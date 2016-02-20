@@ -1,0 +1,81 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU5496                   *
+*      VjudgeProblemID:252439              *
+*      SubmitTime:2015/10/11 11:34:52      *
+*      SubmitType:G++                      *
+*      Memory:5484KB                       *
+*      CodeLen:1516B                       *
+*      RunTime:452ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.in","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1e5 + 5;
+const int mod = 1e9 + 7;
+
+int rear;
+LL A[MX], B[MX], f, cnt;
+LL S[MX], cntS[MX];
+LL cntB[MX];
+
+int BS(int x) {
+    int l = 1, r = rear, m;
+    while(l <= r) {
+        m = (l + r) >> 1;
+        if(B[m] == x) return m;
+        if(B[m] <= x) l = m + 1;
+        else r = m - 1;
+    }
+    return -1;
+}
+
+int main() {
+    int T, n; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        memset(cntB, 0, sizeof(cntB));
+
+        scanf("%d", &n);
+        for(int i = 1; i <= n; i++) {
+            scanf("%I64d", &A[i]);
+            B[i] = A[i];
+        }
+        sort(B + 1, B + 1 + n);
+        rear = unique(B + 1, B + 1 + n) - B - 1;
+
+        S[0] = cntS[0] = 0;
+        for(int i = 1; i <= n; i++) {
+            int id = BS(A[i]);
+            f = (S[i - 1] + A[i] * (cntS[i - 1] + 1) % mod) % mod;
+            f = (f - cntB[id] * A[i] % mod + mod) % mod;
+            cnt = (cntS[i - 1] + 1) % mod;
+
+            cntB[id] = (cntB[id] + cnt) % mod;
+            S[i] = (S[i - 1] + f) % mod;
+            cntS[i] = (cntS[i - 1] + cnt) % mod;
+        }
+
+        printf("%I64d\n", S[n]);
+    }
+    return 0;
+}

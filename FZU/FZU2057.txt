@@ -1,0 +1,99 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU2057                   *
+*      VjudgeProblemID:29393               *
+*      SubmitTime:2015/2/22 16:48:15       *
+*      SubmitType:GNU C++                  *
+*      Memory:400KB                        *
+*      CodeLen:1521B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int maxn=10000+5;
+
+char FM[]="FM";//¸¸Ç×0,Ä¸Ç×1
+int vis[maxn],begin,end;
+
+struct People{
+    int f,m;
+
+}p[maxn];
+
+struct LAST{
+    int id,dic;
+}last[maxn];
+
+bool DFS(int id){
+    if(id==end)  return true;
+    if(!vis[id]) return false;
+
+    last[p[id].f].id=id;
+    last[p[id].f].dic=0;
+    if(DFS(p[id].f)) return true;
+
+    last[p[id].m].id=id;
+    last[p[id].m].dic=1;
+    if(DFS(p[id].m)) return true;
+
+    return false;
+}
+
+void print_ans(int id){
+    if(last[id].id!=begin){
+        print_ans(last[id].id);
+    }
+    printf("%c",FM[last[id].dic]);
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        memset(vis,0,sizeof(vis));
+
+        int n,m,a,b,c;
+        scanf("%d",&n);
+        for(int i=1;i<=n/2;i++){
+            scanf("%d%d%d",&a,&b,&c);
+            vis[a]=1;
+            p[a].f=b;
+            p[a].m=c;
+        }
+
+        scanf("%d",&m);
+        while(m--){
+            scanf("%d%d",&a,&b);
+
+            begin=a,end=b;
+            if(DFS(begin)){
+                printf("1 ");
+                print_ans(end);
+            }else{
+                begin=b,end=a;
+                if(DFS(begin)){
+                    printf("0 ");
+                    print_ans(end);
+                }else{
+                    printf("Relative");
+                }
+            }
+            printf("\n");
+        }
+    }
+    return 0;
+}
+\n");
+        }
+    }
+    return 0;
+}

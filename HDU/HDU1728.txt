@@ -1,0 +1,91 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1728                   *
+*      VjudgeProblemID:20620               *
+*      SubmitTime:2014/12/17 14:13:09      *
+*      SubmitType:C++                      *
+*      Memory:1348KB                       *
+*      CodeLen:1865B                       *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int maxn=105;
+
+char s[maxn][maxn];
+int vis[maxn][maxn][4];
+int dx[]={-1,0,1,0};
+int dy[]={0,-1,0,1};
+int m,n;
+int begx,begy,endx,endy,tn;
+
+struct point{
+    int x,y;
+    int turn,dist;
+}t;
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int T;
+    while(~scanf("%d",&T)) while(T--){
+        memset(vis,0,sizeof(vis));
+
+        scanf("%d%d",&m,&n);
+        for(int i=1;i<=m;i++){
+            scanf("%s",s[i]+1);
+        }
+        scanf("%d%d%d%d%d",&tn,&begx,&begy,&endx,&endy);
+        swap(begx,begy);swap(endx,endy);
+        if(s[begx][begy]=='*'||s[endx][endy]=='*'){
+            printf("no\n");
+            continue;
+        }
+        queue<point>work;
+
+        t.x=begx,t.y=begy,t.turn=-1,t.dist=100;
+        work.push(t);
+        for(int i=0;i<4;i++){
+            vis[begx][begy][i]=1;
+        }
+
+        bool ans=false;
+        while(!work.empty()){
+            t=work.front();
+            work.pop();//printf("[%d,%d,%d,%d]",t.x,t.y,t.turn,t.dist);
+
+            if(t.x==endx&&t.y==endy&&t.turn<=tn){
+                ans=true;
+                break;
+            }
+
+            for(int k=0;k<4;k++){
+                for(int x=t.x+dx[k],y=t.y+dy[k];1<=x&&x<=m&&1<=y&&y<=n&&s[x][y]=='.';x=x+dx[k],y=y+dy[k]){
+                    if(vis[x][y][k]||vis[x][y][k>=2?k-2:k+2]){
+                        continue;
+                    }
+
+                    point p;
+                    p.x=x,p.y=y,p.dist=k;
+
+                    p.turn=(k==t.dist)?t.turn:(t.turn+1);
+                    if(t.turn>tn){
+                        break;
+                    }
+                    vis[x][y][k]=1;
+                    work.push(p);
+                }
+            }
+        }
+
+        printf("%s\n",ans?"yes":"no");
+    }
+    return 0;
+}

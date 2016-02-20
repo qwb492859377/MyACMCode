@@ -1,0 +1,35 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces333A            *
+*      VjudgeProblemID:46120               *
+*      SubmitTime:2015/1/15 14:46:44       *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:0KB                          *
+*      CodeLen:405B                        *
+*      RunTime:30ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+
+int main(){
+    LL n;
+    while(~scanf("%I64d",&n)){
+        if(n%3){
+            printf("%I64d\n",n/3+1);
+        }else{
+            LL x=3;
+            while(n%x==0){
+                x*=3;
+            }
+            printf("%I64d\n",n/x+1);
+        }
+    }
+    return 0;
+}

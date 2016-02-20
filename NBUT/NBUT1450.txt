@@ -1,0 +1,62 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1450                  *
+*      VjudgeProblemID:46168               *
+*      SubmitTime:2015/8/21 12:29:16       *
+*      SubmitType:G++                      *
+*      Memory:244KB                        *
+*      CodeLen:997B                        *
+*      RunTime:359ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<sstream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e5 + 5;
+
+int main() {
+    //FIN;
+    int T;
+    scanf("%d", &T);
+    while(T--) {
+        int a, b;
+        scanf("%x%x\n", &a, &b);
+
+        string s1,s2,line;
+        getline(cin,line);
+        stringstream ss(line);
+
+        while(ss >> s1 >> s2){
+            if(s1 == "80" && s2 == "AF") {
+                ss >> s1;
+                a += b;
+            } else if(s1 == "F0" && s2 == "AF") {
+                a += a;
+            } else if(s1 == "F0" && s2 == "BF") {
+                b += b;
+            } else {
+                ss >> s1;
+                b += a;
+            }
+        }
+        printf("%X %X\n", a, b);
+    }
+    return 0;
+}

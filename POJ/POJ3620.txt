@@ -1,0 +1,73 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3620                   *
+*      VjudgeProblemID:17694               *
+*      SubmitTime:2015/7/20 9:40:40        *
+*      SubmitType:C++                      *
+*      Memory:300KB                        *
+*      CodeLen:1201B                       *
+*      RunTime:32ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 100 + 5;
+const int INF = 0x3f3f3f3f;
+
+int m, n;
+bool vis[MX][MX];
+int dist[][2] = {{ -1, 0}, {1, 0}, {0, 1}, {0, -1}};
+
+void DFS(int x, int y, int &sum) {
+    vis[x][y] = 0;
+    sum++;
+
+
+    for(int k = 0; k < 4; k++) {
+        int nx = x + dist[k][0];
+        int ny = y + dist[k][1];
+
+        if(nx < 1 || nx > m || ny < 1 || ny > n) continue;
+        if(!vis[nx][ny]) continue;
+
+        DFS(nx, ny, sum);
+    }
+}
+
+int main() {
+    int k;
+    while(~scanf("%d%d%d", &m, &n, &k)) {
+        memset(vis, 0, sizeof(vis));
+
+        for(int i = 1; i <= k; i++) {
+            int x, y;
+            scanf("%d%d", &x, &y);
+            vis[x][y] = 1;
+        }
+
+        int ans = 0, sum;
+        for(int i = 1; i <= m; i++) {
+            for(int j = 1; j <= n; j++) {
+                sum = 0;
+                if(vis[i][j]) {
+                    DFS(i, j, sum);
+                    ans = max(ans, sum);
+                }
+            }
+        }
+
+        printf("%d\n", ans);
+    }
+    return 0;
+}

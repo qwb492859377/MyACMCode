@@ -1,0 +1,70 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4709                   *
+*      VjudgeProblemID:46470               *
+*      SubmitTime:2015/8/19 20:47:45       *
+*      SubmitType:G++                      *
+*      Memory:1608KB                       *
+*      CodeLen:1269B                       *
+*      RunTime:46ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1000 + 5;
+const int INF = 0x3f3f3f3f;
+const double exps = 1e-8;
+
+struct Node {
+    double x, y;
+} P[MX];
+
+inline double cross(Node a, Node b, Node c) {
+    return ((b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y));
+}
+
+inline double getS(Node a, Node b, Node c) {
+    return fabs(cross(a, b, c) / 2);
+}
+
+int main() {
+    int T, n;//FIN;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d", &n);
+        for(int i = 1; i <= n; i++) {
+            scanf("%lf%lf", &P[i].x, &P[i].y);
+        }
+
+        double ans = INF;
+        for(int i = 1; i <= n; i++) {
+            for(int j = i + 1; j <= n; j++) {
+                for(int k = i + 1; k <= n; k++) {
+                    double s = getS(P[i], P[j], P[k]);
+                    if(fabs(s) > exps) ans = min(ans, s);
+                }
+            }
+        }
+
+        if(fabs(ans - INF) < exps) printf("Impossible\n");
+        else printf("%.2lf\n", ans);
+    }
+    return 0;
+}

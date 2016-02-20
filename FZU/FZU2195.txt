@@ -1,0 +1,72 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU2195                   *
+*      VjudgeProblemID:162287              *
+*      SubmitTime:2015/5/3 21:35:41        *
+*      SubmitType:GNU C++                  *
+*      Memory:6932KB                       *
+*      CodeLen:1105B                       *
+*      RunTime:546ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+using namespace std;
+const int MX=100000+5;
+typedef long long LL;
+
+vector<int>G[MX];
+LL V[MX],dp1[MX],dp2[MX];
+
+LL DFS2(int rt){
+    if(dp2[rt]!=-1) return dp2[rt];
+
+    dp2[rt]=0;
+    for(int i=0;i<G[rt].size();i++){
+        int nxt=G[rt][i];
+        dp2[rt]+=DFS2(nxt)+V[nxt];
+    }
+    return dp2[rt];
+}
+
+LL DFS1(int rt){
+    if(dp1[rt]!=-1) return dp1[rt];
+
+    dp1[rt]=0;
+    LL ret=0,Max=0,t1,t2;
+    for(int i=0;i<G[rt].size();i++){
+        int nxt=G[rt][i];
+        t1=DFS1(nxt);t2=DFS2(nxt)+V[nxt];
+        Max=max(Max,t2-t1);
+        ret+=t2;
+    }
+    ret-=Max;
+    return dp1[rt]=ret;
+}
+
+int main(){
+    int n,u,v;
+    LL t;
+    while(~scanf("%d",&n)){
+        memset(dp1,-1,sizeof(dp1));
+        memset(dp2,-1,sizeof(dp2));
+
+        for(int i=1;i<=n;i++){
+            G[i].clear();
+        }
+
+        for(int i=1;i<=n-1;i++){
+            scanf("%d%d%I64d",&u,&v,&t);
+            V[v]=t;
+            G[u].push_back(v);
+        }
+
+        printf("%I64d\n",DFS1(1));
+    }
+    return 0;
+}

@@ -1,0 +1,78 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:Gym100712K                *
+*      VjudgeProblemID:195719              *
+*      SubmitTime:2015/7/19 13:33:18       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:200KB                        *
+*      CodeLen:1235B                       *
+*      RunTime:202ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 100000 + 5;
+const int INF = 0x3f3f3f3f;
+
+int A[MX];
+
+int BS(int L,int R,int x){
+    while(L<=R){
+        int m=(L+R)>>1;
+        if(A[m]==x) return m;
+        if(A[m]>x)  R=m-1;
+        else        L=m+1;
+    }
+    return -1;
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        int n,k;
+        scanf("%d%d",&n,&k);
+        for(int i=1;i<=n;i++){
+            scanf("%d",&A[i]);
+        }
+        sort(A+1,A+1+n);
+
+
+        if(A[1]==0&&k==0){
+            printf("%d %d\n",0,A[2]);
+            continue;
+        }
+
+        int ansa=-1,ansb=-1;
+        for(int i=1;i<=n;i++){
+            if(A[i]==0) continue;
+            if(k%A[i]!=0) continue;
+
+            int y=k/A[i];
+            if(y==0) continue;
+            if(i==n) continue;
+
+            if(BS(i+1,n,y)!=-1){
+                ansa=A[i];
+                ansb=y;
+                break;
+            }
+        }
+
+        if(ansa==-1) printf("-1\n");
+        else printf("%d %d\n",ansa,ansb);
+    }
+    return 0;
+}

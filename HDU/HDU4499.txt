@@ -1,0 +1,119 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4499                   *
+*      VjudgeProblemID:46338               *
+*      SubmitTime:2015/6/2 20:11:27        *
+*      SubmitType:C++                      *
+*      Memory:1600KB                       *
+*      CodeLen:1835B                       *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<cctype>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=10+5;
+
+int m,n,ans;
+int vis[MX][MX];
+
+bool ok(int x,int y){
+    int cnt;
+
+    cnt=0;
+    for(int i=x-1;i>=1;i--){
+        if(vis[i][y]!=0) cnt++;
+        if(cnt==2){
+            if(vis[i][y]==1) return false;
+            else break;
+        }
+    }
+
+    cnt=0;
+    for(int i=x+1;i<=m;i++){
+        if(vis[i][y]!=0) cnt++;
+        if(cnt==2){
+            if(vis[i][y]==1) return false;
+            else break;
+        }
+    }
+
+    cnt=0;
+    for(int j=y-1;j>=1;j--){
+        if(vis[x][j]!=0) cnt++;
+        if(cnt==2){
+            if(vis[x][j]==1) return false;
+            else break;
+        }
+    }
+
+    cnt=0;
+    for(int j=y+1;j<=n;j++){
+        if(vis[x][j]!=0) cnt++;
+        if(cnt==2){
+            if(vis[x][j]==1) return false;
+            else break;
+        }
+    }
+    return true;
+}
+
+void DFS(int t,int cnt){
+    int x=t/n+1,y=t%n+1;
+
+    if(t>=m*n){
+        ans=max(ans,cnt);
+
+        /*if(ans==10){
+            for(int i=1;i<=m;i++){
+                for(int j=1;j<=n;j++){
+                    printf("%d ",vis[i][j]);
+                }
+                puts("");
+            }
+        }puts("");*/
+
+        return;
+    }
+
+    if(vis[x][y]==-1){
+        DFS(t+1,cnt);
+        return;
+    }
+
+    if(ok(x,y)){
+        vis[x][y]=1;
+        DFS(t+1,cnt+1);
+    }
+
+    vis[x][y]=0;
+    DFS(t+1,cnt);
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int w,x,y;
+    while(~scanf("%d%d%d",&m,&n,&w)){
+        memset(vis,0,sizeof(vis));
+
+        for(int i=1;i<=w;i++){
+            scanf("%d%d",&x,&y);
+            vis[x+1][y+1]=-1;
+        }
+
+        ans=0;
+        DFS(0,0);
+
+        printf("%d\n",ans);
+    }
+    return 0;
+}

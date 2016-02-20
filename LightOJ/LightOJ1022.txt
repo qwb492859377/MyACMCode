@@ -1,0 +1,31 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:LightOJ1022               *
+*      VjudgeProblemID:25898               *
+*      SubmitTime:2015/1/14 20:38:19       *
+*      SubmitType:C++                      *
+*      Memory:1088KB                       *
+*      CodeLen:324B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int main(){
+    double pi=2*acos(0.0);
+
+    int T,ansk=0;
+    scanf("%d",&T);
+    while(T--){
+        double r;
+        scanf("%lf",&r);
+        printf("Case %d: %.2lf\n",++ansk,(4-pi)*r*r);
+    }
+    return 0;
+}

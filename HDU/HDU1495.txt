@@ -1,0 +1,152 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1495                   *
+*      VjudgeProblemID:18463               *
+*      SubmitTime:2016/1/5 12:32:40        *
+*      SubmitType:G++                      *
+*      Memory:6112KB                       *
+*      CodeLen:2996B                       *
+*      RunTime:358ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iomanip>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+const int maxn=105;
+struct node
+{
+    int s,n,m;
+    int step;
+};
+int S,N,M,vis[maxn][maxn][maxn],flag=0;
+node d,e;
+void bfs()
+{
+    flag=0;
+    queue<node>ss;
+    d.s=S;
+    d.n=0;
+    d.m=0;
+    d.step=0;
+    vis[S][0][0]=1;
+    ss.push(d);
+    while(ss.size())
+    {
+        e=ss.front();
+        ss.pop();
+        if(e.n==e.m&&e.n==S/2||e.s==e.n&&e.s==S/2||e.s==e.m&&e.s==S/2)
+        {
+            printf("%d\n",e.step);
+            flag=1;
+            return;
+        }
+        if(e.s)
+        {
+            if(e.n!=N)
+            {
+                d.s=e.s-(N-e.n);
+                d.n=N;
+                d.m=e.m;
+                if(!vis[d.s][d.n][d.m])
+                {
+                    d.step=e.step+1;
+                    ss.push(d);
+                    vis[d.s][d.n][d.m]=1;
+                }
+            }
+            if(e.m!=M)
+            {
+                d.s=e.s-(M-e.m);
+                d.n=e.n;
+                d.m=M;
+                if(!vis[d.s][d.n][d.m])
+                {
+                    d.step=e.step+1;
+                    ss.push(d);
+                    vis[d.s][d.n][d.m]=1;
+                }
+            }
+        }
+        if(e.n)
+        {
+            d.s=e.s+e.n;
+            d.n=0;
+            d.m=e.m;
+            if(!vis[d.s][d.n][d.m])
+            {
+                d.step=e.step+1;
+                ss.push(d);
+                vis[d.s][d.n][d.m]=1;
+            }
+            d.s=e.s;
+            d.n=e.n>M-e.m?e.n+e.m-M:0;
+            d.m=d.n==0?e.m+e.n:M;
+            if(!vis[d.s][d.n][d.m])
+            {
+                d.step=e.step+1;
+                ss.push(d);
+                vis[d.s][d.n][d.m]=1;
+            }
+        }
+        if(e.m)
+        {
+            d.s=e.s+e.m;
+            d.n=e.n;
+            d.m=0;
+            if(!vis[d.s][d.n][d.m])
+            {
+                d.step=e.step+1;
+                ss.push(d);
+                vis[d.s][d.n][d.m]=1;
+            }
+            d.s=e.s;
+            d.n=e.m>N-e.n?N:e.n+e.m;
+            d.m=d.n==N?e.m+e.n-N:0;
+            if(!vis[d.s][d.n][d.m])
+            {
+                d.step=e.step+1;
+                ss.push(d);
+                vis[d.s][d.n][d.m]=1;
+            }
+        }
+    }
+}
+int main()
+{
+    while(~scanf("%d%d%d",&S,&N,&M)&&S&&N&&M)
+    {
+        if(S%2!=0)
+        {
+            printf("NO\n");
+            continue;
+        }
+        if(N==M)
+        {
+            printf("1\n");
+            continue;
+        }
+        memset(vis,0,sizeof(vis));
+        bfs();
+        if(!flag) printf("NO\n");;
+    }
+    return 0;
+}

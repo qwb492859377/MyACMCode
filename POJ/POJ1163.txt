@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1163                   *
+*      VjudgeProblemID:10754               *
+*      SubmitTime:2015/7/6 3:56:20         *
+*      SubmitType:C++                      *
+*      Memory:220KB                        *
+*      CodeLen:711B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<queue>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+
+const int MX=100+5;
+
+int A[MX][MX],dp[MX][MX];
+
+int main(){
+    int n;
+    while(~scanf("%d",&n)){
+        memset(dp,0,sizeof(dp));
+
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=i;j++){
+                scanf("%d",&A[i][j]);
+            }
+        }
+
+        dp[1][1]=1;
+        int ans=0;
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=i;j++){
+                dp[i][j]=max(dp[i-1][j],dp[i-1][j-1])+A[i][j];
+                ans=max(ans,dp[i][j]);
+            }
+        }
+
+        printf("%d\n",ans);
+    }
+    return 0;
+}

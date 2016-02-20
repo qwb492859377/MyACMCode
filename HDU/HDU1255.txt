@@ -1,0 +1,119 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1255                   *
+*      VjudgeProblemID:15768               *
+*      SubmitTime:2015/8/11 10:24:00       *
+*      SubmitType:C++                      *
+*      Memory:2496KB                       *
+*      CodeLen:2456B                       *
+*      RunTime:405ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,rear,1
+
+int const MX = 1e4 + 5;
+
+int rear, cnt[MX << 2];
+double A[MX], S1[MX << 2], S2[MX << 2];
+
+struct Que {
+    int d;
+    double top, L, R;
+    Que() {}
+    Que(double _top, double _L, double _R, int _d) {
+        top = _top; L = _L; R = _R; d = _d;
+    }
+    bool operator<(const Que &b)const {
+        return top < b.top;
+    }
+} Q[MX];
+
+int BS(double x) {
+    int L = 1, R = rear, m;
+    while(L <= R) {
+        m = (L + R) >> 1;
+        if(A[m] == x) return m;
+        if(A[m] > x) R = m - 1;
+        else L = m + 1;
+    }
+    return -1;
+}
+
+void push_up(int l, int r, int rt) {
+    if(cnt[rt]) {
+        S1[rt] = A[r + 1] - A[l];
+        if(cnt[rt] == 1) {
+            S2[rt] = S1[rt << 1] + S1[rt << 1 | 1];
+        } else S2[rt] = S1[rt];
+    } else if(l == r) S1[rt] = S2[rt] = 0;
+    else {
+        S1[rt] = S1[rt << 1] + S1[rt << 1 | 1];
+        S2[rt] = S2[rt << 1] + S2[rt << 1 | 1];
+    }
+}
+
+void update(int L, int R, int d, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        cnt[rt] += d;
+        push_up(l, r, rt);
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    if(L <= m) update(L, R, d, lson);
+    if(R > m) update(L, R, d, rson);
+    push_up(l, r, rt);
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int n, T;
+    scanf("%d", &T);
+    while(T--) {
+        rear = 0;
+        memset(cnt, 0, sizeof(cnt));
+        memset(S1, 0, sizeof(S1));
+        memset(S2, 0, sizeof(S2));
+
+        scanf("%d", &n);
+        for(int i = 1; i <= n; i++) {
+            double x1, y1, x2, y2;
+            scanf("%lf%lf%lf%lf", &x1, &y1, &x2, &y2);
+            Q[i] = Que(y1, x1, x2, 1);
+            Q[i + n] = Que(y2, x1, x2, -1);
+
+            A[++rear] = x1; A[++rear] = x2;
+        }
+        sort(Q + 1, Q + 1 + 2 * n);
+        sort(A + 1, A + 1 + rear);
+        rear = unique(A + 1, A + 1 + rear) - A - 1;
+
+        double ans = 0, last = 0;
+        for(int i = 1; i <= 2 * n; i++) {
+            ans += (Q[i].top - last) * S2[1];
+            update(BS(Q[i].L), BS(Q[i].R) - 1, Q[i].d, root);
+            last = Q[i].top;
+        }
+        printf("%.2lf\n", ans);
+    }
+    return 0;
+}

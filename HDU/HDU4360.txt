@@ -1,0 +1,124 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4360                   *
+*      VjudgeProblemID:31139               *
+*      SubmitTime:2015/8/21 0:43:19        *
+*      SubmitType:C++                      *
+*      Memory:3780KB                       *
+*      CodeLen:2697B                       *
+*      RunTime:327ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e5 + 5;
+const LL INF = 0x3f3f3f3f3f3f3f3f;
+
+LL d[MX]; int ns[MX];
+int Head[MX], Next[MX], rear;
+
+struct Edge {
+    int u, v, cost;
+} E[MX];
+
+struct Node {
+    LL first;
+    int second, s;
+    Node(LL a, int b, int c) {
+        first = a; second = b; s = c;
+    }
+    bool operator<(const Node &b)const {
+        if(first == b.first) return s < b.s;
+        return first > b.first;
+    }
+};
+
+void edge_init() {
+    rear = 0;
+    memset(Head, -1, sizeof(Head));
+}
+
+void edge_add(int u, int v, int cost) {
+    E[rear].u = u;
+    E[rear].v = v;
+    E[rear].cost = cost;
+    Next[rear] = Head[u];
+    Head[u] = rear++;
+}
+
+void dijistra(int Begin) {
+    memset(d, INF, sizeof(d));
+    memset(ns, 0, sizeof(ns));
+
+    priority_queue<Node>work;
+    work.push(Node(0, Begin, 0));
+
+    while(!work.empty()) {
+        Node f = work.top();
+        work.pop();
+
+        LL dist = f.first;
+        int u = f.second;
+
+        for(int id = Head[u]; ~id; id = Next[id]) {
+            int cost = E[id].cost, v = E[id].v;
+            if(dist + cost < d[v] || (dist + cost == d[v] && f.s + 1 > ns[v])) {
+                ns[v] = f.s + 1;
+                d[v] = dist + cost;
+                work.push(Node(d[v], v, ns[v]));
+            }
+        }
+    }
+}
+
+int main() {//FIN;
+    int T, n, m, ansk = 0;
+    scanf("%d", &T);
+    while(T--) {
+        edge_init();
+        scanf("%d%d", &n, &m);
+
+        for(int i = 1; i <= m; i++) {
+            int u, v, l; char ch[5];
+            scanf("%d%d%d%s", &u, &v, &l, ch);
+            if(ch[0] == 'L'){
+                edge_add(u, v + n, l);
+                edge_add(v, u + n, l);
+            }
+            if(ch[0] == 'O'){
+                edge_add(u + n, v + 2 * n, l);
+                edge_add(v + n, u + 2 * n, l);
+            }
+            if(ch[0] == 'V'){
+                edge_add(u + 2 * n, v + 3 * n, l);
+                edge_add(v + 2 * n, u + 3 * n, l);
+            }
+            if(ch[0] == 'E'){
+                edge_add(u + 3 * n, v, l);
+                edge_add(v + 3 * n, u, l);
+            }
+        }
+        dijistra(1);
+        printf("Case %d: ", ++ansk);
+        if(d[n] == INF) printf("Binbin you disappoint Sangsang again, damn it!\n");
+        else printf("Cute Sangsang, Binbin will come with a donkey after travelling %I64d meters and finding %d LOVE strings at last.\n", d[n], ns[n] / 4);
+    }
+    return 0;
+}

@@ -1,0 +1,168 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ZOJ3228                   *
+*      VjudgeProblemID:16401               *
+*      SubmitTime:2015/10/25 16:15:44      *
+*      SubmitType:C++ (g++ 4.7.2)          *
+*      Memory:72976KB                      *
+*      CodeLen:3630B                       *
+*      RunTime:780ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+/*MX为总长度*/
+const int MN = 1e5 + 5;
+const int MX = 6e5 + 5;
+const int P = 26;
+
+int last[MN], ans[MN], pre[MN];
+
+struct AC_machine {
+    int rear, root, m, len[MX];
+    int Next[MX][P], Fail[MX], End[MX];
+
+    void Init(int _m) {
+        m = _m;
+        rear = 0;
+        root = New();
+    }
+
+    int New() {
+        End[rear] = 0;
+        for(int i = 0; i < P; i++) {
+            Next[rear][i] = -1;
+        }
+        return rear++;
+    }
+
+    void Add(const char *A, int u) {
+        int n = strlen(A), now = root;
+        for(int i = 0; i < n; i++) {
+            int id = A[i] - 'a';
+            if(Next[now][id] == -1) {
+                Next[now][id] = New();
+            }
+            now = Next[now][id];
+        }
+        if(End[now]) pre[u] = End[now];
+        else pre[u] = End[now] = u;
+
+        last[u] = -1;
+        len[now] = n;
+    }
+
+    void Build() {
+        queue<int>Q;
+        Fail[root] = root;
+        for(int i = 0; i < P; i++) {
+            if(Next[root][i] == -1) {
+                Next[root][i] = root;
+            } else {
+                Fail[Next[root][i]] = root;
+                Q.push(Next[root][i]);
+            }
+        }
+
+        while(!Q.empty()) {
+            int u = Q.front();
+            Q.pop();
+
+            for(int i = 0; i < P; i++) {
+                if(Next[u][i] == -1) {
+                    Next[u][i] = Next[Fail[u]][i];
+                } else {
+                    Fail[Next[u][i]] = Next[Fail[u]][i];
+                    Q.push(Next[u][i]);
+                }
+            }
+        }
+    }
+
+    void Query_1(char *S) {
+        int n = strlen(S), now = root, ret = 0;
+
+        for(int i = 0; i < n; i++) {
+            now = Next[now][S[i] - 'a'];
+            int temp = now;
+
+            while(temp != root) {
+                if(End[temp]) ans[End[temp]]++;
+                temp = Fail[temp];
+            }
+        }
+    }
+
+    void Query_2(char *S) {
+        int n = strlen(S), now = root, ret = 0;
+
+        for(int i = 0; i < n; i++) {
+            now = Next[now][S[i] - 'a'];
+            int temp = now;
+
+            while(temp != root) {
+                if(End[temp] && (last[End[temp]] == -1 || last[End[temp]] + len[temp] <= i)){
+                    ans[End[temp]]++;
+                    last[End[temp]] = i;
+                }
+                temp = Fail[temp];
+            }
+        }
+    }
+} AC;
+
+char word[10], line[MN];
+vector<pair<string, int> >A;
+
+int main() {
+    int m, ansk = 0; //FIN;
+    while(~scanf("%s", line)) {
+        memset(ans, 0, sizeof(ans));
+        A.clear();
+        scanf("%d", &m);
+        AC.Init(m);
+
+        int r1 = 0, r2 = 0;
+        for(int i = 1; i <= m; i++) {
+            int type;
+            scanf("%d%s", &type, word);
+            if(type == 0) {
+                AC.Add(word, i);
+            } else A.push_back(make_pair(string(word), i));
+        }
+        AC.Build();
+        AC.Query_1(line);
+
+        AC.Init(A.size());
+        for(int i = 0; i < A.size(); i++) {
+            AC.Add(A[i].first.c_str(), A[i].second);
+        }
+
+        AC.Build();
+        AC.Query_2(line);
+
+        printf("Case %d\n", ++ansk);
+        for(int i = 1; i <= m; i++) printf("%d\n", ans[pre[i]]);
+        printf("\n");
+    }
+    return 0;
+}

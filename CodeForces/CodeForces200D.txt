@@ -1,0 +1,130 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces200D            *
+*      VjudgeProblemID:28924               *
+*      SubmitTime:2015/8/3 23:30:17        *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:300KB                        *
+*      CodeLen:2568B                       *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<string>
+#include<iostream>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 10000 + 5;
+map<string, vector<vector<string> > >G;
+map<string, string>val;
+
+int T;
+char S[MX], use[MX];
+
+void func() {
+    int cur = 1, tot = 0;
+
+    while(S[cur] == ' ') cur++;
+    while(S[cur] != ' ') cur++;
+    while(S[cur] == ' ') cur++;
+
+    while(S[cur] != '(' && S[cur]!= ' ') use[tot++] = S[cur++];
+    while(S[cur]==' ') cur++;
+    use[tot] = 0;
+    string name = use;
+
+    vector<string>vec;
+    while(S[cur++] != ')') {
+        tot = 0;
+        while(S[cur] == ' ') cur++;
+        while(S[cur] != ' ' && S[cur] != ',' && S[cur] != ')') use[tot++] = S[cur++];
+        while(S[cur] == ' ') cur++;
+        use[tot] = 0;
+        vec.push_back(string(use));
+    }
+    G[name].push_back(vec);
+}
+
+void Val() {
+    int cur = 1, tot = 0;
+    while(S[cur] == ' ') cur++;
+    while(S[cur] != ' ') use[tot++] = S[cur++];
+    use[tot] = 0; tot = 0;
+
+    string a = use;
+    while(S[cur] == ' ') cur++;
+    while(S[cur] != ' ' || S[cur] == 0) use[tot++] = S[cur++];
+    use[tot] = 0;
+    val[string(use)] = a;
+}
+
+int check() {
+    int cur = 1, tot = 0;
+    while(S[cur] == ' ') cur++;
+    while(S[cur] != '(' && S[cur]!=' ') use[tot++] = S[cur++];
+    while(S[cur]==' ') cur++;
+    use[tot] = 0; tot = 0;
+    string name = use;
+
+    vector<string>vec;
+    while(S[cur++] != ')') {
+        tot = 0;
+        while(S[cur] == ' ') cur++;
+        while(S[cur] != ' ' && S[cur] != ',' && S[cur] != ')') use[tot++] = S[cur++];
+        while(S[cur] == ' ') cur++;
+        use[tot] = 0;
+        vec.push_back(string(use));
+    }
+
+    vector<vector<string> >&g = G[name];
+    if(!g.size()) return 0;
+
+    int ret = 0;
+    for(int i = 0; i < g.size(); i++) {
+        bool sign = true;
+        if(g[i].size() != vec.size()) continue;
+
+        for(int j = 0; j < g[i].size(); j++) {
+            if(g[i][j] != val[vec[j]] && g[i][j] != "T") {
+                sign = false;
+                break;
+            }
+        }
+        ret += sign;
+    }
+    return ret;
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    scanf("%d%*c", &T);
+    while(T--) {
+        gets(S + 1);
+        func();
+    }
+
+    scanf("%d%*c", &T);
+    while(T--) {
+        gets(S + 1);
+        Val();
+    }
+
+    int ans = 0;
+    scanf("%d%*c", &T);
+    while(T--) {
+        gets(S + 1);
+        cout << check() << endl;
+    }
+    return 0;
+}

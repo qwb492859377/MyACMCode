@@ -1,0 +1,68 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces81B             *
+*      VjudgeProblemID:20220               *
+*      SubmitTime:2014/12/29 16:17:54      *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:0KB                          *
+*      CodeLen:1252B                       *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+
+int main(){
+    char str[300];
+    while(gets(str)){
+        int len=strlen(str),cur=0,last=true,space=false,lsn=false;
+        while(cur<len){
+            int a=str[cur];
+
+            if(a==' '){
+                cur+=1;
+                continue;
+            }
+
+            if(space){
+                printf(" ");
+                space=false;
+                last=true;
+            }
+
+            if(a=='.'){
+                if(!last){
+                    printf(" ");
+                }else{
+                    last=false;
+                }
+                printf("...");
+                cur+=3;
+                lsn=false;
+            }else if(a==','){
+                printf(",");
+                space=true;
+                cur+=1;
+                lsn=false;
+            }else{
+                if(lsn){
+                    printf(" ");
+                }
+                while('0'<=str[cur]&&str[cur]<='9'){
+                    printf("%c",str[cur]);
+                    cur+=1;
+                }
+                last=false;
+                lsn=true;
+            }
+        }
+        printf("\n");
+    }
+    return 0;
+}

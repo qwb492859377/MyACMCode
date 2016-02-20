@@ -1,0 +1,37 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1407                   *
+*      VjudgeProblemID:36675               *
+*      SubmitTime:2014/12/2 16:10:43       *
+*      SubmitType:C++                      *
+*      Memory:248KB                        *
+*      CodeLen:528B                        *
+*      RunTime:156ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int main(){
+    int n;
+    while(~scanf("%d",&n)){
+        for(int x=1;x<=100;x++){
+            for(int y=x;y<=100;y++){
+                for(int z=y;z<=100;z++){
+                    int w=x*x+y*y+z*z;
+                    if(w==n){
+                        printf("%d %d %d\n",x,y,z);
+                        goto end;
+                    }
+                }
+            }
+        }
+        end:;
+    }
+    return 0;
+}

@@ -1,0 +1,95 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ACdream1094               *
+*      VjudgeProblemID:71716               *
+*      SubmitTime:2015/8/25 10:35:39       *
+*      SubmitType:C++                      *
+*      Memory:1812KB                       *
+*      CodeLen:2074B                       *
+*      RunTime:12ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e5;
+const double exps = 1e-6;
+const double pi = acos(-1.0);
+
+struct Point {
+    double x, y;
+    Point(double _x = 0, double _y = 0) {
+        x = _x; y = _y;
+    }
+    Point operator-(Point p) {
+        Point ret;
+        ret.x = x - p.x;
+        ret.y = y - p.y;
+        return ret;
+    }
+    double len() {
+        return sqrt(x * x + y * y);
+    }
+    double operator*(Point p) {
+        return x * p.x + y * p.y;
+    }
+};
+
+Point solve(Point p1, Point p2, Point p3) {
+    double A1 = 2 * (p2.x - p1.x), B1 = 2 * (p2.y - p1.y), C1 = (p1.x * p1.x - p2.x * p2.x + p1.y * p1.y - p2.y * p2.y);
+    double A2 = 2 * (p3.x - p2.x), B2 = 2 * (p3.y - p2.y), C2 = (p2.x * p2.x - p3.x * p3.x + p2.y * p2.y - p3.y * p3.y);
+
+    Point ret;
+    ret.x = (C2 * B1 - C1 * B2) / (A1 * B2 - A2 * B1);
+    ret.y = (C2 * A1 - C1 * A2) / (A2 * B1 - A1 * B2);
+    return ret;
+}
+
+double angel(Point p1, Point p2) {
+    return acos(p1 * p2 / p1.len() / p2.len());
+}
+
+bool is_int(double x) {
+    return fabs(x - round(x)) <= exps;
+}
+
+bool is_ok(int n, double x) {
+    return is_int(n * x / pi);
+}
+
+int main() {
+    int T; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        Point p[3];
+        scanf("%lf%lf%lf%lf%lf%lf", &p[0].x, &p[0].y, &p[1].x, &p[1].y, &p[2].x, &p[2].y);
+        Point o = solve(p[0], p[1], p[2]);
+        double a[3] = {angel(p[1] - p[0], p[2] - p[0]), angel(p[0] - p[1], p[2] - p[1]), angel(p[0] - p[2], p[1] - p[2])};
+
+        int ans;
+        for(int i = 3; i <= MX; i++) {
+            if(is_ok(i, a[0]) && is_ok(i, a[1]) && is_ok(i, a[2])) {
+                ans = i; break;
+            }
+        }
+        printf("%.4lf %.4lf %d\n", o.x + exps, o.y + exps, ans);
+    }
+    return 0;
+}

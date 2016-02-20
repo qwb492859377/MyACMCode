@@ -1,0 +1,104 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1218                  *
+*      VjudgeProblemID:32788               *
+*      SubmitTime:2015/8/17 13:09:04       *
+*      SubmitType:G++                      *
+*      Memory:416KB                        *
+*      CodeLen:1780B                       *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 6e3 + 5;
+const int INF = 0x3f3f3f3f;
+
+int Head[MX], Next[MX], rear;
+
+struct Edge {
+    int u, v, cost;
+} E[MX], S[MX];
+
+void edge_init() {
+    rear = 0;
+    memset(Head, -1, sizeof(Head));
+}
+
+void edge_add(int u, int v, int cost = 0) {
+    E[rear].u = u;
+    E[rear].v = v;
+    E[rear].cost = cost;
+    Next[rear] = Head[u];
+    Head[u] = rear++;
+}
+
+int DFS(int u) {
+    for(int i = Head[u]; ~i; i = Next[i]) {
+        int v = E[i].v;
+        return DFS(v);
+    }
+    return u;
+}
+
+void solve(int u, int d, int &a, int &b) {
+    if(u == 1) a = d;
+    if(u == 2) b = d;
+
+    for(int i = Head[u]; ~i; i = Next[i]) {
+        int v = E[i].v;
+        solve(v, d + 1, a, b);
+    }
+}
+
+int main() {
+    int n, u, v; //FIN;
+    while(~scanf("%d", &n)) {
+        edge_init();
+        for(int i = 1; i <= n; i++) {
+            scanf("%d%d", &u, &v);
+            S[i].u = u; S[i].v = v;
+            edge_add(u, v);
+        }
+        int root = DFS(1);
+
+        edge_init();
+        for(int i = 1; i <= n; i++) {
+            edge_add(S[i].v, S[i].u);
+        }
+
+        int a = -1, b = -1;
+        solve(root, 0, a, b);
+
+        if(a == -1 || b == -1) {
+            printf("You are my brother\n");
+            continue;
+        }
+
+        if(a == b) {
+            printf("You are my brother\n");
+        } else if(a > b) {
+            printf("You are my elder\n");
+        } else {
+            printf("You are my younger\n");
+        }
+    }
+    return 0;
+}

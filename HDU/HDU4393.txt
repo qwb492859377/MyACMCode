@@ -1,0 +1,70 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4393                   *
+*      VjudgeProblemID:31580               *
+*      SubmitTime:2015/2/25 21:21:26       *
+*      SubmitType:C++                      *
+*      Memory:1688KB                       *
+*      CodeLen:1264B                       *
+*      RunTime:483ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int INF=0x3F3F3F3F;
+struct Node{
+    int Fi,id;
+    bool operator<(const Node&b) const{
+        if(Fi==b.Fi) return id>b.id;
+        else return Fi<b.Fi;
+    }
+}temp;
+
+int main(){
+    int T,n,ansk=0,si;
+    scanf("%d",&T);
+    while(T--){
+        priority_queue<Node>Si[101];
+        scanf("%d",&n);
+        for(int i=1;i<=n;i++){
+            scanf("%d%d",&temp.Fi,&si);
+            temp.id=i;
+            Si[si].push(temp);
+        }
+
+        bool first=true;
+        printf("Case #%d:\n",++ansk);
+        for(int time=1;time<=n;time++){
+            int maxs=-INF,maxi,maxid=INF;
+            for(int i=1;i<=100;i++){
+                if(!Si[i].empty()){
+                    temp=Si[i].top();
+                    int t=temp.Fi+(time-1)*i;
+                    if(maxs<t||(maxs==t&&maxid>temp.id)){
+                        maxs=t;
+                        maxi=i;
+                        maxid=temp.id;
+                    }
+                }
+            }
+            Si[maxi].pop();
+            if(first) first=false;
+            else printf(" ");
+            printf("%d",maxid);
+        }
+        printf("\n");
+    }
+    return 0;
+}
+tf("%d",maxx.id);
+        }
+        printf("\n");
+    }
+    return 0;
+}

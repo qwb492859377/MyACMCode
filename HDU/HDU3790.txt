@@ -1,0 +1,113 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3790                   *
+*      VjudgeProblemID:20910               *
+*      SubmitTime:2015/8/4 12:22:14        *
+*      SubmitType:C++                      *
+*      Memory:5376KB                       *
+*      CodeLen:2131B                       *
+*      RunTime:296ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<string>
+#include<iostream>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 200000 + 5;
+const int INF = 0x3f3f3f3f;
+
+int rear, d[MX], S[MX];
+int Head[MX], Next[MX];
+
+struct Edge {
+    int u, v, cost, money;
+} E[MX];
+
+struct Node {
+    int u, cost, money;
+    Node(int a, int b, int c) {
+        u = a; cost = b; money = c;
+    }
+    bool operator<(const Node &b)const {
+        if(cost == b.cost) {
+            return money > b.money;
+        }
+        return cost > b.cost;
+    }
+};
+
+void edge_init() {
+    rear = 0;
+    memset(Head, -1, sizeof(Head));
+    memset(Next, -1, sizeof(Next));
+}
+
+void edge_add(int u, int v, int cost, int money) {
+    E[rear].u = u;
+    E[rear].v = v;
+    E[rear].cost = cost;
+    E[rear].money = money;
+    Next[rear] = Head[u];
+    Head[u] = rear++;
+}
+
+
+void dijistra(int Begin) {
+    memset(d, INF, sizeof(d));
+    memset(S, 0, sizeof(S));
+    d[Begin] = 0;
+
+    priority_queue<Node>work;
+    work.push(Node(Begin, 0, 0));
+
+    while(!work.empty()) {
+        Node f = work.top();
+        work.pop();
+
+        int dist = f.cost, u = f.u, m = f.money;
+
+        for(int id = Head[u]; ~id; id = Next[id]) {
+            int cost = E[id].cost, v = E[id].v, money = E[id].money;
+            Node np = Node(v, dist + cost, m + money);
+            if(!(np < Node(v, d[v], S[v]))) {
+                d[v] = dist + cost;
+                S[v] = m + money;
+                work.push(np);
+            }
+        }
+    }
+}
+
+int main() {
+    int m, n;
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%d%d", &n, &m), n + m) {
+        edge_init();
+
+        for(int i = 1; i <= m; i++) {
+            int u, v, cost, money;
+            scanf("%d%d%d%d", &u, &v, &cost, &money);
+            edge_add(u, v, cost, money);
+            edge_add(v, u, cost, money);
+        }
+
+        int Begin, End;
+        scanf("%d%d", &Begin, &End);
+
+        dijistra(Begin);
+        printf("%d %d\n", d[End], S[End]);
+    }
+    return 0;
+}

@@ -1,0 +1,106 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1240                   *
+*      VjudgeProblemID:36476               *
+*      SubmitTime:2015/7/21 23:23:29       *
+*      SubmitType:C++                      *
+*      Memory:1640KB                       *
+*      CodeLen:2160B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<cctype>
+#include<stack>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 10 + 5;
+const int INF = 0x3f3f3f3f;
+
+int N;
+int vis[MX][MX][MX];
+char S[MX][MX][MX];//H,M,N
+int dist[][3] = {{1, 0, 0}, { -1, 0, 0}, {0, 1, 0}, {0, -1, 0}, {0, 0, 1}, {0, 0, -1}};
+
+struct Point {
+    int h, x, y, t;
+    Point(int a, int b, int c, int d) {
+        h = a;
+        x = b;
+        y = c;
+        t = d;
+    }
+    Point() {}
+} FST, END;
+
+int main() {
+    char oper[10];
+    while(~scanf("%s%d", oper, &N)) {
+        memset(vis, 0, sizeof(vis));
+
+        FST.x = -1, END.x = -1;
+        for(int i = 1; i <= N; i++) {
+            for(int j = 1; j <= N; j++) {
+                scanf("%s", S[i][j] + 1);
+            }
+        }
+        FST.t = 0;
+        scanf("%d%d%d", &FST.x, &FST.y, &FST.h);
+        scanf("%d%d%d", &END.x, &END.y, &END.h);
+        FST.x++;
+        FST.y++;
+        FST.h++;
+        END.x++;
+        END.y++;
+        END.h++;
+        scanf("%s", oper);
+
+        if(S[FST.h][FST.x][FST.y] == 'X') {
+            printf("NO ROUTE\n");
+            continue;
+        }
+
+        int ans = -1;
+        queue<Point>work;
+        work.push(FST);
+        while(!work.empty()) {
+            Point f = work.front();
+            work.pop();
+
+            vis[f.h][f.x][f.y] = 1;
+            if(f.h == END.h && f.x == END.x && f.y == END.y) {
+                ans = f.t;
+                break;
+            }
+
+            for(int k = 0; k < 6; k++) {
+                int nh = f.h + dist[k][0];
+                int nx = f.x + dist[k][1];
+                int ny = f.y + dist[k][2];
+
+                if(nx < 1 || nx > N || ny < 1 || ny > N || nh < 1 || nh > N) continue;
+                if(S[nh][nx][ny] == 'X' || vis[nh][nx][ny]) continue;
+
+                vis[nh][nx][ny] = 1;
+                work.push(Point(nh, nx, ny, f.t + 1));
+            }
+        }
+
+        if(ans == -1) {
+            printf("NO ROUTE\n");
+        } else {
+            printf("%d %d\n", N, ans);
+        }
+    }
+    return 0;
+}

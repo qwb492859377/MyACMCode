@@ -1,0 +1,73 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1315                   *
+*      VjudgeProblemID:17646               *
+*      SubmitTime:2015/7/20 12:10:23       *
+*      SubmitType:C++                      *
+*      Memory:132KB                        *
+*      CodeLen:1139B                       *
+*      RunTime:32ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 10 + 5;
+const int INF = 0x3f3f3f3f;
+
+int n;
+char S[MX][MX];
+bool vis[MX][MX];
+
+void DFS(int id,int cnt,int &ans){
+    int x=(id-1)%n+1;
+    int y=(id-1)/n+1;
+
+    if(S[x][y]=='X') return;
+
+    bool sign=false;
+    for(int nx=x;nx>=1&&S[nx][y]!='X';nx--) sign|=vis[nx][y];
+    for(int nx=x;nx<=n&&S[nx][y]!='X';nx++) sign|=vis[nx][y];
+    for(int ny=y;ny>=1&&S[x][ny]!='X';ny--) sign|=vis[x][ny];
+    for(int ny=y;ny<=n&&S[x][ny]!='X';ny++) sign|=vis[x][ny];
+
+    if(!sign) ans=max(ans,cnt+1);
+    for(int i=id+1;i<=n*n;i++){
+        if(!sign){
+            vis[x][y]=1;
+            DFS(i,cnt+1,ans);
+            vis[x][y]=0;
+        }
+        DFS(i,cnt,ans);
+    }
+}
+
+int main(){
+    while(~scanf("%d",&n),n){
+        for(int i=1;i<=n;i++){
+            scanf("%s",S[i]+1);
+        }
+
+        int ans=0;
+        for(int id=1;id<=n*n;id++){
+            DFS(id,0,ans);
+        }
+
+        printf("%d\n",ans);
+    }
+    return 0;
+}
+%d\n",max_num);
+  }
+  return 0;
+}

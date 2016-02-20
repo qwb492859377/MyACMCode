@@ -1,0 +1,123 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1166                   *
+*      VjudgeProblemID:16216               *
+*      SubmitTime:2015/8/7 12:02:37        *
+*      SubmitType:C++                      *
+*      Memory:2136KB                       *
+*      CodeLen:1658B                       *
+*      RunTime:405ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<set>
+#include<string>
+#include<iostream>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<LL, int> PLI;
+
+const int MX = 1e5 + 5;
+const int INF = 0x3f3f3f3f;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,n,1
+
+int S[MX << 2];
+
+void push_up(int rt) {
+    S[rt] = S[rt << 1] + S[rt << 1 | 1];
+}
+
+void build(int l, int r, int rt) {
+    if(l == r) {
+        scanf("%d", &S[rt]);
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    build(lson);
+    build(rson);
+    push_up(rt);
+}
+
+void update(int x, int d, int l, int r, int rt) {
+    if(l == r) {
+        S[rt] += d;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    if(x <= m) update(x, d, lson);
+    else update(x, d, rson);
+    push_up(rt);
+}
+
+int query(int L, int R, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        return S[rt];
+    }
+
+    int m = (l + r) >> 1, ret = 0;
+    if(L <= m) ret += query(L, R, lson);
+    if(R > m)  ret += query(L, R, rson);
+    return ret;
+}
+
+int main() {
+    int n, T, Q, ansk = 0;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d", &n);
+        printf("Case %d:\n", ++ansk);
+        build(root);
+
+        char op[5];
+        while(scanf("%s", op), op[0] != 'E') {
+            int x, y;
+            scanf("%d%d", &x, &y);
+            if(op[0] == 'Q') {
+                printf("%d\n", query(x, y, root));
+            } else if(op[0] == 'A') {
+                update(x, y, root);
+            } else {
+                update(x, -y, root);
+            }
+        }
+    }
+    return 0;
+}
+r(int i=1;i<=n;i++){
+            int t;
+            scanf("%d",&t);
+            tree_add(root,i,t);
+        }
+
+        char s[1000];
+        getchar();
+
+        while(gets(s)&&strcmp(s,"End")!=0){
+            char sta[100];
+            int i,j;
+            sscanf(s,"%s%d%d",sta,&i,&j);
+            if(strcmp(sta,"Add")==0){
+                tree_add(root,i,j);
+            }else if(strcmp(sta,"Sub")==0){
+                tree_sub(root,i,j);
+            }else if(strcmp(sta,"Query")==0){
+                printf("%d\n",tree_query(root,i,j));
+            }
+        }
+
+    }
+    return 0;
+}

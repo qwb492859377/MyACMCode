@@ -1,0 +1,55 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1050                   *
+*      VjudgeProblemID:17323               *
+*      SubmitTime:2015/1/27 17:11:10       *
+*      SubmitType:C++                      *
+*      Memory:196KB                        *
+*      CodeLen:906B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=105;
+const int INF=1<<30;
+
+int s[maxn][maxn];
+
+int main(){
+    int n;
+    while(~scanf("%d",&n)){
+        memset(s,0,sizeof(s));
+
+        int ans=-INF;
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=n;j++){
+                int temp;
+                scanf("%d",&temp);
+                s[i][j]=s[i-1][j]+temp;
+            }
+        }
+
+        int maxs=-INF;
+        for(int i=1;i<=n;i++){
+            for(int j=i;j<=n;j++){
+                int temp,dp=s[j][1]-s[i-1][1];maxs=dp;
+                for(int k=2;k<=n;k++){
+                    temp=s[j][k]-s[i-1][k];
+                    dp=dp>=0?dp+temp:temp;
+                    maxs=max(maxs,dp);
+                }
+
+                ans=max(ans,maxs);
+            }
+        }
+
+        printf("%d\n",ans);
+    }
+    return 0;
+}

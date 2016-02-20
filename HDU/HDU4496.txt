@@ -1,0 +1,60 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4496                   *
+*      VjudgeProblemID:46335               *
+*      SubmitTime:2015/6/2 18:52:53        *
+*      SubmitType:C++                      *
+*      Memory:2828KB                       *
+*      CodeLen:845B                        *
+*      RunTime:296ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<cctype>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=10000+5;
+const int MXX=100000+5;
+
+int P[MX];
+int U[MXX],V[MXX],ANS[MXX];
+
+int find(int x){
+    return P[x]==x?x:(P[x]=find(P[x]));
+}
+
+int main(){
+    int n,m;
+    while(~scanf("%d%d",&n,&m)){
+        for(int i=0;i<n;i++){
+            P[i]=i;
+        }
+
+        for(int i=0;i<m;i++){
+            scanf("%d%d",&U[i],&V[i]);
+        }
+
+        int ans=n;
+        for(int i=m-1;i>=0;i--){
+            int p1=find(U[i]),p2=find(V[i]);
+
+            ANS[i]=ans;
+            if(p1!=p2){
+                P[p2]=p1;
+                ans--;
+            }
+        }
+
+        for(int i=0;i<m;i++){
+            printf("%d\n",ANS[i]);
+        }
+    }
+    return 0;
+}

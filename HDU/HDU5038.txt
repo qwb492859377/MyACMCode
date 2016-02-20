@@ -1,0 +1,71 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU5038                   *
+*      VjudgeProblemID:53421               *
+*      SubmitTime:2015/6/5 20:22:00        *
+*      SubmitType:C++                      *
+*      Memory:1648KB                       *
+*      CodeLen:1044B                       *
+*      RunTime:842ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=10000+5;
+const double exps=1e-6;
+
+int S[MX];
+
+int f(int w){
+    return 10000-(100-w)*(100-w);
+}
+int main(){
+    int T,ansk=0,t,n;
+    scanf("%d",&T);
+
+    while(T--){
+        memset(S,0,sizeof(S));
+
+        scanf("%d",&n);
+
+        int Max=0,cnt=0;
+        for(int i=1;i<=n;i++){
+            scanf("%d",&t);
+            int temp=++S[f(t)];
+
+            Max=max(Max,temp);
+        }
+
+
+        for(int i=0;i<=10000;i++){
+            if(S[i]==Max) cnt++;
+        }
+
+        printf("Case #%d:\n",++ansk);
+
+        if(cnt*Max==n&&cnt>1){
+            printf("Bad Mushroom\n");
+            continue;
+        }
+
+        bool first=true;
+        for(int i=0;i<=10000;i++){
+            if(Max==S[i]){
+                if(first) first=false;
+                else      printf(" ");
+
+                printf("%d",i);
+            }
+        }
+        puts("");
+    }
+    return 0;
+}

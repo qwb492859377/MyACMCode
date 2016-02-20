@@ -1,0 +1,49 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1112                   *
+*      VjudgeProblemID:30377               *
+*      SubmitTime:2015/1/19 17:15:59       *
+*      SubmitType:C++                      *
+*      Memory:964KB                        *
+*      CodeLen:736B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int table[200];
+char s[50];
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        int n;
+        scanf("%d",&n);
+        int point=0;
+        for(int i=1;i<=n;i++){
+            scanf("%s",s);
+            if(s[0]=='L'){
+                point--;
+                table[i]=-1;
+            }else if(s[0]=='R'){
+                point++;
+                table[i]=1;
+            }else{
+                int id;
+                scanf("%s",s);
+                scanf("%d",&id);
+                table[i]=table[id];
+                point+=table[i];
+            }
+        }
+        printf("%d\n",point);
+    }
+    return 0;
+}

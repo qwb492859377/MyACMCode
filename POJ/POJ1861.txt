@@ -1,0 +1,72 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1861                   *
+*      VjudgeProblemID:17712               *
+*      SubmitTime:2015/1/23 15:43:21       *
+*      SubmitType:C++                      *
+*      Memory:324KB                        *
+*      CodeLen:1206B                       *
+*      RunTime:47ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=15000+5;
+struct edge{
+    int u,v,w;
+    bool operator<(const edge &b) const{
+        return w<b.w;
+    }
+}E[maxn];
+
+struct ANS{
+    int u,v;
+    bool operator<(const ANS &b) const{
+        if(u==b.u){
+            return v<b.v;
+        }
+        return u<b.u;
+    }
+}ans[maxn];
+
+int p[1005];
+
+int find(int x){
+    return p[x]==-1?x:(p[x]=find(p[x]));
+}
+
+int main(){
+    int n,m;
+    while(~scanf("%d%d",&n,&m)){
+        memset(p,-1,sizeof(p));
+        for(int i=0;i<m;i++){
+            scanf("%d%d%d",&E[i].u,&E[i].v,&E[i].w);
+        }
+        sort(E,E+m);
+
+        int rear=0,maxlen=-1;
+        for(int i=0;i<m;i++){
+            int p1=find(E[i].u);
+            int p2=find(E[i].v);
+            if(p1!=p2){
+                p[p2]=p1;
+                maxlen=max(maxlen,E[i].w);
+                ans[rear].u=E[i].u;
+                ans[rear].v=E[i].v;
+                rear++;
+            }
+        }
+
+        printf("%d\n%d\n",maxlen,rear);
+        sort(ans,ans+rear);
+        for(int i=0;i<rear;i++){
+            printf("%d %d\n",ans[i].u,ans[i].v);
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,35 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU1058                   *
+*      VjudgeProblemID:30132               *
+*      SubmitTime:2015/8/27 0:18:34        *
+*      SubmitType:Java                     *
+*      Memory:34180KB                      *
+*      CodeLen:481B                        *
+*      RunTime:125ms                       *
+********************************************
+*/
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Scanner;
+import java.math.*;
+
+public class Main {
+	static final int MX = 100000 + 5;
+
+	public static void main(String[] args) {
+		Scanner cin = new Scanner(System.in);
+
+		while (cin.hasNext()) {
+			int n = cin.nextInt();
+			double s = 0;
+			for (int i = n; i >= 1; i--) {
+				s += 1.0 / i;
+			}
+
+			DecimalFormat fm = new DecimalFormat("0.000000000000");
+			System.out.println(fm.format(s));
+		}
+	}
+}

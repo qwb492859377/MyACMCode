@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces344B            *
+*      VjudgeProblemID:46665               *
+*      SubmitTime:2015/8/10 21:41:23       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:3920KB                       *
+*      CodeLen:695B                        *
+*      RunTime:30ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e6 + 5;
+
+int A[MX];
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int a, b, c, x, y, z;
+    scanf("%d%d%d", &a, &b, &c);
+    if((c + b - a) % 2 != 0) {
+        printf("Impossible\n");
+        return 0;
+    }
+
+    y = (c + b - a) / 2;
+    x = b - y;
+    z = c - y;
+    if(x < 0 || y < 0 || z < 0) {
+        printf("Impossible\n");
+        return 0;
+    }
+    printf("%d %d %d\n", x, y, z);
+    return 0;
+}

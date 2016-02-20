@@ -1,0 +1,40 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces567B            *
+*      VjudgeProblemID:215350              *
+*      SubmitTime:2015/11/8 11:30:49       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:3728KB                       *
+*      CodeLen:574B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<stdio.h>
+#define MX 1000005
+
+int vis[MX];
+
+int main() {
+    int n;
+    while(~scanf("%d", &n)) {
+        char op[10];
+        int i, t, ans = 0, now = 0;
+
+        for(i = 1; i <= n; i++) {
+            scanf("%s%d", op, &t);
+            if(op[0] == '+') {
+                vis[t] = 1;
+                now++;
+                ans = now > ans ? now : ans;
+            } else {
+                if(vis[t]) {
+                    vis[t] = 0;
+                    now--;
+                } else ans++;
+            }
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

@@ -1,0 +1,61 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU1082                   *
+*      VjudgeProblemID:31202               *
+*      SubmitTime:2015/2/10 21:56:28       *
+*      SubmitType:GNU C++                  *
+*      Memory:292KB                        *
+*      CodeLen:995B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=105;
+
+int m,n;
+int s[maxn][maxn];
+int vis[maxn][maxn];
+int dist[][2]={{-1,0},{0,-1},{1,0},{0,1}};//иовСобср
+
+int DFS(int x,int y){
+    vis[x][y]=1;
+
+    int cnt=0;
+    for(int k=0;k<4;k++){
+        int nx=x+dist[k][0];
+        int ny=y+dist[k][1];
+        if(nx<1||nx>m||ny<1||ny>n) continue;
+        if(!s[nx][ny]||vis[nx][ny]) continue;
+        cnt+=DFS(nx,ny);
+    }
+    return cnt+1;
+}
+
+int main(){
+    while(~scanf("%d%d",&m,&n),m+n){
+        memset(vis,0,sizeof(vis));
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                scanf("%d",&s[i][j]);
+            }
+        }
+
+        int ans=0;
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(!vis[i][j]&&s[i][j]){
+                    ans=max(ans,DFS(i,j));
+                }
+            }
+        }
+
+        printf("%d\n",ans);
+    }
+    return 0;
+}

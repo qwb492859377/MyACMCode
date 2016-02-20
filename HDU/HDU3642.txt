@@ -1,0 +1,166 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3642                   *
+*      VjudgeProblemID:13041               *
+*      SubmitTime:2015/8/12 11:25:31       *
+*      SubmitType:C++                      *
+*      Memory:2020KB                       *
+*      CodeLen:3989B                       *
+*      RunTime:2698ms                      *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,rear-1,1
+
+int const MX = 4e3 + 5;
+
+struct Side {
+    int z, x1, y1, x2, y2, d, id;
+    bool operator<(const Side &b)const {
+        if(z == b.z) return d < b.d;
+        return z < b.z;
+    }
+    Side() {}
+    Side(int _z, int _id, int _x1, int _y1, int _x2, int _y2, int _d) {
+        z = _z; x1 = _x1; y1 = _y1; x2 = _x2; y2 = _y2; d = _d; id = _id;
+    }
+} A[MX];
+
+struct Line {
+    int y, x1, x2, d, id;
+    bool operator<(const Line &b)const {
+        if(y == b.y) {
+            if(d == b.d) return id < b.id;
+            return d < b.d;
+        }
+        return y < b.y;
+    }
+    Line() {}
+    Line(int _y, int _id, int _d, int _x1, int _x2) {
+        y = _y; x1 = _x1; x2 = _x2; d = _d; id = _id;
+    }
+};
+
+int X[MX], rear;
+int S1[MX << 2], S2[MX << 2], S3[MX << 2], cnt[MX << 2];
+set<Line>work;
+
+int BS(int x) {
+    int L = 1, R = rear, m;
+    while(L <= R) {
+        m = (L + R) >> 1;
+        if(X[m] == x) return m;
+        if(X[m] > x) R = m - 1;
+        else L = m + 1;
+    }
+    return -1;
+}
+
+void push_up(int l, int r, int rt) {
+    if(cnt[rt]) {
+        S1[rt] = X[r + 1] - X[l];
+        if(cnt[rt] == 1) {
+            S2[rt] = S1[rt << 1] + S1[rt << 1 | 1];
+            S3[rt] = S2[rt << 1] + S2[rt << 1 | 1];
+        } else {
+            S2[rt] = X[r + 1] - X[l];
+            if(cnt[rt] == 2) {
+                S3[rt] = S1[rt << 1] + S1[rt << 1 | 1];
+            } else {
+                S3[rt] = X[r + 1] - X[l];
+            }
+        }
+    } else if(l == r) S1[rt] = S2[rt] = S3[rt] = 0;
+    else {
+        S1[rt] = S1[rt << 1] + S1[rt << 1 | 1];
+        S2[rt] = S2[rt << 1] + S2[rt << 1 | 1];
+        S3[rt] = S3[rt << 1] + S3[rt << 1 | 1];
+    }
+}
+
+void update(int L, int R, int d, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        cnt[rt] += d;
+        push_up(l, r, rt);
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    if(L <= m) update(L, R, d, lson);
+    if(R > m) update(L, R, d, rson);
+    push_up(l, r, rt);
+}
+
+LL solve() {
+    memset(S1, 0, sizeof(S1));
+    memset(S2, 0, sizeof(S2));
+    memset(cnt, 0, sizeof(cnt));
+
+    LL ans = 0;
+    int last = 0;
+    for(set<Line>::iterator it = work.begin(); it != work.end(); it++) {
+        //printf("[%d,%d    %d,%d]\n", it->x1, it->x2, it->y, it->d);
+        ans += (LL)(it->y - last) * S3[1];
+        update(BS(it->x1), BS(it->x2) - 1, it->d, root);
+        last = it->y;
+    } //printf("{%I64d}\n", ans);
+    return ans;
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int T, n, ansk = 0;
+    scanf("%d", &T);
+    while(T--) {
+        rear = 0;
+        work.clear();
+
+        scanf("%d", &n);
+        for(int i = 1; i <= n; i++) {
+            int x1, y1, z1, x2, y2, z2;
+            scanf("%d%d%d%d%d%d", &x1, &y1, &z1, &x2, &y2, &z2);
+            A[i] = Side(z1, i, x1, y1, x2, y2, 1);
+            A[i + n] = Side(z2, i, x1, y1, x2, y2, -1);
+            X[++rear] = x1; X[++rear] = x2;
+        }
+        sort(A + 1, A + 1 + 2 * n);
+        sort(X + 1, X + 1 + rear);
+        rear = unique(X + 1, X + 1 + rear) - X - 1;
+
+        LL ans = 0;
+        int last = 0;
+        printf("Case %d: ", ++ansk);
+        for(int i = 1; i <= 2 * n; i++) {
+            ans += (LL)(A[i].z - last) * solve();
+
+            if(A[i].d > 0) {
+                work.insert(Line(A[i].y1, A[i].id, 1, A[i].x1, A[i].x2));
+                work.insert(Line(A[i].y2, A[i].id, -1, A[i].x1, A[i].x2));
+            } else {
+                work.erase(Line(A[i].y1, A[i].id, 1, A[i].x1, A[i].x2));
+                work.erase(Line(A[i].y2, A[i].id, -1, A[i].x1, A[i].x2));
+            }
+            last = A[i].z;
+        }
+        printf("%I64d\n", ans);
+    }
+    return 0;
+}

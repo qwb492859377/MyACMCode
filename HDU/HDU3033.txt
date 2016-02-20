@@ -1,0 +1,78 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3033                   *
+*      VjudgeProblemID:17677               *
+*      SubmitTime:2015/7/28 23:36:00       *
+*      SubmitType:C++                      *
+*      Memory:2396KB                       *
+*      CodeLen:1262B                       *
+*      RunTime:78ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e4 + 5;
+const int INF = 0x3f3f3f3f;
+const int mod = 1e9 + 7;
+
+struct Node {
+    int cost, val;
+    Node(int _w = 0, int _v = 0) {
+        cost = _w;
+        val = _v;
+    }
+};
+int dp[20][MX];
+vector<Node>G[20];
+
+int main() {
+    int n, V, brand;
+    while(~scanf("%d%d%d", &n, &V, &brand)) {
+        memset(dp, -INF, sizeof(dp));
+        for(int i = 1; i <= brand; i++) {
+            G[i].clear();
+        }
+
+        for(int i = 1; i <= n; i++) {
+            int a, b, c;
+            scanf("%d%d%d",&a,&b,&c);
+            G[a].push_back(Node(b, c));
+        }
+
+        memset(dp[0], 0, sizeof(dp[0]));
+        for(int i = 1; i <= brand; i++) {
+            for(int j = 0; j < G[i].size(); j++) {
+                for(int k = V; k >= G[i][j].cost; k--) {
+                    dp[i][k] = max(dp[i][k], max(dp[i - 1][k - G[i][j].cost], dp[i][k - G[i][j].cost]) + G[i][j].val);
+                }
+            }
+        }
+
+        if(dp[brand][V] < 0) printf("Impossible\n");
+        else printf("%d\n", dp[brand][V]);
+    }
+    return 0;
+}
+[j] = max(F[k][j], dp[i][j]);
+                    //printf("[%d,%d]%d\n", k, j, F[k][j]);
+                }
+            }
+        }
+
+        if(F[brand][V] < 0) printf("Impossible\n");
+        else printf("%d\n", F[brand][V]);
+    }
+    return 0;
+}

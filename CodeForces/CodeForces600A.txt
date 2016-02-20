@@ -1,0 +1,87 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces600A            *
+*      VjudgeProblemID:287461              *
+*      SubmitTime:2015/12/1 21:02:57       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:5196KB                       *
+*      CodeLen:1634B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1e5 + 5;
+
+int P[MX];
+char S[MX], temp[MX];
+vector<string>A, B;
+
+void solve() {
+    int len = strlen(S + 1), rear = 0;
+    for(int i = 1; i <= len; i++) {
+        if(S[i] == ',' || S[i] == ';') P[++rear] = i;
+    }
+
+    P[0] = 0; P[rear + 1] = len + 1;
+    for(int i = 1; i <= rear + 1; i++) {
+        int l = P[i - 1] + 1, r = P[i] - 1, tot = 0, sign = true;
+        for(int j = l; j <= r; j++) {
+            if(!isdigit(S[j])) sign = false;
+            temp[tot++] = S[j];
+        }
+        if(!tot || tot != 1 && temp[0] == '0') sign = false;
+        temp[tot] = 0;
+
+        if(sign) A.push_back(string(temp));
+        else B.push_back(string(temp));
+    }
+
+    string ret;
+    if(A.size()) {
+        ret = "\"";
+        for(int i = 0; i < (int)A.size(); i++) {
+            if(i) ret += ",";
+            ret += A[i];
+        }
+        ret += "\"";
+    } else ret = "-";
+    cout << ret << endl;
+
+    ret = "";
+    if(B.size()) {
+        ret = "\"";
+        for(int i = 0; i < (int)B.size(); i++) {
+            if(i) ret += ",";
+            ret += B[i];
+        }
+        ret += "\"";
+    } else ret = "-";
+    cout << ret << endl;
+}
+
+int main() {
+    //FIN;
+    scanf("%s", S + 1);
+    solve();
+    return 0;
+}

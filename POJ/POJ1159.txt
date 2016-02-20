@@ -1,0 +1,53 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1159                   *
+*      VjudgeProblemID:15305               *
+*      SubmitTime:2015/7/26 11:02:17       *
+*      SubmitType:C++                      *
+*      Memory:208KB                        *
+*      CodeLen:909B                        *
+*      RunTime:875ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 5500 + 5;
+const int INF = 0x3f3f3f3f;
+
+char S1[MX], S2[MX];
+int dp[2][MX];
+
+int main() {
+    int L;
+    while(~scanf("%d%s", &L, S1 + 1)) {
+        for(int i = 1; i <= L; i++) {
+            S2[i] = S1[L - i + 1];
+        }
+
+        int cur = 0, nxt = 1;
+        for(int i = 1; i <= L; i++) {
+            memset(dp[nxt], 0, sizeof(dp[nxt]));
+            for(int j = 1; j <= L; j++) {
+                if(S1[i] == S2[j]) {
+                    dp[nxt][j] = dp[cur][j - 1] + 1;
+                } else {
+                    dp[nxt][j] = max(dp[nxt][j - 1], dp[cur][j]);
+                }
+            }
+            swap(cur, nxt);
+        }
+        printf("%d\n", L - dp[cur][L]);
+    }
+    return 0;
+}

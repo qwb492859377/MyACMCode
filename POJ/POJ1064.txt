@@ -1,0 +1,67 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1064                   *
+*      VjudgeProblemID:17529               *
+*      SubmitTime:2015/12/4 22:57:23       *
+*      SubmitType:G++                      *
+*      Memory:476KB                        *
+*      CodeLen:736B                        *
+*      RunTime:172ms                       *
+********************************************
+*/
+#include<stdio.h>
+#include<algorithm>
+using namespace std;
+
+const int MX = 1e4 + 5 ;
+
+int n, m;
+double A[MX];
+
+bool check(double x) {
+    int ret = 0;
+    for(int i = 1; i <= n; i++) {
+        ret += A[i] / x;
+    }
+    return ret >= m;
+}
+
+double solve() {
+    double l = 0, r = 1e6, m;
+    for(int i = 1; i <= 100; i++) {
+        m = (l + r) / 2;
+        if(check(m)) l = m;
+        else r = m;
+    }
+    return (int)(l * 100) / 100.0;
+}
+/*
+定义f(x)表示，当长度为x时，
+能截断出多少条绳子
+*/
+int main() {
+    //freopen("input.txt","r",stdin);
+    while(~scanf("%d%d", &n, &m)) {
+        for(int i = 1; i <= n; i++) {
+            scanf("%lf", &A[i]);
+        }
+        printf("%.2f\n", solve());
+    }
+    return 0;
+})) l = m;
+        else r = m;
+    }
+    return (int)(l * 100) / 100.0;
+}
+
+int main() {
+    //FIN;
+    while(~scanf("%d%lf", &n, &L)) {
+        for(int i = 1; i <= n; i++) {
+            scanf("%lf", &A[i]);
+        }
+        printf("%.2f\n", solve());
+    }
+    return 0;
+}

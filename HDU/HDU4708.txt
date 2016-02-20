@@ -1,0 +1,63 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4708                   *
+*      VjudgeProblemID:46469               *
+*      SubmitTime:2015/8/19 13:43:03       *
+*      SubmitType:C++                      *
+*      Memory:1736KB                       *
+*      CodeLen:1273B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e2 + 5;
+const LL INF = 0x3f3f3f3f3f3f3f3f;
+const double exps = 1e-8;
+
+LL S[MX][MX];
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n), n) {
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= n; j++) {
+                scanf("%I64d", &S[i][j]);
+            }
+        }
+
+        LL ansa = 0, ansb = 0;
+        for(int j = 1; j <= n / 2; j++) {
+            LL sum = -INF, cost = INF;
+            for(int i = 1; i <= n - 2 * j + 1; i++) {
+                LL a = S[j][j - 1 + i] + S[j - 1 + i][n - j + 1] + S[n - j + 1 - i + 1][1 + j - 1] + S[n - j + 1][n - j + 1 - i + 1];
+                LL b = min(i - 1, n - 2 * j + 2 - i);
+
+                if(a > sum || (a == sum && b < cost)) {
+                    sum = a; cost = b;
+                }
+            }
+            ansa += sum;
+            ansb += cost;
+        }
+        printf("%I64d %I64d\n", ansa + S[(n + 1) / 2][(n + 1) / 2], ansb);
+    }
+    return 0;
+}

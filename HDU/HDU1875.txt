@@ -1,0 +1,101 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1875                   *
+*      VjudgeProblemID:15740               *
+*      SubmitTime:2015/7/31 13:35:54       *
+*      SubmitType:C++                      *
+*      Memory:1712KB                       *
+*      CodeLen:1575B                       *
+*      RunTime:156ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+#define For(i,x,y) for(int i=x;i<=y;i++)
+
+const int MX = 1e4 + 5;
+const int INF = 0x3f3f3f3f;
+
+int P[MX];
+int find(int x) {
+    return P[x] == x ? x : (P[x] = find(P[x]));
+}
+
+struct Edge {
+    int u, v;
+    double cost;
+    bool operator<(const Edge &b)const {
+        return cost < b.cost;
+    }
+} E[MX];
+
+int X[MX], Y[MX], rear;
+double dist(double x, double y) {
+    return sqrt(x * x + y * y);
+}
+
+int main() {
+    int n, m, T;
+    scanf("%d", &T);
+    while(T--) {
+        rear = 0;
+        scanf("%d", &n);
+        For(i, 1, n) P[i] = i;
+
+        For(i, 1, n) {
+            scanf("%d%d", &X[i], &Y[i]);
+        }
+
+        For(i, 1, n) {
+            For(j, i + 1, n) {
+                double d = dist(X[i] - X[j], Y[i] - Y[j]);
+                if(10 <= d && d <= 1000) {
+                    rear++;
+                    E[rear].u = i;
+                    E[rear].v = j;
+                    E[rear].cost = d * 100;
+                }
+            }
+        }
+
+        sort(E + 1, E + 1 + rear);
+
+        int cnt = 0;
+        double ans = 0;
+        For(i, 1, rear) {
+            int p1 = find(E[i].u), p2 = find(E[i].v);
+            if(p1 != p2) {
+                cnt++;
+                ans += E[i].cost;
+                P[p1] = p2;
+            }
+        }
+        if(cnt != n - 1) {
+            printf("oh!\n");
+        } else {
+            printf("%.1lf\n", ans);
+        }
+    }
+    return 0;
+}
+        sign=false;
+                break;
+            }
+        }
+        if(sign){
+            printf("%.1lf\n",ans);
+        }else{
+            printf("oh!\n");
+        }
+    }
+    return 0;
+}

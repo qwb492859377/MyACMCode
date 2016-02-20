@@ -1,0 +1,95 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3265                   *
+*      VjudgeProblemID:10769               *
+*      SubmitTime:2015/8/11 11:24:18       *
+*      SubmitType:C++                      *
+*      Memory:11028KB                      *
+*      CodeLen:2088B                       *
+*      RunTime:670ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 0,50000,1
+
+int const MX = 1e5 + 5;
+
+int rear, cnt[MX << 2], S[MX << 2];
+
+struct Que {
+    int d;
+    int top, L, R;
+    Que() {}
+    Que(int _top, int _L, int _R, int _d) {
+        top = _top; L = _L; R = _R; d = _d;
+    }
+    bool operator<(const Que &b)const {
+        return top < b.top;
+    }
+} Q[MX << 3];
+
+void push_up(int l, int r, int rt) {
+    if(cnt[rt]) S[rt] = r - l + 1;
+    else if(l == r) S[rt] = 0;
+    else S[rt] = S[rt << 1] + S[rt << 1 | 1];
+}
+
+void update(int L, int R, int d, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        cnt[rt] += d;
+        push_up(l, r, rt);
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    if(L <= m) update(L, R, d, lson);
+    if(R > m) update(L, R, d, rson);
+    push_up(l, r, rt);
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int n;
+    while(~scanf("%d", &n), n) {
+        rear = 0;
+        memset(cnt, 0, sizeof(cnt));
+        memset(S, 0, sizeof(S));
+
+        for(int i = 1; i <= n; i++) {
+            int x1, y1, x2, y2, x3, y3, x4, y4;
+            scanf("%d%d%d%d%d%d%d%d", &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
+            Q[++rear] = Que(y1, x3, x4, 1); Q[++rear] = Que(y3, x3, x4, -1);
+            Q[++rear] = Que(y4, x3, x4, 1); Q[++rear] = Que(y2, x3, x4, -1);
+            Q[++rear] = Que(y1, x1, x3, 1); Q[++rear] = Que(y2, x1, x3, -1);
+            Q[++rear] = Que(y1, x4, x2, 1); Q[++rear] = Que(y2, x4, x2, -1);
+        }
+        sort(Q + 1, Q + 1 + rear);
+
+        int last = 0; LL ans = 0;
+        for(int i = 1; i <= rear; i++) {
+            ans += (LL)(Q[i].top - last) * S[1];
+            if(Q[i].L <= Q[i].R - 1) update(Q[i].L, Q[i].R - 1, Q[i].d, root);
+            last = Q[i].top;
+        }
+        printf("%I64d\n", ans);
+    }
+    return 0;
+}

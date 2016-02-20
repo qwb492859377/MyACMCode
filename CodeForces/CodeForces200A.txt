@@ -1,0 +1,82 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces200A            *
+*      VjudgeProblemID:28866               *
+*      SubmitTime:2015/8/5 16:43:30        *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:31476KB                      *
+*      CodeLen:1543B                       *
+*      RunTime:405ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<string>
+#include<iostream>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 2000 + 5;
+const int INF = 0x3f3f3f3f;
+
+int m, n;
+int vis[MX][MX], dist[MX][MX];
+
+bool inline check(int nx, int ny) {
+    if(1 <= nx && nx <= m && 1 <= ny && ny <= n && !vis[nx][ny]) {
+        printf("%d %d\n", nx, ny);
+        vis[nx][ny] = 1;
+        return true;
+    }
+    return false;
+}
+
+void inline solve(int x, int y) {
+    if(check(x, y)) return;
+
+    for(int i = -1; i <= 1; i++) {
+        for(int j = -1; j <= 1; j++) {
+            int nx = x + i, ny = y + j;
+            if(1 <= nx && nx <= m && 1 <= ny && ny <= n) {
+                dist[x][y] = max(dist[x][y], dist[nx][ny] - abs(i) - abs(j));
+            }
+        }
+    }
+
+    for(;; dist[x][y]++) {
+        int d = dist[x][y];
+        for(int nx = x - d, dy = 0; nx <= x; nx++, dy++) {
+            if(check(nx, y - dy)) return;
+            if(check(nx, y + dy)) return;
+        }
+
+        for(int nx = x, dy = d; nx <= x + d; nx++, dy--) {
+            if(check(nx, y - dy)) return;
+            if(check(nx, y + dy)) return;
+        }
+    }
+}
+
+int main() {
+    int Q;
+    //freopen("input.txt","r",stdin);
+    memset(vis, 0, sizeof(vis));
+    memset(dist, 0, sizeof(vis));
+
+    scanf("%d%d%d", &m, &n, &Q);
+    while(Q--) {
+        int x, y;
+        scanf("%d%d", &x, &y);
+        solve(x, y);
+    }
+    return 0;
+}

@@ -1,0 +1,52 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU5198                   *
+*      VjudgeProblemID:145927              *
+*      SubmitTime:2015/4/5 10:29:13        *
+*      SubmitType:C++                      *
+*      Memory:1600KB                       *
+*      CodeLen:755B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+const int MX=1000+5;
+
+int main(){
+    char S[MX];
+    while(gets(S)){
+        int len=strlen(S),n1=0,n2=0,n3=0,cur=0;
+
+        char a=S[0],b,c;
+        for(;cur<len;cur++){
+            if(S[cur]==a) n1++;
+            else break;
+        }
+
+        b=S[cur];
+        for(;cur<len;cur++){
+            if(S[cur]==b) n2++;
+            else break;
+        }
+
+        c=S[cur];
+        for(;cur<len;cur++){
+            if(S[cur]==c) n3++;
+            else break;
+        }
+
+        if(n1==n2&&n2==n3&&a!=b&&b!=c&&a!=c&&n1+n2+n3==len){
+            printf("YES\n");
+        }else{
+            printf("NO\n");
+        }
+    }
+    return 0;
+}

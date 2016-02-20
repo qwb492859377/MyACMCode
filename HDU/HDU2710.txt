@@ -1,0 +1,66 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2710                   *
+*      VjudgeProblemID:17476               *
+*      SubmitTime:2015/11/30 1:09:33       *
+*      SubmitType:C++                      *
+*      Memory:1808KB                       *
+*      CodeLen:1071B                       *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 2e4 + 5;
+
+int f[MX];
+
+void f_init() {
+    f[1] = 1;
+    for(int i = 2; i < MX; i++) {
+        int t = i, e = sqrt(i + 0.5);
+        for(int j = 2; j <= e; j++) {
+            if(t % j == 0) {
+                f[i] = j;
+                while(t % j == 0) t /= j;
+            }
+        }
+        if(t != 1) f[i] = t;
+    }
+}
+
+int main() {
+    f_init();
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        int ans = 0, id = 1, t;
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &t);
+            if(f[t] > ans) {
+                ans = f[t];
+                id = t;
+            }
+        }
+        printf("%d\n", id);
+    }
+    return 0;
+}

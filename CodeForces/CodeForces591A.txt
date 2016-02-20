@@ -1,0 +1,41 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces591A            *
+*      VjudgeProblemID:266709              *
+*      SubmitTime:2015/11/1 23:34:15       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:4KB                          *
+*      CodeLen:582B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1e5 + 5;
+
+int main() {
+    double l, p, q; //FIN;
+    while(~scanf("%lf%lf%lf", &l, &p, &q)) {
+        printf("%.8lf\n", l * p / (p + q));
+    }
+    return 0;
+}

@@ -1,0 +1,59 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3480                   *
+*      VjudgeProblemID:15083               *
+*      SubmitTime:2015/12/9 14:35:49       *
+*      SubmitType:G++                      *
+*      Memory:692KB                        *
+*      CodeLen:1140B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 100 + 5;
+
+int A[MX];
+/*
+SJ定理
+SG函数的求法一模一样，最后如果只有一堆，也能用SJ定理
+如果为Anti-Nim游戏，如下情况先手胜
+SG异或和为0，且单个游戏的SG全部<=1
+SG异或不为0，且存在单个游戏的SG>1,即<=1的个数不等于独立游戏个数
+*/
+int main() {
+    int T, n;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d", &n);
+        int sum = 0, cnt = 0;
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+            sum ^= A[i];
+            cnt += (A[i] <= 1);
+        }
+        if(sum == 0 && cnt == n) printf("John\n");
+        else if(sum != 0 && cnt != n) printf("John\n");
+        else printf("Brother\n");
+    }
+    return 0;
+}

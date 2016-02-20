@@ -1,0 +1,107 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1698                   *
+*      VjudgeProblemID:15763               *
+*      SubmitTime:2015/8/7 12:35:21        *
+*      SubmitType:C++                      *
+*      Memory:3688KB                       *
+*      CodeLen:1889B                       *
+*      RunTime:936ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<set>
+#include<string>
+#include<iostream>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<LL, int> PLI;
+
+const int MX = 2e5 + 5;
+const int INF = 0x3f3f3f3f;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,n,1
+
+int S[MX << 2], col[MX << 2];
+
+void push_up(int rt) {
+    S[rt] = S[rt << 1] + S[rt << 1 | 1];
+}
+
+void push_down(int rt, int len) {
+    if(col[rt]) {
+        col[rt << 1] = col[rt];
+        col[rt << 1 | 1] = col[rt];
+
+        int w = len >> 1;
+        S[rt << 1] = col[rt] * (len - w);
+        S[rt << 1 | 1] = col[rt] * w;
+        col[rt] = 0;
+    }
+}
+
+void build(int l, int r, int rt) {
+    col[rt] = 0;
+    if(l == r) {
+        S[rt] = 1;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    build(lson);
+    build(rson);
+    push_up(rt);
+}
+
+void update(int L, int R, int x, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        S[rt] = (r - l + 1) * x;
+        col[rt] = x;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    push_down(rt, r - l + 1);
+    if(L <= m) update(L, R, x, lson);
+    if(R > m)  update(L, R, x, rson);
+    push_up(rt);
+}
+
+int query(int L, int R, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        return S[rt];
+    }
+
+    int m = (l + r) >> 1, ret = 0;
+    push_down(rt, r - l + 1);
+    if(L <= m) ret += query(L, R, lson);
+    if(R > m)  ret += query(L, R, rson);
+    return ret;
+}
+
+int main() {
+    int T, n, Q, ansk = 0;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d%d", &n, &Q);
+        build(root);
+
+        while(Q--) {
+            int a, b, c;
+            scanf("%d%d%d", &a, &b, &c);
+            update(a, b, c, root);
+        }
+        printf("Case %d: The total value of the hook is %d.\n", ++ansk, query(1, n, root));
+    }
+    return 0;
+}

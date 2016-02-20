@@ -1,0 +1,174 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ZOJ3122                   *
+*      VjudgeProblemID:34485               *
+*      SubmitTime:2015/9/15 17:38:13       *
+*      SubmitType:C++ (g++ 4.7.2)          *
+*      Memory:4212KB                       *
+*      CodeLen:4103B                       *
+*      RunTime:170ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MS = 16 + 5;
+const int MX = 4200 + 5;
+const int MN = 200000 + 5;
+const int INF = 0x3f3f3f3f;
+
+char Map[MS][MS];
+int vis[MS];
+
+struct DLX {
+    int m, n;
+    int H[MX], S[MX], rear;
+    short Row[MN], Col[MN];
+    int L[MN], R[MN], U[MN], D[MN];
+
+    void Init(int _m, int _n) {
+        m = _m; n = _n;
+        rear = n;
+        for(int i = 0; i <= n; i++) {
+            S[i] = 0;
+            L[i] = i - 1;
+            R[i] = i + 1;
+            U[i] = D[i] = i;
+        }
+        L[0] = n; R[n] = 0;
+        for(int i = 1; i <= m; i++) {
+            H[i] = -1;
+        }
+    }
+
+    void Link(int r, int c) {
+        int rt = ++rear;
+        Row[rt] = r; Col[rt] = c; S[c]++;
+
+        D[rt] = D[c]; U[D[c]] = rt;
+        U[rt] = c; D[c] = rt;
+        if(H[r] == -1) {
+            H[r] = L[rt] = R[rt] = rt;
+        } else {
+            int id = H[r];
+            R[rt] = R[id]; L[R[id]] = rt;
+            L[rt] = id; R[id] = rt;
+        }
+    }
+
+    void Remove(int c) {
+        R[L[c]] = R[c]; L[R[c]] = L[c];
+        for(int i = D[c]; i != c; i = D[i]) {
+            for(int j = R[i]; j != i; j = R[j]) {
+                D[U[j]] = D[j]; U[D[j]] = U[j];
+                S[Col[j]]--;
+            }
+        }
+    }
+
+    void Resume(int c) {
+        for(int i = U[c]; i != c; i = U[i]) {
+            for(int j = L[i]; j != i; j = L[j]) {
+                D[U[j]] = U[D[j]] = j;
+                S[Col[j]]++;
+            }
+        }
+        R[L[c]] = L[R[c]] = c;
+    }
+
+    bool Dance(int cnt) {
+        if(R[0] == 0) return true;
+
+        int c = R[0];
+        for(int i = R[0]; i != 0; i = R[i]) {
+            if(S[i] < S[c]) c = i;
+        }
+
+        Remove(c);
+        for(int i = D[c]; i != c; i = D[i]) {
+            for(int j = R[i]; j != i; j = R[j]) Remove(Col[j]);
+
+            int r = Row[i];
+            Map[(r - 1) / 256 + 1][((r - 1) % 256) / 16 + 1] = ((r - 1) % 256) % 16 + 'A';
+            if(Dance(cnt + 1)) return true;
+
+            for(int j = L[i]; j != i; j = L[j]) Resume(Col[j]);
+        }
+        Resume(c);
+        return false;
+    }
+} G;
+
+void check(int x, int y) {
+    for(int i = 1; i <= 16; i++) vis[i] = 0;
+    for(int i = 1; i <= 16; i++) {
+        if(isalpha(Map[i][y])) vis[Map[i][y] - 'A' + 1] = 1;
+        if(isalpha(Map[x][i])) vis[Map[x][i] - 'A' + 1] = 1;
+    }
+    int tx = (x - 1) / 4 + 1, ty = (y - 1) / 4 + 1;
+    for(int i = (tx - 1) * 4 + 1; i <= tx * 4; i++) {
+        for(int j = (ty - 1) * 4 + 1; j <= ty * 4; j++) {
+            if(isalpha(Map[i][j])) vis[Map[i][j] - 'A' + 1] = 1;
+        }
+    }
+}
+
+void Link(int i, int j, int k) {
+    int id = ((i - 1) * 16 + j - 1) * 16 + k;
+    int tx = (i - 1) / 4 + 1, ty = (j - 1) / 4 + 1, tp = (tx - 1) * 4 + ty;
+
+    G.Link(id, (i - 1) * 16 + j);
+    G.Link(id, 16 * 16 + (i - 1) * 16 + k);
+    G.Link(id, 2 * 16 * 16 + (j - 1) * 16 + k);
+    G.Link(id, 3 * 16 * 16 + (tp - 1) * 16 + k);
+}
+
+int main() {//FIN;
+    bool first = true;
+    while(~scanf("%s", Map[1] + 1)) {
+        G.Init(16 * 16 * 16, 4 * 16 * 16);
+        for(int i = 2; i <= 16; i++) {
+            scanf("%s", Map[i] + 1);
+        }
+
+        for(int i = 1; i <= 16; i++) {
+            for(int j = 1; j <= 16; j++) {
+                if(!isalpha(Map[i][j])) {
+                    check(i, j);
+                    for(int k = 1; k <= 16; k++) {
+                        if(!vis[k]) {
+                            Link(i, j, k);
+                        }
+                    }
+                } else Link(i, j, Map[i][j] - 'A' + 1);
+            }
+        }
+
+        int ret = G.Dance(0);
+
+        if(first) first = false;
+        else printf("\n");
+
+        for(int i = 1; i <= 16; i++) {
+            printf("%s\n", Map[i] + 1);
+        }
+    }
+    return 0;
+}

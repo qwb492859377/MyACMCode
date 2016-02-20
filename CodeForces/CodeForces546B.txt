@@ -1,0 +1,45 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces546B            *
+*      VjudgeProblemID:173144              *
+*      SubmitTime:2015/5/23 12:08:14       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:0KB                          *
+*      CodeLen:538B                        *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<cstdlib>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=3000+5;
+
+int A[MX],vis[5*MX];
+
+int main(){
+    int n,cur;LL sum=0;
+    scanf("%d",&n);
+
+    for(int i=1;i<=n;i++){
+        scanf("%d",&A[i]);
+        sum+=A[i];
+    }
+    sort(A+1,A+1+n);
+
+    LL ans=0;
+    for(int i=1;i<=n;i++){
+        for(cur=A[i];vis[cur];cur++);
+        vis[cur]=1;
+        ans+=cur;
+    }
+
+    printf("%I64d\n",ans-sum);
+    return 0;
+}

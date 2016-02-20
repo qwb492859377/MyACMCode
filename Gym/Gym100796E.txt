@@ -1,0 +1,90 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:Gym100796E                *
+*      VjudgeProblemID:264728              *
+*      SubmitTime:2015/11/18 10:58:48      *
+*      SubmitType:GNU G++11 4.9.2          *
+*      Memory:2368KB                       *
+*      CodeLen:1728B                       *
+*      RunTime:77ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e5 + 5;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,n,1
+
+int S[MX << 2];
+void push_up(int rt) {
+    S[rt] = S[rt << 1] + S[rt << 1 | 1];
+}
+void update(int x, int d, int l, int r, int rt) {
+    if(l == r) {
+        S[rt] += d;
+        return;
+    }
+    int m = (l + r) >> 1;
+    if(x <= m) update(x, d, lson);
+    else update(x, d, rson);
+    push_up(rt);
+}
+int query(int L, int R, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        return S[rt];
+    }
+    int m = (l + r) >> 1, ret = 0;
+    if(L <= m) ret += query(L, R, lson);
+    if(R > m) ret += query(L, R, rson);
+    return ret;
+}
+
+struct Seg {
+    int L, R;
+    bool operator<(const Seg &P)const {
+        if(L == P.L) return R > P.R;
+        return L < P.L;
+    }
+} A[MX];
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        memset(S, 0, sizeof(S));
+        for(int i = 1; i <= n; i++) {
+            int p; scanf("%d", &p);
+            A[i].L = min(p, i);
+            A[i].R = max(p, i);
+        }
+        sort(A + 1, A + 1 + n);
+
+        LL ans = 0;
+        for(int i = 1; i <= n; i++) {
+            if(A[i].L + 1 <= A[i].R - 1) ans += query(A[i].L + 1, A[i].R - 1, root);
+            update(A[i].R, 1, root);
+        }
+        printf("%I64d\n", ans);
+    }
+    return 0;
+}

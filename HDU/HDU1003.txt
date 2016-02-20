@@ -1,0 +1,77 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1003                   *
+*      VjudgeProblemID:15514               *
+*      SubmitTime:2015/2/26 18:49:53       *
+*      SubmitType:C++                      *
+*      Memory:1088KB                       *
+*      CodeLen:767B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+const int INF=0x3f3f3f3f;
+
+int main(){
+    int T,n,t,ansk=0;
+    scanf("%d",&T);
+    while(T--){
+        scanf("%d",&n);
+
+        int l,r,s=-INF;
+        int maxl,maxr,maxs=-INF;
+        for(int i=1;i<=n;i++){
+            scanf("%d",&t);
+            if(s>=0){
+                r=i;
+                s+=t;
+            }else{
+                l=r=i;
+                s=t;
+            }
+            if(s>=maxs) maxr=r;
+            if(s>maxs){
+                maxs=s;
+                maxl=l;
+            }
+        }
+
+        printf("Case %d:\n%d %d %d\n",++ansk,maxs,maxl,maxr);
+        if(T) printf("\n");
+    }
+    return 0;
+}
+f("\n");
+    }
+    return 0;
+}
+l first=true;
+  scanf("%d",&T);
+  for(int ansk=1;ansk<=T;ansk++){
+     if(first){
+      first=false;
+     }else{
+      printf("\n");
+     }
+
+    int n,t;
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++){
+      scanf("%d",&sn[i]);
+    }
+    int left,right;
+
+    int ans=solve(1,n,left,right);
+    printf("Case %d:\n",ansk);
+    printf("%d %d %d\n",ans,left,right);
+  }
+  return 0;
+}

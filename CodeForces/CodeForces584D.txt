@@ -1,0 +1,89 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces584D            *
+*      VjudgeProblemID:254401              *
+*      SubmitTime:2015/11/4 15:43:57       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:320KB                        *
+*      CodeLen:1601B                       *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 4e4 + 5;
+
+int vis[MX], Prime[MX], rear;
+vector<int>ans;
+
+void init() { //vis[i]==1 表示不是质数
+    rear = 0; vis[1] = 1;
+    for(int i = 2; i < MX; i++) {
+        if(!vis[i]) Prime[++rear] = i;
+
+        for(int j = 1; j <= rear && i * Prime[j] < MX; j++) {
+            vis[i * Prime[j]] = 1;
+            if(!i % Prime[j]) break;
+        }
+    }
+}
+
+bool is_prime(int x) {
+    if(x < MX) return !vis[x];
+    for(int i = 1; i <= rear; i++) {
+        if(x % Prime[i] == 0) return false;
+    }
+    return true;
+}
+
+bool DFS(int n, int cnt) {
+    if(cnt == 3) return false;
+    if(is_prime(n)) {
+        ans.push_back(n);
+        return true;
+    }
+
+    for(int i = 1; i <= rear; i++) {
+        if(n >= Prime[i] && DFS(n - Prime[i], cnt + 1)) {
+            ans.push_back(Prime[i]);
+            return true;
+        }
+    }
+    return false;
+}
+
+int main() {
+    init();
+
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        ans.clear();
+
+        DFS(n, 0);
+        printf("%d\n", (int)ans.size());
+        for(int i = 0; i < ans.size(); i++) {
+            printf("%d%c", ans[i], i == (int)ans.size() - 1 ? '\n' : ' ');
+        }
+    }
+    return 0;
+}

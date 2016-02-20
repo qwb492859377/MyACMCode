@@ -1,0 +1,41 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1417                   *
+*      VjudgeProblemID:82584               *
+*      SubmitTime:2015/11/8 11:22:39       *
+*      SubmitType:C                        *
+*      Memory:976KB                        *
+*      CodeLen:468B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+#include<math.h>
+
+int main() {
+    double a, b, c, d;
+    while(~scanf("%lf%lf%lf%lf", &a, &b, &c, &d)) {
+        double e = 4 * b * b - 12 * a * c;
+        if(e <= 0) printf("(-inf, +inf)+\n");
+        else {
+            e = sqrt(e);
+            double x1 = (-2 * b - e) / (6 * a);
+            double x2 = (-2 * b + e) / (6 * a);
+            printf("(-inf, %.4lf)+ (%.4lf, %.4lf)- (%.4lf, +inf)+\n", x1, x1, x2, x2);
+        }
+    }
+    return 0;
+}
+/(3*a)-b/(3*a));
+            printf("(%.4lf, +inf)+\n",sqrt(b*b-3*a*c)/(3*a)-b/(3*a));
+        }
+    }
+    return 0;
+}
+n",y);
+        }
+    }
+
+    return 0;
+}

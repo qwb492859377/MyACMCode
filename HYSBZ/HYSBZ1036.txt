@@ -1,0 +1,169 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HYSBZ1036                 *
+*      VjudgeProblemID:24279               *
+*      SubmitTime:2015/12/2 19:47:47       *
+*      SubmitType:C++                      *
+*      Memory:6008KB                       *
+*      CodeLen:3818B                       *
+*      RunTime:2644ms                      *
+********************************************
+*/
+#include<bits/stdc++.h>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+
+const int MX = 3e4 + 5;
+const int INF = 0x3f3f3f3f;
+
+struct Edge {
+    int v, nxt;
+} E[MX << 2];
+int Head[MX], h_r;
+void edge_init() {
+    h_r = 0;
+    memset(Head, -1, sizeof(Head));
+}
+void edge_add(int u, int v) {
+    E[h_r].v = v;
+    E[h_r].nxt = Head[u];
+    Head[u] = h_r++;
+}
+
+int SUM[MX << 2];
+int MAX[MX << 2], A[MX], B[MX];
+void push_up(int rt) {
+    SUM[rt] = SUM[rt << 1] + SUM[rt << 1 | 1];
+    MAX[rt] = max(MAX[rt << 1], MAX[rt << 1 | 1]);
+}
+void build(int l, int r, int rt) {
+    if(l == r) {
+        SUM[rt] = A[l];
+        MAX[rt] = A[l];
+        return;
+    }
+    int m = (l + r) >> 1;
+    build(lson); build(rson);
+    push_up(rt);
+}
+int query_max(int L, int R, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        return MAX[rt];
+    }
+    int m = (l + r) >> 1, ret = -INF;
+    if(L <= m) ret = max(ret, query_max(L, R, lson));
+    if(R > m) ret = max(ret, query_max(L, R, rson));
+    return ret;
+}
+int query_sum(int L, int R, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        return SUM[rt];
+    }
+    int m = (l + r) >> 1; LL ret = 0;
+    if(L <= m) ret += query_sum(L, R, lson);
+    if(R > m) ret += query_sum(L, R, rson);
+    return ret;
+}
+void update(int x, int d, int l, int r, int rt) {
+    if(l == r) {
+        SUM[rt] = d;
+        MAX[rt] = d;
+        return;
+    }
+    int m = (l + r) >> 1;
+    if(x <= m) update(x, d, lson);
+    else update(x, d, rson);
+    push_up(rt);
+}
+
+int fa[MX], top[MX], siz[MX], son[MX], dep[MX], id[MX], rear;
+void DFS1(int u, int f, int d) {
+    fa[u] = f; dep[u] = d;
+    son[u] = 0; siz[u] = 1;
+    for(int i = Head[u]; ~i; i = E[i].nxt) {
+        int v = E[i].v;
+        if(v == f) continue;
+        DFS1(v, u, d + 1);
+        siz[u] += siz[v];
+        if(siz[son[u]] < siz[v]) {
+            son[u] = v;
+        }
+    }
+}
+void DFS2(int u, int tp) {
+    top[u] = tp;
+    id[u] = ++rear;
+    if(son[u]) DFS2(son[u], tp);
+    for(int i = Head[u]; ~i; i = E[i].nxt) {
+        int v = E[i].v;
+        if(v == fa[u] || v == son[u]) continue;
+        DFS2(v, v);
+    }
+}
+void HLD_presolve() {
+    rear = 0;
+    DFS1(1, 0, 1);
+    DFS2(1, 1);
+    for(int i = 1; i <= rear; i++) {
+        A[id[i]] = B[i];
+    }
+    build(1, rear, 1);
+}
+void HLD_update(int x, int d) {
+    update(id[x], d, 1, rear, 1);
+}
+int HLD_query(int u, int v, bool _max) {
+    int tp1 = top[u], tp2 = top[v];
+    int Max = -INF, sum = 0;
+    while(tp1 != tp2) {
+        if(dep[tp1] < dep[tp2]) {
+            swap(u, v);
+            swap(tp1, tp2);
+        }
+        if(_max) Max = max(Max, query_max(id[tp1], id[u], 1, rear, 1));
+        else sum += query_sum(id[tp1], id[u], 1, rear, 1);
+        u = fa[tp1]; tp1 = top[u];
+    }
+
+    if(dep[u] > dep[v]) swap(u, v);
+    if(_max) {
+        Max = max(Max, query_max(id[u], id[v], 1, rear, 1));
+        return Max;
+    }
+    sum += query_sum(id[u], id[v], 1, rear, 1);
+    return sum;
+}
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        edge_init();
+        for(int i = 1; i <= n - 1; i++) {
+            int u, v;
+            scanf("%d%d", &u, &v);
+            edge_add(u, v);
+            edge_add(v, u);
+        }
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &B[i]);
+        }
+        HLD_presolve();
+
+        int Q, a, b; char op[10];
+        scanf("%d", &Q);
+        while(Q--) {
+            scanf("%s%d%d", op, &a, &b);
+
+            if(op[0] == 'C') HLD_update(a, b);
+            else if(op[0] == 'Q' && op[1] == 'M') printf("%d\n", HLD_query(a, b, true));
+            else printf("%d\n", HLD_query(a, b, false));
+        }
+    }
+    return 0;
+}

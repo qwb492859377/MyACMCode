@@ -1,0 +1,61 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1611                   *
+*      VjudgeProblemID:10536               *
+*      SubmitTime:2015/7/31 14:52:53       *
+*      SubmitType:C++                      *
+*      Memory:360KB                        *
+*      CodeLen:929B                        *
+*      RunTime:16ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+#define For(i,x,y) for(int i=x;i<=y;i++)
+
+const int MX = 3e4 + 5;
+const int INF = 0x3f3f3f3f;
+
+int P[MX], S[MX];
+int find(int x) {
+    return P[x] == x ? x : (P[x] = find(P[x]));
+}
+
+void Union(int u, int v) {
+    int p1 = find(u), p2 = find(v);
+    if(p1 != p2) {
+        P[p1] = p2;
+        S[p2] += S[p1];
+    }
+}
+
+int main() {
+    int n, m;
+    while(~scanf("%d%d", &n, &m), n) {
+        For(i, 0, n) {
+            P[i] = i;
+            S[i] = 1;
+        }
+
+        For(i, 1, m) {
+            int w, rt, v;
+            scanf("%d", &w);
+            if(w >= 1) scanf("%d", &rt);
+            For(j, 2, w) {
+                scanf("%d", &v);
+                Union(v, rt);
+            }
+        }
+        printf("%d\n", S[find(0)]);
+    }
+    return 0;
+}

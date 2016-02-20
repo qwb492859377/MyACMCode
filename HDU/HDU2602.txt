@@ -1,0 +1,50 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2602                   *
+*      VjudgeProblemID:17434               *
+*      SubmitTime:2015/1/23 17:04:16       *
+*      SubmitType:C++                      *
+*      Memory:1100KB                       *
+*      CodeLen:683B                        *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=1000+5;
+const int INF=1<<30;
+int dp[maxn],A[maxn],B[maxn];//A体积，B价值
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        memset(dp,0,sizeof(dp));
+
+        int n,P;
+        scanf("%d%d",&n,&P);
+        for(int i=1;i<=n;i++){
+            scanf("%d",&B[i]);
+        }
+        for(int i=1;i<=n;i++){
+            scanf("%d",&A[i]);
+        }
+
+        for(int i=1;i<=n;i++){
+            for(int j=P;j>=A[i];j--){
+                dp[j]=max(dp[j],dp[j-A[i]]+B[i]);
+            }
+        }
+        printf("%d\n",dp[P]);
+    }
+    return 0;
+}
+     printf("%d\n",dp[V]);
+    }
+    return 0;
+}

@@ -1,0 +1,69 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1347                   *
+*      VjudgeProblemID:51716               *
+*      SubmitTime:2015/11/19 12:40:19      *
+*      SubmitType:C++                      *
+*      Memory:1488KB                       *
+*      CodeLen:1097B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int mod = 10;
+
+LL power(LL a, LL b) {
+    LL ret = 1;
+    while(b) {
+        if(b & 1) ret = ret * a % mod;
+        a = a * a % mod;
+        b >>= 1;
+    }
+    return ret;
+}
+
+int F[1000];
+
+int main() {
+    int T; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        LL n, k;
+        scanf("%lld%lld", &n, &k);
+
+        int sum = 0;
+        for(int i = 1; i <= 10; i++) {
+            F[i] = power(i, k);
+            sum += F[i];
+        }
+
+        int a = (n - 1) / 10 + 1, b = (n - 1) % 10 + 1;
+        LL ans = (LL)(a - 1) * sum % 10;
+        for(int i = 1; i <= b; i++) {
+            ans += F[i];
+            ans %= 10;
+        }
+        printf("%lld\n", ans);
+    }
+    return 0;
+}

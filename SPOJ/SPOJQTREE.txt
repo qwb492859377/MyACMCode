@@ -1,0 +1,168 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:SPOJQTREE                 *
+*      VjudgeProblemID:13013               *
+*      SubmitTime:2015/12/2 16:12:57       *
+*      SubmitType:C++ (g++ 4.9.2)          *
+*      Memory:4813KB                       *
+*      CodeLen:3843B                       *
+*      RunTime:460ms                       *
+********************************************
+*/
+#include<bits/stdc++.h>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+
+const int MX = 1e4 + 5;
+const int INF = 0x3f3f3f3f;
+
+struct Edge {
+    int u, v, nxt, cost;
+} E[MX << 2];
+int Head[MX], h_r;
+void edge_init() {
+    h_r = 0;
+    memset(Head, -1, sizeof(Head));
+}
+void edge_add(int u, int v, int cost) {
+    E[h_r].u = u; E[h_r].v = v; E[h_r].cost = cost;
+    E[h_r].nxt = Head[u];
+    Head[u] = h_r++;
+}
+
+int MAX[MX << 2], A[MX];
+void push_up(int rt) {
+    MAX[rt] = max(MAX[rt << 1], MAX[rt << 1 | 1]);
+}
+void build(int l, int r, int rt) {
+    if(l == r) {
+        MAX[rt] = A[l];
+        return;
+    }
+    int m = (l + r) >> 1;
+    build(lson); build(rson);
+    push_up(rt);
+}
+int query(int L, int R, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        return MAX[rt];
+    }
+    int m = (l + r) >> 1, ret = -INF;
+    if(L <= m) ret = max(ret, query(L, R, lson));
+    if(R > m) ret = max(ret, query(L, R, rson));
+    return ret;
+}
+void update(int x, int d, int l, int r, int rt) {
+    if(l == r) {
+        MAX[rt] = d;
+        return;
+    }
+    int m = (l + r) >> 1;
+    if(x <= m) update(x, d, lson);
+    else update(x, d, rson);
+    push_up(rt);
+}
+
+int fa[MX], top[MX], siz[MX], son[MX], dep[MX], id[MX], rear;
+void DFS1(int u, int f, int d) {
+    fa[u] = f; dep[u] = d;
+    son[u] = 0; siz[u] = 1;
+    for(int i = Head[u]; ~i; i = E[i].nxt) {
+        int v = E[i].v;
+        if(v == f) continue;
+        DFS1(v, u, d + 1);
+        siz[u] += siz[v];
+        if(siz[son[u]] < siz[v]) {
+            son[u] = v;
+        }
+    }
+}
+void DFS2(int u, int tp) {
+    top[u] = tp;
+    id[u] = ++rear;
+    if(son[u]) DFS2(son[u], tp);
+    for(int i = Head[u]; ~i; i = E[i].nxt) {
+        int v = E[i].v;
+        if(v == fa[u] || v == son[u]) continue;
+        DFS2(v, v);
+    }
+}
+/*void ceshi(int u, int f) {
+    printf("u:%d fa:%d top:%d siz:%d son:%d dep:%d id:%d\n", u, fa[u], top[u], siz[u], son[u], dep[u], id[u]);
+    for(int i = Head[u]; ~i; i = E[i].nxt) {
+        int v = E[i].v;
+        if(v == f) continue;
+        ceshi(v, u);
+    }
+}*/
+/*void ceshi(int l, int r, int rt) {
+    if(l == r) {
+        printf("[%d,%d]", l, MAX[rt]);
+        return;
+    }
+    int m = (l + r) >> 1;
+    ceshi(lson); ceshi(rson);
+}*/
+void HLD_presolve() {
+    rear = 0;
+    DFS1(1, 1, 1);
+    DFS2(1, 1);
+    for(int i = 0; i < 2 * (rear - 1); i += 2) {
+        int u = E[i].u, v = E[i].v;
+        if(dep[u] < dep[v]) swap(u, v);
+        A[id[u]] = E[i].cost;
+    }
+    A[1] = -INF;
+    build(1, rear, 1);
+}
+void HLD_update(int x, int d) {
+    x = (x - 1) * 2;
+    int u = E[x].u, v = E[x].v;
+    if(dep[u] < dep[v]) swap(u, v);
+    update(id[u], d, 1, rear, 1);
+}
+int HLD_query(int u, int v) {
+    int tp1 = top[u], tp2 = top[v], ans = -INF;
+    while(tp1 != tp2) {
+        if(dep[tp1] < dep[tp2]) {
+            swap(u, v);
+            swap(tp1, tp2);
+        }
+        ans = max(ans, query(id[tp1], id[u], 1, rear, 1));
+        u = fa[tp1]; tp1 = top[u];
+    }
+    if(u == v) return ans;
+    if(dep[u] > dep[v]) swap(u, v);
+    ans = max(ans, query(id[son[u]], id[v], 1, rear, 1));
+    return ans;
+}
+
+int main() {
+    int T, n; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        edge_init();
+        scanf("%d", &n);
+        for(int i = 1; i <= n - 1; i++) {
+            int u, v, cost;
+            scanf("%d%d%d", &u, &v, &cost);
+            edge_add(u, v, cost);
+            edge_add(v, u, cost);
+        }
+        HLD_presolve();
+
+        char op[10]; int a, b;
+        while(scanf("%s", op), op[0] != 'D') {
+            scanf("%d%d", &a, &b);
+            if(op[0] == 'Q') printf("%d\n", HLD_query(a, b));
+            else HLD_update(a, b);
+        }
+    }
+    return 0;
+}

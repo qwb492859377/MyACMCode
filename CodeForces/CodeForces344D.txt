@@ -1,0 +1,64 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces344D            *
+*      VjudgeProblemID:46667               *
+*      SubmitTime:2015/8/10 22:40:38       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:968KB                        *
+*      CodeLen:916B                        *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+int const MX = 1e5 + 5;
+
+stack<PII>work;
+char S[MX];
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    scanf("%s", S + 1);
+    int n = strlen(S + 1);
+
+    if(n % 2 == 1) {
+        printf("No\n");
+        return 0;
+    }
+
+    for(int i = 1; i <= n; i++) {
+        if(work.empty()) {
+            work.push(PII(S[i], 1));
+        } else {
+            PII f = work.top();
+            if(f.first == S[i]) {
+                work.pop();
+            } else {
+                work.push(PII(S[i], 1));
+            }
+        }
+    }
+
+    if(work.empty()) {
+        printf("Yes\n");
+    } else {
+        printf("No\n");
+    }
+    return 0;
+}

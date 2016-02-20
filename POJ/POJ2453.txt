@@ -1,0 +1,43 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2453                   *
+*      VjudgeProblemID:19886               *
+*      SubmitTime:2014/12/7 11:38:34       *
+*      SubmitType:C++                      *
+*      Memory:164KB                        *
+*      CodeLen:522B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<vector>
+#include<map>
+#include<algorithm>
+using namespace std;
+
+int s[32];
+
+int main(){
+    int n;
+    while(~scanf("%d",&n)&&n){
+        for(int i=0;i<32;i++){
+            s[31-i]=n&(1<<i)?1:0;
+        }
+        next_permutation(s,s+32);
+
+
+        int w=0;
+        for(int i=0;i<32;i++){
+            //printf("%d",s[i]);
+            if(s[31-i]){
+                w|=1<<i;
+            }
+        }
+        printf("%d\n",w);
+    }
+    return 0;
+}

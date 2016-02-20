@@ -1,0 +1,76 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3460                   *
+*      VjudgeProblemID:15727               *
+*      SubmitTime:2015/8/9 13:52:06        *
+*      SubmitType:C++                      *
+*      Memory:54452KB                      *
+*      CodeLen:1184B                       *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 5e5 + 5;
+const int TX = 5e5 + 5;
+const int INF = 0x3f3f3f3f;
+
+struct Node {
+    int num;
+    int Next[26];
+    Node() {
+        memset(Next, 0, sizeof(Next));
+    }
+} node[TX];
+int T_rear;
+
+int trie_node() {
+    node[++T_rear] = Node();
+    return T_rear;
+}
+
+void trie_add(int root, char*S) {
+    int L = strlen(S);
+    int p = root;
+    for(int i = 0; i < L; i++) {
+        int id = S[i] - 'a';
+        if(!node[p].Next[id]) {
+            node[p].Next[id] = trie_node();
+        }
+        p = node[p].Next[id];
+    }
+    node[p].num++;
+}
+
+int main() {
+    int n; char S[100];
+    while(~scanf("%d", &n)) {
+        T_rear = 0;
+        int Max = 0;
+        int root = trie_node();
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%s", S);
+            Max = max(Max, (int)strlen(S));
+            trie_add(root, S);
+        }
+
+        printf("%d\n", n + (T_rear - 1) * 2 - Max);
+    }
+    return 0;
+}

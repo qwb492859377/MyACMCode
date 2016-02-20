@@ -1,0 +1,98 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1551                   *
+*      VjudgeProblemID:143208              *
+*      SubmitTime:2015/10/6 11:37:28       *
+*      SubmitType:C++                      *
+*      Memory:1756KB                       *
+*      CodeLen:1921B                       *
+*      RunTime:244ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e4 + 5;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,10000,1
+
+int MAX[MX << 2], SL[MX], SR[MX], A[MX];
+
+void push_up(int rt) {
+    MAX[rt] = max(MAX[rt << 1], MAX[rt << 1 | 1]);
+}
+
+void update(int x, int d, int l, int r, int rt) {
+    if(l == r) {
+        MAX[rt] = max(MAX[rt], d);
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    if(x <= m) update(x, d, lson);
+    else update(x, d, rson);
+    push_up(rt);
+}
+
+int query(int L, int R, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        return MAX[rt];
+    }
+
+    int m = (l + r) >> 1, ret = 0;
+    if(L <= m) ret = max(ret, query(L, R, lson));
+    if(R > m) ret = max(ret, query(L, R, rson));
+    return ret;
+}
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        memset(MAX, 0, sizeof(MAX));
+        memset(SL, 0, sizeof(SL));
+        memset(SR, 0, sizeof(SR));
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+
+        SL[1] = 1;
+        for(int i = 2; i <= n; i++) {
+            SL[i] = (A[i - 1] < A[i] ? SL[i - 1] : 0) + 1;
+        }
+
+        SR[n] = 1;
+        for(int i = n - 1; i >= 1; i--) {
+            SR[i] = (A[i] < A[i + 1] ? SR[i + 1] : 0) + 1;
+        }
+
+        int ans = 1;
+        for(int i = 1; i <= n; i++) {
+            int temp = 0;
+            if(1 <= A[i] - 1) temp = query(1, A[i] - 1, root);
+            ans = max(ans, temp + SR[i]);
+            update(A[i], SL[i], root);
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

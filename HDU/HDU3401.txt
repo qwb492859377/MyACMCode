@@ -1,0 +1,103 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3401                   *
+*      VjudgeProblemID:14693               *
+*      SubmitTime:2015/12/14 23:42:54      *
+*      SubmitType:G++                      *
+*      Memory:17320KB                      *
+*      CodeLen:2122B                       *
+*      RunTime:218ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 2e3 + 5;
+const int INF = 0x3f3f3f3f;
+
+int n, V, W;
+int dp[MX][MX];
+int c, r;
+int AP[MX], BP[MX], AS[MX], BS[MX];
+
+void umax(int &a, int b) {
+    a = a > b ? a : b;
+}
+
+struct Data {
+    int id, x;
+    Data() {}
+    Data(int _id, int _x) {
+        id = _id; x = _x;
+    }
+} Q[MX];
+
+int solve() {
+    for(int i = 1; i <= W + 1; i++) {
+        for(int j = 0; j <= V; j++) {
+            dp[i][j] = j <= AS[i] ? -j * AP[i] : -INF;
+            if(i > 1) umax(dp[i][j], dp[i - 1][j]);
+        }
+    }
+    for(int i = W + 2; i <= n; i++) {
+        for(int j = 0; j <= V; j++) {
+            dp[i][j] = dp[i - 1][j];
+        }
+
+        c = r = 0; Q[r++] = Data(0, dp[i - W - 1][0]);
+        for(int j = 1; j <= V; j++) {
+            while(c < r && j - Q[c].id > AS[i]) c++;
+            int Max =  Q[c].x;
+
+            umax(dp[i][j], Max - j * AP[i]);
+
+            Data temp(j, dp[i - W - 1][j] + j * AP[i]);
+            while(c < r && Q[r - 1].x < temp.x) r--;
+            Q[r++] = temp;
+        }
+
+        c = r = 0; Q[r++] = Data(V, dp[i - W - 1][V] + V * BP[i]);
+        for(int j = V - 1; j >= 0; j--) {
+            while(c < r && Q[c].id - j > BS[i]) c++;
+            int Max = Q[c].x;
+
+            umax(dp[i][j], Max - j * BP[i]);
+            Data temp(j, dp[i - W - 1][j] + j * BP[i]);
+            while(c < r && Q[r - 1].x < temp.x) r--;
+            Q[r++] = temp;
+        }
+    }
+    return dp[n][0];
+}
+
+int main() {
+    int T; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d%d%d", &n, &V, &W);
+        for(int i = 1; i <= n; i++) {
+            scanf("%d%d%d%d", &AP[i], &BP[i], &AS[i], &BS[i]);
+        }
+        printf("%d\n", solve());
+    }
+    return 0;
+}

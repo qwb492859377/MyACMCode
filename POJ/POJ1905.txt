@@ -1,0 +1,56 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1905                   *
+*      VjudgeProblemID:17093               *
+*      SubmitTime:2015/11/30 1:51:25       *
+*      SubmitType:G++                      *
+*      Memory:724KB                        *
+*      CodeLen:920B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const double pi = acos(-1.0);
+const double eps = 1e-6;
+double L, n, C, L2;
+
+double solve() {
+    double l = 0, r = pi, m;
+    for(int i = 1; i <= 100; i++) {
+        m = (l + r) / 2;
+        double f = L * m / sin(m);
+        if(f >= L2) r = m;
+        else l = m;
+    }
+    if(fabs(l) < eps) return 0;
+    return L / 2 / sin(l) - L / 2 / tan(l);
+}
+
+int main() {
+    //FIN;
+    while(~scanf("%lf%lf%lf", &L, &n, &C), L >= 0) {
+        L2 = (1 + n * C) * L;
+        printf("%.3f\n", solve());
+    }
+    return 0;
+}

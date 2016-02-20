@@ -1,0 +1,36 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4464                   *
+*      VjudgeProblemID:34417               *
+*      SubmitTime:2014/11/4 21:44:11       *
+*      SubmitType:C++                      *
+*      Memory:228KB                        *
+*      CodeLen:400B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int main(){
+  int n,k=0;
+  while(~scanf("%d\n",&n)){
+    int ans=0;
+    while(n--){
+      int s=0;
+      char line[200];
+      gets(line);
+      for(int i=0;i<strlen(line);i++){
+        s+=line[i];
+      }
+      ans=max(ans,s);
+    }
+    printf("Case %d: %d\n",++k,ans);
+  }
+  return 0;
+}

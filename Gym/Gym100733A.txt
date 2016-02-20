@@ -1,0 +1,39 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:Gym100733A                *
+*      VjudgeProblemID:229602              *
+*      SubmitTime:2015/8/27 23:37:23       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:12KB                         *
+*      CodeLen:557B                        *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const double pi = acos(-1.0);
+
+int main() {
+    double n, R, r; //FIN;
+    while(~scanf("%lf%lf%lf", &n, &R, &r)) {
+        printf("%.10lf\n", n * r * R * sin(pi / n));
+    }
+    return 0;
+}

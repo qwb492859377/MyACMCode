@@ -1,0 +1,49 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1159                   *
+*      VjudgeProblemID:22149               *
+*      SubmitTime:2015/1/23 20:05:41       *
+*      SubmitType:C++                      *
+*      Memory:5088KB                       *
+*      CodeLen:658B                        *
+*      RunTime:171ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=1005;
+const int INF=1<<30;
+
+char A[maxn],B[maxn];
+int lenA,lenB;
+int dp[maxn][maxn];
+
+int solve(int i,int j){
+    if(i==lenA||j==lenB){
+        return 0;
+    }
+    if(dp[i][j]!=-1){
+        return dp[i][j];
+    }
+    if(A[i]==B[j]){
+        return dp[i][j]=solve(i+1,j+1)+1;
+    }
+    dp[i][j]=max(solve(i+1,j),solve(i,j+1));
+    return dp[i][j];
+}
+
+int main(){
+    while(~scanf("%s%s",A,B)){
+        memset(dp,-1,sizeof(dp));
+        lenA=strlen(A);
+        lenB=strlen(B);
+
+        printf("%d\n",solve(0,0));
+    }
+    return 0;
+}

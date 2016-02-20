@@ -1,0 +1,49 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU2055                   *
+*      VjudgeProblemID:29391               *
+*      SubmitTime:2014/12/27 18:59:15      *
+*      SubmitType:GNU C++                  *
+*      Memory:216KB                        *
+*      CodeLen:797B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const double exps=1e-9;
+const int INF=1<<30;
+const int maxn=1e5+10;
+
+char s[105][105];
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        int n,m;
+        scanf("%d%d",&n,&m);
+        for(int i=1;i<=n;i++){
+            scanf("%s",s[i]);
+        }
+
+        for(int i=1;i<=m;i++){
+            char path[105],last[105];
+            scanf("%s%s",path,last);
+            int len1,len2=strlen(last);
+            for(int i=1;i<=n;i++){
+                len1=strlen(s[i]);
+                if(strstr(s[i],path)-s[i]==0&&strcmp(s[i]+len1-len2,last)==0){
+                    printf("%s\n",s[i]);
+                }
+            }
+        }
+    }
+    return 0;
+}

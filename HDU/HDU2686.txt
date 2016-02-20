@@ -1,0 +1,145 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2686                   *
+*      VjudgeProblemID:18322               *
+*      SubmitTime:2015/8/18 11:15:00       *
+*      SubmitType:C++                      *
+*      Memory:7604KB                       *
+*      CodeLen:1170B                       *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 30 + 5;//都开4倍把..
+
+int n;
+int dp[MX][MX][MX][MX], A[MX][MX];
+
+int DP(int x1, int y1, int x2, int y2) {
+    int &d = dp[x1][y1][x2][y2];
+    if(d) return d;
+
+    if(x1 > 1) d = max(d, DP(x1 - 1, y1, x2 - 1, y2));
+    if(y2 > 1) d = max(d, DP(x1, y1 - 1, x2, y2 - 1));
+    if(x1 > 1 && y2 > 1) d = max(d, DP(x1 - 1, y1, x2, y2 - 1));
+    if(!(y1 - 1 == y2 && x2 - 1 == x1)) d = max(d, DP(x1, y1 - 1, x2 - 1, y2));
+    d += A[x1][y1] + A[x2][y2];
+    return d;
+}
+
+int main() {//FIN;
+    while(~scanf("%d", &n)) {
+        memset(dp, 0, sizeof(dp));
+
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= n; j++) {
+                scanf("%d", &A[i][j]);
+            }
+        }
+
+        printf("%d\n", DP(n - 1, n, n, n - 1) + A[1][1] + A[n][n]);
+    }
+    return 0;
+}
+i] = INF;
+        vis[i] = false;
+        pre[i] = -1;
+    }
+    dis[s] = 0;
+    vis[s] = true;
+    q.push(s);
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        vis[u] = false;
+        for (int i = Head[u]; i != -1; i = E[i].next) {
+            int v = E[i].to;
+            if (E[i].cap > E[i].flow && dis[v] > dis[u] + E[i].cost) {
+                dis[v] = dis[u] + E[i].cost;
+                pre[v] = i;
+                if (!vis[v]) {
+                    vis[v] = true;
+                    q.push(v);
+                }
+            }
+        }
+    }
+    if (pre[t] == -1) return false;
+    else return true;
+}
+
+//返回的是最大流， cost存的是最小费用
+int minCostMaxflow(int s, int t, int &cost) {
+    int flow = 0;
+    cost = 0;
+    while (spfa(s, t)) {
+        int Min = INF;
+        for (int i = pre[t]; i != -1; i = pre[E[i ^ 1].to]) {
+            if (Min > E[i].cap - E[i].flow)
+                Min = E[i].cap - E[i].flow;
+        }
+        for (int i = pre[t]; i != -1; i = pre[E[i ^ 1].to]) {
+            E[i].flow += Min;
+            E[i ^ 1].flow -= Min;
+            cost += E[i].cost * Min;
+        }
+        flow += Min;
+    }
+    return flow;
+}
+
+int n, A[100][100];
+int dist[][2] = {{0, 1}, {1, 0}};
+
+int ID(int x, int y, int p = 0) {
+    return (x - 1) * n + y + p * n * n;
+}
+
+int main() {
+    //FIN;
+    while(~scanf("%d", &n)) {
+        int s = 0, t = 2 * n * n; init(t);
+
+        edge_add(s, ID(1, 1), 1, 0);
+        edge_add(s, ID(1, 1, 1), 1, 0);
+        edge_add(ID(n, n), t, 1, 0);
+        edge_add(ID(n, n, 1), t, 1, 0);
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= n; j++) {
+                scanf("%d", &A[i][j]);
+                edge_add(ID(i, j), ID(i, j, 1), 1, -A[i][j]);
+                for(int k = 0; k < 2; k++) {
+                    int nx = i + dist[k][0];
+                    int ny = j + dist[k][1];
+                    if(nx <= n && ny <= n) {
+                        edge_add(ID(i, j, 1), ID(nx, ny), 1, 0);
+                    }
+                }
+            }
+        }
+
+        int ans = 0;
+        minCostMaxflow(s, t, ans);
+        printf("%d\n", -ans);
+    }
+    return 0;
+}

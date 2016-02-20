@@ -1,0 +1,76 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2838                   *
+*      VjudgeProblemID:20092               *
+*      SubmitTime:2015/8/9 17:44:55        *
+*      SubmitType:C++                      *
+*      Memory:3168KB                       *
+*      CodeLen:1158B                       *
+*      RunTime:46ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e5 + 5;
+const int INF = 0x3f3f3f3f;
+
+LL A[MX], B[MX];
+
+LL sum(LL *S, int x) {
+    LL ret = 0;
+    for(; x; x -= x & -x) {
+        ret += S[x];
+    }
+    return ret;
+}
+
+LL query(LL *S, int L, int R) {
+    return sum(S, R) - sum(S, L - 1);
+}
+
+void update(LL *S, int x, int d) {
+    for(; x < MX; x += x & -x) {
+        S[x] += d;
+    }
+}
+
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int n, t;
+    while(~scanf("%d", &n)) {
+        memset(A, 0, sizeof(A));
+        memset(B, 0, sizeof(B));
+
+        scanf("%d", &t);
+
+        update(A, t, 1);
+        update(B, t, t);
+
+        LL ans = 0;
+        for(int i = 2; i <= n; i++) {
+            scanf("%d", &t);
+            ans += query(A, t + 1, MX - 1) * t;
+            ans += query(B, t + 1, MX - 1);
+            update(A, t, 1);
+            update(B, t, t);
+        }
+        printf("%I64d\n", ans);
+    }
+    return 0;
+}

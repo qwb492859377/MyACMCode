@@ -1,0 +1,50 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ACdream1420               *
+*      VjudgeProblemID:71901               *
+*      SubmitTime:2015/8/26 22:25:51       *
+*      SubmitType:Java                     *
+*      Memory:33280KB                      *
+*      CodeLen:863B                        *
+*      RunTime:296ms                       *
+********************************************
+*/
+import java.util.Scanner;
+import java.math.*;
+
+public class Main {
+	static final int MX = 100 + 5;
+
+	public static void main(String[] args) {
+		Scanner cin = new Scanner(System.in);
+
+		BigInteger zero = BigInteger.valueOf(0);
+		BigInteger one = BigInteger.valueOf(1);
+		BigInteger two = BigInteger.valueOf(2);
+
+		BigInteger[][] C = new BigInteger[MX][MX];
+		C[0][0] = one;
+		for (int i = 1; i < MX; i++) {
+			C[i][0] = C[i][i] = one;
+			for (int j = 1; j < i; j++) {
+				C[i][j] = C[i - 1][j - 1].add(C[i - 1][j]);
+			}
+		}
+
+		BigInteger f[] = new BigInteger[MX];
+		f[1] = one;
+		f[2] = one;
+		for (int i = 3; i < MX; i++) {
+			f[i] = two.pow(i * (i - 1) / 2).subtract(one);
+			for (int k = 2; k <= i - 1; k++) {
+				f[i] = f[i].subtract(C[i][k].multiply(f[k]));
+			}
+		}
+
+		while (cin.hasNext()) {
+			int n = cin.nextInt();
+			System.out.println(f[n]);
+		}
+	}
+}

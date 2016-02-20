@@ -1,0 +1,21 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2001                   *
+*      VjudgeProblemID:17549               *
+*      SubmitTime:2015/4/24 12:09:27       *
+*      SubmitType:C++                      *
+*      Memory:1612KB                       *
+*      CodeLen:209B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+#include<math.h>
+int main(){
+    double x1,y1,x2,y2;
+    while(~scanf("%lf%lf%lf%lf",&x1,&y1,&x2,&y2)){
+        printf("%.2lf\n",sqrt(1.0*(x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)));
+    }
+	return 0;
+}

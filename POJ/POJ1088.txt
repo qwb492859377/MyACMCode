@@ -1,0 +1,69 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1088                   *
+*      VjudgeProblemID:16378               *
+*      SubmitTime:2015/7/25 12:14:54       *
+*      SubmitType:C++                      *
+*      Memory:240KB                        *
+*      CodeLen:1139B                       *
+*      RunTime:16ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 100 + 5;
+const int INF = 0x3f3f3f3f;
+#define For(i,x,y) for(int i=x;i<=y;i++)
+#define Mem(x,y) memset(x,y,sizeof(x))
+
+int m, n;
+int dp[MX][MX];
+int A[MX][MX];
+int dist[][2] = {{1, 0}, { -1, 0}, {0, 1}, {0, -1}};
+
+int DP(int x, int y) {
+    if(dp[x][y]) return dp[x][y];
+
+    For(k, 0, 3) {
+        int nx = dist[k][0] + x;
+        int ny = dist[k][1] + y;
+        if(nx < 1 || nx > m || ny < 1 || ny > n) continue;
+
+        if(A[x][y] > A[nx][ny]) {
+            dp[x][y] = max(dp[x][y], DP(nx, ny));
+        }
+    }
+    dp[x][y]++;
+    return dp[x][y];
+}
+
+int main() {
+    while(~scanf("%d%d", &m, &n)) {
+        Mem(dp,0);
+        For(i, 1, m) {
+            For(j, 1, n) {
+                scanf("%d", &A[i][j]);
+            }
+        }
+
+        int ans = 0;
+        For(i, 1, m) {
+            For(j, 1, n) {
+                ans = max(ans, DP(i, j));
+            }
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

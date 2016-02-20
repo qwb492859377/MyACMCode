@@ -1,0 +1,65 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1505                   *
+*      VjudgeProblemID:70418               *
+*      SubmitTime:2015/8/16 18:28:35       *
+*      SubmitType:C++                      *
+*      Memory:1484KB                       *
+*      CodeLen:1023B                       *
+*      RunTime:24ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1000 + 5;
+
+int cnt[30];
+
+bool ok(char*s) {
+    memset(cnt, 0, sizeof(cnt));
+
+    int n = strlen(s), tot = 0;
+    for(int i = 0; i < n; i++) {
+        if(cnt[s[i] - 'a'] == 0) tot++;
+        cnt[s[i] - 'a']++;
+    }
+
+    if(tot == 1) return false;
+
+    for(int i = 0; i < 26; i++) {
+        for(int j = i + 1; j < 26; j++) {
+            if(cnt[i] && cnt[i] == cnt[j]) return false;
+        }
+    }
+    return true;
+}
+
+int main() {
+    int n, ansk = 0; char s[MX];
+    while(~scanf("%d", &n)) {
+        int ans = 0;
+        for(int i = 1; i <= n; i++) {
+            scanf("%s", s);
+            if(ok(s)) ans++;
+        }
+        printf("Case %d: %d\n", ++ansk, ans);
+    }
+    return 0;
+}

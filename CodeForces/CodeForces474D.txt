@@ -1,0 +1,52 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces474D            *
+*      VjudgeProblemID:53685               *
+*      SubmitTime:2015/3/13 15:53:29       *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:2168KB                       *
+*      CodeLen:842B                        *
+*      RunTime:78ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+const int MX=1e5+5;
+const int mod=1e9+7;
+
+int A[MX],B[MX];
+LL SUM[MX],dp[MX];
+
+int main(){
+    int t,k;
+    while(~scanf("%d%d",&t,&k)){
+        memset(SUM,0,sizeof(SUM));
+        memset(dp,0,sizeof(dp));
+
+        int maxx=0;
+        for(int i=1;i<=t;i++){
+            scanf("%d%d",&A[i],&B[i]);
+            maxx=max(maxx,max(A[i],B[i]));
+        }
+
+        dp[0]=dp[k]=1;
+        for(int i=1;i<=maxx;i++){
+            dp[i]=(dp[i-1]+dp[i])%mod;
+            SUM[i]=(SUM[i-1]+dp[i])%mod;
+            if(i+k<=maxx) dp[i+k]=(dp[i+k]+dp[i])%mod;
+        }
+
+        for(int i=1;i<=t;i++){
+            printf("%I64d\n",(SUM[B[i]]-SUM[A[i]-1]+mod)%mod);
+        }
+    }
+    return 0;
+}

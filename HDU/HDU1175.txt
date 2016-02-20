@@ -1,0 +1,101 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1175                   *
+*      VjudgeProblemID:10788               *
+*      SubmitTime:2014/12/17 15:14:02      *
+*      SubmitType:C++                      *
+*      Memory:23488KB                      *
+*      CodeLen:2368B                       *
+*      RunTime:1029ms                      *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int maxn=1005;
+int s[maxn][maxn];
+bool vis[maxn][maxn][4];
+int m,n;
+int dx[]={-1,0,1,0};
+int dy[]={0,-1,0,1};
+
+
+struct point{
+    int x,y,turn,dist;
+};
+
+int main(){
+    while(~scanf("%d%d",&m,&n)&&m&&n){
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                scanf("%d",&s[i][j]);
+            }
+        }
+        int k;
+        scanf("%d",&k);
+        for(int i=1;i<=k;i++){
+            memset(vis,0,sizeof(vis));
+
+            int x1,y1,x2,y2;
+            scanf("%d%d%d%d",&x1,&y1,&x2,&y2);
+            if(x1<1||x1>m||y1<1||y1>n||x2<1||x2>m||y2<1||y2>n){
+                printf("NO\n");
+                continue;
+            }
+            if(s[x1][y1]!=s[x2][y2]||!s[x1][y1]){
+                printf("NO\n");
+                continue;
+            }
+            if(abs(x1-x2)+abs(y1-y2)==1){
+                printf("YES\n");
+                continue;
+            }
+
+            queue<point>work;
+            for(int k=0;k<4;k++){
+                point t;
+                vis[x1][y1][k]=1;
+                t.x=x1,t.y=y1,t.turn=-1,t.dist=k;
+                work.push(t);
+            }
+
+            bool ans=false;
+            while(!work.empty()){
+                point t=work.front();
+                work.pop();//printf("{%d,%d,%d,%d}\n",t.x,t.y,t.dist,t.turn);
+
+                if(abs(t.x-x2)+abs(t.y-y2)==1){
+                    if(t.turn<2||(t.x+dx[t.dist]==x2&&t.y+dy[t.dist]==y2)){
+                        ans=true;
+                        break;
+                    }
+                }
+
+                for(int k=0;k<4;k++){
+                    point temp;
+                    temp.turn=(t.dist==k)?t.turn:(t.turn+1);
+                    if(temp.turn>2){
+                        continue;
+                    }
+                    for(int x=t.x+dx[k],y=t.y+dy[k];1<=x&&x<=m&&1<=y&&y<=n&&!s[x][y]&&!vis[x][y][k];x+=dx[k],y+=dy[k]){
+                        if(vis[x][y][k]){
+                            continue;
+                        }
+                        temp.x=x,temp.y=y,temp.dist=k;
+                        vis[x][y][k]=1;
+                        work.push(temp);
+                    }
+                }
+            }
+
+            printf("%s\n",ans?"YES":"NO");
+        }
+
+    }
+    return 0;
+}

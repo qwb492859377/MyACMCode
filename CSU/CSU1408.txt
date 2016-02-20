@@ -1,0 +1,60 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1408                   *
+*      VjudgeProblemID:50081               *
+*      SubmitTime:2015/11/18 11:37:14      *
+*      SubmitType:C                        *
+*      Memory:1352KB                       *
+*      CodeLen:433B                        *
+*      RunTime:236ms                       *
+********************************************
+*/
+#include<stdio.h>
+
+int a[100005];
+int main() {
+    int T, i, n, d;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d%d", &n, &d);
+
+        for(i = 1; i <= n; i++) {
+            scanf("%d", &a[i]);
+        }
+
+        int tree = a[1], sum = 1;
+        for(i = 2; i <= n; i++) {
+            if(a[i] - tree >= d) {
+                sum++;
+                tree = a[i];
+            }
+
+        }
+        printf("%d\n", sum);
+
+    }
+
+}
+                    if(a[j]-a[i]<D)
+                    {
+                        count1++;
+                    }
+                    else
+                    {
+                        sign=true;
+                        break;
+                    }
+                }
+
+                if(sign){
+                    i=j-1;
+                    continue;
+                }
+
+                break;
+            }
+            cout<<N-count1<<endl;
+        }
+    return 0;
+}

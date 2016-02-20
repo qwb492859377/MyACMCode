@@ -1,0 +1,45 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ZOJ3713                   *
+*      VjudgeProblemID:38588               *
+*      SubmitTime:2014/12/23 16:50:50      *
+*      SubmitType:C++ (g++ 4.7.2)          *
+*      Memory:4076KB                       *
+*      CodeLen:625B                        *
+*      RunTime:170ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+#define ceshi printf("here")
+char w[]="0123456789ABCDEF",s[4000005];
+void print_content(int x){
+    printf("%c%c",w[x/16],w[x%16]);
+}
+
+void print_len(int x){
+    while(x>=128){
+        print_content((x&127)|128);
+        x=x>>7;
+    }
+    print_content(x);
+}
+int main(){
+    int T;
+    scanf("%d",&T);getchar();
+    while(T--){
+        gets(s);
+        int len=strlen(s);
+        print_len(len);
+        for(int i=0;i<len;i++){
+            print_content(s[i]);
+        }
+        printf("\n");
+    }
+    return 0;
+}

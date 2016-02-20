@@ -1,0 +1,92 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1555                   *
+*      VjudgeProblemID:143211              *
+*      SubmitTime:2015/9/20 22:51:58       *
+*      SubmitType:C++                      *
+*      Memory:1720KB                       *
+*      CodeLen:1608B                       *
+*      RunTime:180ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 10000 + 5;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,n,1
+
+int S[MX << 2], A[MX], B[MX];
+
+void push_up(int rt) {
+    S[rt] = S[rt << 1] + S[rt << 1 | 1];
+}
+
+void build(int l, int r, int rt) {
+    if(l == r) {
+        S[rt] = 1;
+        return;
+    }
+    int m = (l + r) >> 1;
+    build(lson);
+    build(rson);
+    push_up(rt);
+}
+
+int query(int x, int l, int r, int rt) {
+    if(l == r) {
+        S[rt]--;
+        return l;
+    }
+
+    int m = (l + r) >> 1, ret;
+    if(x <= S[rt << 1]) ret = query(x, lson);
+    else ret = query(x - S[rt << 1], rson);
+    push_up(rt);
+    return ret;
+}
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        build(root);
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+
+        bool sign = false;
+        for(int i = 1; i <= n; i++) {
+            if(S[1] < A[i] + 1) {
+                sign = true;
+                break;
+            }
+            int p = query(A[i] + 1, root);
+            B[p] = i;
+        }
+
+        if(sign) printf("No solution\n");
+        else for(int i = 1; i <= n; i++) {
+                printf("%d%c", B[i], i == n ? '\n' : ' ');
+            }
+    }
+    return 0;
+}

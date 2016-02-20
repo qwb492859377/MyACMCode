@@ -1,0 +1,70 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1115                   *
+*      VjudgeProblemID:30380               *
+*      SubmitTime:2015/1/19 17:11:14       *
+*      SubmitType:C++                      *
+*      Memory:4208KB                       *
+*      CodeLen:1033B                       *
+*      RunTime:40ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<map>
+#include<algorithm>
+using namespace std;
+
+struct node{
+    int n;
+    node*next[26];
+    node(){
+        n=0;
+        memset(next,NULL,sizeof(next));
+    }
+};
+char word[10000];
+
+void tree_insert(node*root,char*s){
+    int len=strlen(s);
+    for(int i=0;i<len;i++){
+        char w=s[i]-'a';
+        if(root->next[w]==NULL){
+            root->next[w]=new node();
+        }
+        root=root->next[w];
+        root->n++;
+    }
+}
+
+int tree_sum(node*root){
+    int sum=root->n;
+    if(root->n==1){
+        return 1;
+    }
+    for(int i=0;i<26;i++){
+        if(root->next[i]!=NULL){
+            sum+=tree_sum(root->next[i]);
+        }
+    }
+    return sum;
+}
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        int n;
+        scanf("%d",&n);
+        node*root=new node();
+        for(int i=1;i<=n;i++){
+            scanf("%s",word);
+            tree_insert(root,word);
+        }
+        printf("%d\n",tree_sum(root));
+    }
+    return 0;
+}

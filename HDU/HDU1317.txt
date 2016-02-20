@@ -1,0 +1,121 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1317                   *
+*      VjudgeProblemID:30513               *
+*      SubmitTime:2015/8/5 11:03:02        *
+*      SubmitType:C++                      *
+*      Memory:1996KB                       *
+*      CodeLen:2239B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<string>
+#include<iostream>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 20000 + 5;
+const int INF = 0x3f3f3f3f;
+
+int Head[MX], Next[MX], rear;
+int energy[MX], vis[MX], d[MX], del[MX];
+
+struct Edge {
+    int u, v;
+} E[MX];
+
+void edge_init() {
+    rear = 0;
+    memset(Head, -1, sizeof(Head));
+}
+
+void edge_add(int u, int v) {
+    E[rear].u = u;
+    E[rear].v = v;
+    Next[rear] = Head[u];
+    Head[u] = rear++;
+}
+
+int spfa_dfs(int u) {
+    vis[u] = 1;
+    for(int i = Head[u]; ~i; i = Next[i]) {
+        int v = E[i].v, w = energy[v], t;
+        if(del[v]) continue;
+
+        if(d[u] + w < d[v] && d[u] + w < 0) {
+            d[v] = d[u] + w;
+            if(!vis[v]) {
+                if(t = spfa_dfs(v)) {
+                    vis[u] = 0;
+                    return t;
+                }
+            } else {
+                vis[u] = 0;
+                return v;
+            }
+        }
+    }
+    vis[u] = 0;
+    return 0;
+}
+
+bool connect(int Begin, int End) {
+    if(Begin == End) return true;
+
+    vis[Begin] = 1;
+    for(int i = Head[Begin]; ~i; i = Next[i]) {
+        int v = E[i].v;
+        if(!vis[v] && connect(v, End)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int main() {
+    int n, m;
+    while(~scanf("%d", &n), n >= 0) {
+        edge_init();
+        memset(del, 0, sizeof(del));
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d%d", &energy[i], &m);
+            energy[i] = -energy[i];
+            for(int j = 1; j <= m; j++) {
+                int v; scanf("%d", &v);
+                edge_add(i, v);
+            }
+        }
+
+        bool sign = false;
+        for(;;) {
+            memset(d, INF, sizeof(d));
+            memset(vis, 0, sizeof(vis));
+
+            d[1] = -100;
+            int ret = spfa_dfs(1);
+            if(!ret) break;
+
+            if(connect(ret, n)) {
+                sign = true;
+                break;
+            }
+            del[ret] = 1;
+        }
+
+        if(sign) printf("winnable\n");
+        else printf("%s\n", d[n] >= 0 ? "hopeless" : "winnable");
+    }
+    return 0;
+}

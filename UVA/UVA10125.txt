@@ -1,0 +1,75 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:UVA10125                  *
+*      VjudgeProblemID:24030               *
+*      SubmitTime:2015/12/14 13:15:23      *
+*      SubmitType:C++ 4.8.2                *
+*      Memory:0KB                          *
+*      CodeLen:1461B                       *
+*      RunTime:239ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e3 + 5;
+
+int n, A[MX];
+
+int solve() {
+    sort(A + 1, A + 1 + n);
+    n = unique(A + 1, A + 1 + n) - A - 1;
+    map<LL, vector<PII> >m;
+    for(int i = 1; i <= n; i++) {
+        for(int j = i + 1; j <= n; j++) {
+            m[A[i] + A[j]].push_back(PII(A[i], A[j]));
+        }
+    }
+
+    for(int d = n; d >= 1; d--) {
+        for(int c = d - 1; c >= 1; c--) {
+            LL sum = A[d] - A[c];
+            if(!m.count(sum)) continue;
+            vector<PII> &p = m[sum];
+            for(int i = 0; i < p.size(); i++) {
+                PII w = p[i];
+                if(w.first != A[d] && w.first != A[c] && w.second != A[d] && w.second != A[c]) {
+                    return A[d];
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+int main() {
+    //FIN;
+    while(~scanf("%d", &n), n) {
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+        int ret = solve();
+        if(ret == -1) printf("no solution\n");
+        else printf("%d\n", ret);
+    }
+    return 0;
+}

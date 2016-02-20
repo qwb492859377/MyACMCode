@@ -1,0 +1,52 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1712                   *
+*      VjudgeProblemID:17676               *
+*      SubmitTime:2015/7/28 12:34:13       *
+*      SubmitType:C++                      *
+*      Memory:1656KB                       *
+*      CodeLen:834B                        *
+*      RunTime:124ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e2 + 5;
+const int INF = 0x3f3f3f3f;
+
+int dp[MX], A[MX][MX];
+
+int main() {
+    int n, m;
+    while(~scanf("%d%d", &n, &m), m + n) {
+        memset(dp, 0, sizeof(dp));
+
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= m; j++) {
+                scanf("%d", &A[i][j]);
+            }
+        }
+
+        for(int i = 1; i <= n; i++) {
+            for(int j = m; j >= 0; j--) {
+                for(int k = 1; k <= m; k++) {
+                    if(j >= k) dp[j] = max(dp[j], dp[j - k] + A[i][k]);
+                }
+            }
+        }
+        printf("%d\n", dp[m]);
+    }
+    return 0;
+}

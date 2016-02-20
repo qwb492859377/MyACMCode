@@ -1,0 +1,65 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1847                   *
+*      VjudgeProblemID:10757               *
+*      SubmitTime:2015/8/4 15:09:54        *
+*      SubmitType:C++                      *
+*      Memory:312KB                        *
+*      CodeLen:1257B                       *
+*      RunTime:16ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<string>
+#include<iostream>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 200 + 5;
+const int INF = 0x3f3f3f3f;
+
+int dist[MX][MX];
+
+int main() {
+    int m, n, Begin, End;
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%d%d%d", &n, &Begin, &End)) {
+        memset(dist, INF, sizeof(dist));
+
+        for(int i = 1; i <= n; i++) {
+            int m, v;
+            scanf("%d", &m);
+            if(m >= 1) {
+                scanf("%d", &v);
+                dist[i][v] = 0;
+            }
+            for(int j = 2; j <= m; j++) {
+                scanf("%d", &v);
+                if(dist[i][v] == INF) dist[i][v] = 1;
+            }
+        }
+
+        for(int k = 1; k <= n; k++) {
+            for(int i = 1; i <= n; i++) {
+                for(int j = 1; j <= n; j++) {
+                    if(dist[i][k] + dist[k][j] < INF) {
+                        dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+                    }
+                }
+            }
+        }
+
+        printf("%d\n", dist[Begin][End] == INF ? -1 : dist[Begin][End]);
+    }
+    return 0;
+}

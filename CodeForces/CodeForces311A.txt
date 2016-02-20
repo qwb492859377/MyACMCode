@@ -1,0 +1,47 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces311A            *
+*      VjudgeProblemID:49657               *
+*      SubmitTime:2015/12/22 18:44:37      *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:8KB                          *
+*      CodeLen:735B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e5 + 5;
+
+int main() {
+    LL n, k; //FIN;
+    while(~scanf("%I64d%I64d", &n, &k)) {
+        if(n * (n - 1) / 2 <= k) printf("no solution\n");
+        else {
+            for(int i = 1; i <= n; i++) {
+                printf("%d %d\n", 1, i);
+            }
+        }
+    }
+    return 0;
+}

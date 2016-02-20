@@ -1,0 +1,119 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces377A            *
+*      VjudgeProblemID:48749               *
+*      SubmitTime:2014/12/29 17:05:16      *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:5576KB                       *
+*      CodeLen:2588B                       *
+*      RunTime:156ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int maxn=505;
+#define ceshi printf("ok");
+
+int dx[]={-1,0,1,0};//§Ú§à§Ó§³§à§Ò§ã§â
+int dy[]={0,-1,0,1};
+char s[maxn][maxn];
+int vis[maxn][maxn];
+int lx[maxn][maxn];
+int ly[maxn][maxn];
+struct point{
+    int x,y;
+    int len;
+    bool operator<(const point &b)const{
+        return len<b.len;
+    }
+}t;
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int M,N,K;
+    while(~scanf("%d%d%d",&M,&N,&K)){
+        memset(vis,0,sizeof(vis));
+        memset(lx,0,sizeof(lx));
+        memset(ly,0,sizeof(ly));
+
+        int begx=0,begy=0;
+        for(int i=1;i<=M;i++){
+            scanf("%s",s[i]+1);
+            if(!begx){
+                for(int j=1;j<=N;j++){
+                    if(s[i][j]=='.'){
+                        begx=i;begy=j;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(K==0){
+            for(int i=1;i<=M;i++){
+                printf("%s\n",s[i]+1);
+            }
+            continue;
+        }
+
+        vis[begx][begy]=1;
+        priority_queue<point>work;
+        t.len=0;t.x=begx;t.y=begy;
+        lx[begx][begy]=begx;
+        ly[begx][begy]=begy;
+        work.push(t);
+
+        while(!work.empty()){
+
+            t=work.top();//printf("[%d,%d,%d,%d]",t.x,t.y,t.len,vis[t.x][t.y]);
+            work.pop();
+            bool sign=false;
+            for(int k=0;k<4;k++){
+                int nx=t.x+dx[k];
+                int ny=t.y+dy[k];
+                if(nx<1||nx>M||ny<1||ny>N){
+                    continue;
+                }
+                if(s[nx][ny]!='.'||vis[nx][ny]){
+                    continue;
+                }
+                sign=true;
+                vis[nx][ny]=1;
+                point temp;
+                temp.len=t.len+1;
+                temp.x=nx;temp.y=ny;
+                lx[nx][ny]=t.x;
+                ly[nx][ny]=t.y;
+                work.push(temp);
+            }
+            if(!sign){
+                s[t.x][t.y]='X';
+                K--;
+                if(!K){
+                    break;
+                }
+                point temp;
+
+                if(vis[lx[t.x][t.y]][ly[t.x][t.y]]!=2){
+                   vis[lx[t.x][t.y]][ly[t.x][t.y]]=2;
+                    temp.x=lx[t.x][t.y];
+                    temp.y=ly[t.x][t.y];
+                    temp.len=t.len-1;
+                    work.push(temp);
+                }
+            }
+        }
+
+        for(int i=1;i<=M;i++){
+            printf("%s\n",s[i]+1);
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,46 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1406                   *
+*      VjudgeProblemID:50079               *
+*      SubmitTime:2015/11/2 15:52:10       *
+*      SubmitType:C                        *
+*      Memory:964KB                        *
+*      CodeLen:322B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    while(T--) {
+        double m, h;
+        scanf("%lf%lf", &m, &h);
+        double bim = m / h / h;
+
+        if(bim < 18.5) printf("Underweight\n");
+        else if(bim >= 23) printf("Overweight\n");
+        else printf("Normal\n");
+    }
+    return 0;
+}
+ FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+int main() {
+    int T; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        double m, h;
+        scanf("%lf%lf", &m, &h);
+        double bim = m / h / h;
+
+        if(bim < 18.5) printf("Underweight\n");
+        else if(bim >= 23) printf("Overweight\n");
+        else printf("Normal\n");
+    }
+    return 0;
+}

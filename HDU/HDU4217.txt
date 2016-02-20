@@ -1,0 +1,85 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4217                   *
+*      VjudgeProblemID:27724               *
+*      SubmitTime:2015/6/10 14:02:49       *
+*      SubmitType:C++                      *
+*      Memory:7780KB                       *
+*      CodeLen:1267B                       *
+*      RunTime:1092ms                      *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cstdlib>
+#include<algorithm>
+using namespace std;
+const int MX=262144+5;
+const int INF=0x3f3f3f3f;
+typedef long long LL;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,n,1
+
+int POS[MX<<2];
+LL S[MX<<2];
+
+void push_up(int rt){
+    POS[rt]=POS[rt<<1]+POS[rt<<1|1];
+    S[rt]=S[rt<<1]+S[rt<<1|1];
+}
+void build(int l,int r,int rt){
+    if(l==r){
+        S[rt]=0;
+        POS[rt]=1;
+        return;
+    }
+
+    int m=(l+r)>>1;
+    build(lson);
+    build(rson);
+    push_up(rt);
+}
+
+void update(int k,int l,int r,int rt){
+    if(l==r){
+        POS[rt]=0;
+        S[rt]=l;
+        return;
+    }
+
+    int m=(l+r)>>1;
+    if(k<=POS[rt<<1]) update(k,lson);
+    else update(k-POS[rt<<1],rson);
+    push_up(rt);
+}
+
+LL query(int L,int R,int l,int r,int rt){
+    if(l==r){
+        return S[rt];
+    }
+
+    int m=(l+r)>>1;
+    LL ret=0;
+    if(L<=m) ret+=query(L,R,lson);
+    if(R>m)  ret+=query(L,R,rson);
+    return ret;
+}
+
+int main(){
+    int T,n,m,t,ansk=0;
+    scanf("%d",&T);
+
+    while(T--){
+        scanf("%d%d",&n,&m);
+        build(root);
+        while(m--){
+            scanf("%d",&t);
+            update(t,root);
+        }
+        printf("Case %d: %I64d\n",++ansk,S[1]);
+    }
+    return 0;
+}

@@ -1,0 +1,42 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ZOJ1733                   *
+*      VjudgeProblemID:30753               *
+*      SubmitTime:2015/1/27 16:49:00       *
+*      SubmitType:C++ (g++ 4.7.2)          *
+*      Memory:4116KB                       *
+*      CodeLen:722B                        *
+*      RunTime:10ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int dp[1005][1005];
+
+int main(){
+    char str1[1005],str2[1005];
+    while(~scanf("%s%s",str1+1,str2+1)){
+        int len1=strlen(str1+1);
+        int len2=strlen(str2+1);
+
+        memset(dp,0,sizeof(dp));
+        for(int i=1;i<=len1;i++){
+            for(int j=1;j<=len2;j++){
+                if(str1[i]==str2[j]){
+                    dp[i][j]=max(dp[i][j],dp[i-1][j-1]+1);
+                }else{
+                    dp[i][j]=max(dp[i][j],dp[i-1][j]);
+                    dp[i][j]=max(dp[i][j],dp[i][j-1]);
+                }
+            }
+        }
+        printf("%d\n",dp[len1][len2]);
+    }
+    return 0;
+}

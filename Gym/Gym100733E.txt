@@ -1,0 +1,45 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:Gym100733E                *
+*      VjudgeProblemID:229607              *
+*      SubmitTime:2015/8/28 0:18:29        *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:3924KB                       *
+*      CodeLen:637B                        *
+*      RunTime:249ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e6 + 5;
+
+int A[MX];
+
+int main() {
+    int n, m; //FIN;
+    while(~scanf("%d%d", &n, &m)) {
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+        sort(A + 1, A + 1 + n);
+        printf("%d\n", A[m]);
+    }
+    return 0;
+}

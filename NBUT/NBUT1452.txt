@@ -1,0 +1,53 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1452                  *
+*      VjudgeProblemID:46170               *
+*      SubmitTime:2015/8/21 13:11:09       *
+*      SubmitType:G++                      *
+*      Memory:232KB                        *
+*      CodeLen:847B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<sstream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+
+const int MX = 100 + 5;
+char S[MX][MX];
+
+int main() {
+    int T;//FIN;
+    scanf("%d", &T);
+    while(T--) {
+        memset(S, 0, sizeof(S));
+
+        for(int i = 0; i < 2; i++) {
+            for(int j = 0; j < 32; j++) {
+                int x; scanf("%x", &x);
+                for(int k = 0; k < 8; k++) {
+                    if(x >> k & 1) S[i * 8 + k][j] = '*';
+                    else S[i * 8 + k][j] = '.';
+                }
+            }
+        }
+
+        for(int i = 0; i < 16; i++) printf("%s\n", S[i]);
+    }
+    return 0;
+}

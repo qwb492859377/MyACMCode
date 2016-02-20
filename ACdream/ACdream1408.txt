@@ -1,0 +1,68 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ACdream1408               *
+*      VjudgeProblemID:71911               *
+*      SubmitTime:2015/8/25 13:39:21       *
+*      SubmitType:C++                      *
+*      Memory:1672KB                       *
+*      CodeLen:1364B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define UFOR(i, a, b) for (int i = (int)a; i <= (int)b; i++)
+#define DFOR(i, a, b) for (int i = (int)a; i >= (int)b; i--)
+#define MEMINF memset(a, 0x3f3f3f3f, sizeof(a))
+#define FOUT freopen("output.txt","w+",stdout)
+#define FIN freopen("input.txt","r",stdin)
+#define MEM1(a) memset(a, -1, sizeof(a))
+#define MEM0(a) memset(a, 0, sizeof(a))
+#define rson m + 1, r, rt<<1|1
+#define lson l, m, rt<<1
+#define root 1, n, 1
+#define NR rt<<1|1
+#define NL rt<<1
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+template <typename T>void print(const T* p, const T* q, string gap = " ") {
+    int d = p < q ? 1 : -1;
+    while(p != q) {
+        cout << *p ;
+        p += d;
+        if(p != q) cout << gap;
+    } cout << endl;
+}
+inline void read(int &x) {
+    char c = getchar();
+    while(!isdigit(c)) c = getchar();
+
+    x = 0;
+    while(isdigit(c)) {
+        x = x * 10 + c - '0';
+        c = getchar();
+    }
+}
+/*--------------------fuck------------------------*/
+int main() {
+    LL n;
+    while(~scanf("%lld", &n)) {
+        if(n % 2 == 0) printf("0 0\n");
+        else {
+            printf("2 %lld\n", n + 2);
+        }
+    }
+    return 0;
+}

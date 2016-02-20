@@ -1,0 +1,55 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2352                   *
+*      VjudgeProblemID:21069               *
+*      SubmitTime:2014/12/14 11:08:41      *
+*      SubmitType:C++                      *
+*      Memory:1088KB                       *
+*      CodeLen:773B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+
+char alp[]="IVXLCDM";
+int num[]={1,5,10,50,100,500,1000};
+int get_id(char a){
+    for(int i=0;i<strlen(alp);i++){
+        if(alp[i]==a){
+            return i;
+        }
+    }
+}
+
+int get_num(int id){
+    return num[id];
+}
+
+int main(){
+    int T;
+    char s[1000];
+    scanf("%d",&T);
+    while(T--){
+        scanf("%s",s);
+        int last=-1,ans=0;
+        for(int i=strlen(s)-1;i>=0;i--){
+            int k=get_id(s[i]);
+            if(k>=last){
+                ans+=get_num(k);
+            }else{
+                ans-=get_num(k);
+            }
+            last=k;
+        }
+        printf("%d\n",ans);
+    }
+    return 0;
+}

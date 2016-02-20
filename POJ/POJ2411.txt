@@ -1,0 +1,75 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2411                   *
+*      VjudgeProblemID:12637               *
+*      SubmitTime:2015/7/30 9:42:43        *
+*      SubmitType:C++                      *
+*      Memory:4300KB                       *
+*      CodeLen:1245B                       *
+*      RunTime:438ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 2050 + 5;
+const int INF = 0x3f3f3f3f;
+
+bool G[MX][MX];
+LL dp[2][MX];
+
+void DFS(int x, int y, int col, int k) {
+    if(col == k) {
+        G[y][x] = 1;
+        return;
+    }
+
+    DFS(x << 1, (y << 1) + 1, col + 1, k);
+    DFS((x << 1) + 1, y << 1, col + 1, k);
+    if(col + 2 <= k) {
+        DFS((x << 2) + 3, (y << 2) + 3, col + 2, k);
+    }
+}
+
+LL solve(int m, int n) {
+    memset(G, false, sizeof(G));
+    memset(dp, 0, sizeof(dp));
+
+    if(m > n) swap(m, n);
+    int tot = 1 << m;
+
+    DFS(0, 0, 0, m);
+
+    int cur = 0, nxt = 1;
+    dp[cur][tot - 1] = 1;
+    for(int i = 1; i <= n; i++) {
+        memset(dp[nxt], 0, sizeof(dp[nxt]));
+
+        for(int j = 0; j < tot; j++) {
+            for(int k = 0; k < tot; k++) {
+                if(G[j][k]) dp[nxt][j] += dp[cur][k];
+            }
+        }
+        swap(cur, nxt);
+    }
+    return dp[cur][tot - 1];
+}
+
+int main() {
+    int m, n;
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%d%d", &m, &n), m + n) {
+        printf("%I64d\n", solve(m, n));
+    }
+    return 0;
+}

@@ -1,0 +1,55 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4493                   *
+*      VjudgeProblemID:46333               *
+*      SubmitTime:2015/6/2 18:08:14        *
+*      SubmitType:C++                      *
+*      Memory:1624KB                       *
+*      CodeLen:744B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<cctype>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=1000+5;
+
+void solve(double x){
+    char pt[100];
+    sprintf(pt,"%.2lf",x);
+    int l=strlen(pt);
+
+    printf("$");
+
+    if(pt[l-1]=='0'&&pt[l-2]=='0'){
+        for(int i=0;i<l-3;i++) putchar(pt[i]);
+    }else if(pt[l-1]=='0'){
+        for(int i=0;i<=l-2;i++) putchar(pt[i]);
+    }else{
+        printf("%s",pt);
+    }
+    puts("");
+}
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        double s=0,t;
+        for(int i=1;i<=12;i++){
+            scanf("%lf",&t);
+            s+=t;
+        }
+
+        solve(s/12);
+    }
+    return 0;
+}

@@ -1,0 +1,78 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2298                   *
+*      VjudgeProblemID:19904               *
+*      SubmitTime:2015/7/24 10:04:11       *
+*      SubmitType:C++                      *
+*      Memory:1620KB                       *
+*      CodeLen:1343B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+typedef long long LL;
+
+const int MX = 20 + 5;
+const int INF = 0x3f3f3f3f;
+const double pi = acos(-1.0);
+const double exps = 1e-8;
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    while(T--) {
+        double x, y, v, g = 9.8;
+        scanf("%lf%lf%lf", &x, &y, &v);
+
+        double A, B, C, D, P1, P2;
+        if(v < exps) {
+            printf("-1\n");
+            break;
+        }
+
+        A = -g * x * x / (2.0 * v * v);
+        B = x;
+        C = -y + A;
+
+        D = B * B - 4 * A * C;
+        if(D < 0) {
+            printf("-1\n");
+            continue;
+        }
+
+        if(fabs(A) < exps) {
+            //说明x等于0
+            double h = v * v / (2 * g);
+            if(y <= h) printf("%.6lf\n", pi / 2);
+            else printf("-1\n");
+            continue;
+        }
+
+        D = sqrt(D);
+        P1 = (-B - D) / (2.0 * A);
+        P2 = (-B + D) / (2.0 * A);
+
+        P1 = atan(P1);
+        P2 = atan(P2);
+        double ans = 100;
+        if(0 <= P1 && P1 <= pi / 2 && P1 < ans) {
+            ans = P1;
+        }
+        if(0 <= P2 && P2 <= pi / 2 && P2 < ans) {
+            ans = P2;
+        }
+
+        if(ans > 99) {
+            printf("-1\n");
+        } else {
+            printf("%.6lf\n", ans);
+        }
+    }
+    return 0;
+}

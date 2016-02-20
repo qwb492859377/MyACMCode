@@ -1,0 +1,56 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2652                   *
+*      VjudgeProblemID:33863               *
+*      SubmitTime:2014/12/1 12:11:17       *
+*      SubmitType:C++                      *
+*      Memory:18176KB                      *
+*      CodeLen:937B                        *
+*      RunTime:453ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int INF=1<<30;
+struct node{
+    int end,happy;
+    node*next;
+    node(int e,int h){
+        next=NULL;
+        end=e;
+        happy=h;
+    }
+};
+node*time[1000005];
+int dp[1000005];
+
+int main(){
+    int n;
+    while(~scanf("%d",&n)){
+        node*t;
+        int a,b,c,ends=-INF;
+        memset(time,NULL,sizeof(time));
+        for(int i=0;i<n;i++){
+            scanf("%d%d%d",&a,&b,&c);
+            b++;
+            ends=max(ends,b);
+            t=new node(b,c);
+            t->next=time[a];
+            time[a]=t;
+        }
+        memset(dp,0,sizeof(dp));
+        for(int i=1;i<=ends;i++){
+            for(node*j=time[i];j!=NULL;j=j->next){
+                dp[j->end]=max(dp[j->end],dp[i]+j->happy);
+            }
+            dp[i+1]=max(dp[i+1],dp[i]);
+        }
+        printf("%d\n",dp[ends]);
+    }
+    return 0;
+}

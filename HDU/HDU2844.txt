@@ -1,0 +1,64 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2844                   *
+*      VjudgeProblemID:17442               *
+*      SubmitTime:2015/2/26 19:49:25       *
+*      SubmitType:C++                      *
+*      Memory:1500KB                       *
+*      CodeLen:885B                        *
+*      RunTime:514ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+int A[105],W[100000+5],rear;
+int dp[100000+5];
+
+int main(){
+    int n,m,t;
+    while(~scanf("%d%d",&n,&m),n+m){
+        memset(dp,0,sizeof(dp));
+        for(int i=1;i<=n;i++){
+            scanf("%d",&A[i]);
+        }
+
+        rear=0;
+        for(int i=1;i<=n;i++){
+            scanf("%d",&t);
+            int k=1;
+            while(t>k){
+                W[rear++]=k*A[i];
+                t-=k;k*=2;
+            }
+            W[rear++]=t*A[i];
+        }
+
+        dp[0]=1;
+        for(int i=0;i<rear;i++){
+            for(int j=m;j>=W[i];j--){
+                if(dp[j-W[i]]) dp[j]=1;
+            }
+        }
+
+        int ans=0;
+        for(int i=1;i<=m;i++){
+            ans+=dp[i];
+        }
+        printf("%d\n",ans);
+    }
+    return 0;
+}
+          ans+=dp[i];
+        }
+        printf("%d\n",ans);
+    }
+    return 0;
+}

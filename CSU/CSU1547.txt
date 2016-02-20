@@ -1,0 +1,73 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1547                   *
+*      VjudgeProblemID:141791              *
+*      SubmitTime:2015/9/20 19:33:54       *
+*      SubmitType:C++                      *
+*      Memory:1564KB                       *
+*      CodeLen:1241B                       *
+*      RunTime:8ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 10000 + 5;
+
+int dp[MX], A[MX];
+
+int main() {
+    int T, n; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        int rear = 0;
+        scanf("%d", &n);
+        memset(dp, 0, sizeof(dp));
+
+        int sa = 0, sb = 0;
+        for(int i = 1; i <= n; i++) {
+            int a, b;
+            scanf("%d%d", &a, &b);
+            if(a == 1) {
+                sa += b;
+                A[++rear] = b;
+            } else sb += b;
+        }
+
+        dp[0] = 1;
+        for(int i = 1; i <= rear; i++) {
+            for(int j = sa / 2; j >= A[i]; j--) {
+                dp[j] |= dp[j - A[i]];
+            }
+        }
+
+        int ans = 0;
+        for(int i = sa / 2; i >= 0; i--) {
+            if(dp[i]) {
+                ans = sa - i;
+                break;
+            }
+        }
+
+        printf("%d\n", ans + sb);
+    }
+    return 0;
+}

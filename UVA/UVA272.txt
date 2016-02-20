@@ -1,0 +1,44 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:UVA272                    *
+*      VjudgeProblemID:19396               *
+*      SubmitTime:2015/1/26 14:23:05       *
+*      SubmitType:C++ 4.8.2                *
+*      Memory:0KB                          *
+*      CodeLen:643B                        *
+*      RunTime:35ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<string>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+string content,line;
+
+int main(){
+    while(getline(cin,line)){
+        content=content+line+"\n";
+    }
+
+    int sign1=0,sign2=0;
+    int cur=0,rear=content.size();
+    while(cur<rear){
+        if(content[cur]=='"'){
+            if(sign1==0){
+                content.replace(cur,1,"``");
+                sign1=1;rear++;
+            }else{
+                content.replace(cur,1,"''");
+                sign1=0;rear++;
+            }
+        }
+        cur++;
+    }
+    cout<<content;
+    return 0;
+}

@@ -1,0 +1,35 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:LightOJ1182               *
+*      VjudgeProblemID:26895               *
+*      SubmitTime:2015/1/14 19:42:38       *
+*      SubmitType:C++                      *
+*      Memory:1088KB                       *
+*      CodeLen:405B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int main(){
+    int T,ansk=0;
+    scanf("%d",&T);
+    while(T--){
+        int n,s=0;
+        scanf("%d",&n);
+        for(int i=0;i<=31;i++){
+            if((1<<i)&n){
+                s++;
+            }
+        }
+
+        printf("Case %d: %s\n",++ansk,(s%2)?"odd":"even");
+    }
+    return 0;
+}

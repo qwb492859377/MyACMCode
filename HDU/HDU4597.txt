@@ -1,0 +1,61 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4597                   *
+*      VjudgeProblemID:46330               *
+*      SubmitTime:2015/6/3 11:38:32        *
+*      SubmitType:C++                      *
+*      Memory:3128KB                       *
+*      CodeLen:943B                        *
+*      RunTime:78ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<cctype>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=20+5;
+
+int A[MX],B[MX];
+int dp[MX][MX][MX][MX];
+
+int f(int la,int ra,int lb,int rb,int s){
+    if(la>ra&&lb>rb) return 0;
+
+    int &DP=dp[la][ra][lb][rb];
+    if(DP) return DP;
+
+    if(la<=ra){
+        DP=max(DP,s-f(la+1,ra,lb,rb,s-A[la]));
+        DP=max(DP,s-f(la,ra-1,lb,rb,s-A[ra]));
+    }
+
+    if(lb<=rb){
+        DP=max(DP,s-f(la,ra,lb+1,rb,s-B[lb]));
+        DP=max(DP,s-f(la,ra,lb,rb-1,s-B[rb]));
+    }
+    return DP;
+}
+
+int main(){
+    int T,n;
+    scanf("%d",&T);
+
+    while(T--){
+        memset(dp,0,sizeof(dp));
+        scanf("%d",&n);
+
+        int sum=0;
+        for(int i=1;i<=n;i++) scanf("%d",&A[i]),sum+=A[i];
+        for(int i=1;i<=n;i++) scanf("%d",&B[i]),sum+=B[i];
+
+        printf("%d\n",f(1,n,1,n,sum));
+    }
+    return 0;
+}

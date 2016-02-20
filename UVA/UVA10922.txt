@@ -1,0 +1,52 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:UVA10922                  *
+*      VjudgeProblemID:19784               *
+*      SubmitTime:2015/1/26 17:01:25       *
+*      SubmitType:C++ 4.8.2                *
+*      Memory:0KB                          *
+*      CodeLen:710B                        *
+*      RunTime:32ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<string>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+int DFS(int n){
+    if(n==9){
+        return 1;
+    }
+    int w=0;
+    while(n){
+        w+=n%10;
+        n/=10;
+    }
+    return 1+DFS(w);
+}
+
+int main(){
+    char line[10000];
+    while(~scanf("%s",line)){
+        if(line[0]=='0'){
+            break;
+        }
+
+        int w=0;
+        for(int i=0;i<strlen(line);i++){
+            w+=line[i]-'0';
+        }
+        if(w%9){
+            printf("%s is not a multiple of 9.\n",line);
+            continue;
+        }
+        printf("%s is a multiple of 9 and has 9-degree %d.\n",line,DFS(w));
+    }
+    return 0;
+}

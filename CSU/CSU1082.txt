@@ -1,0 +1,98 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1082                   *
+*      VjudgeProblemID:30354               *
+*      SubmitTime:2015/8/10 20:41:18       *
+*      SubmitType:C++                      *
+*      Memory:2428KB                       *
+*      CodeLen:1874B                       *
+*      RunTime:1056ms                      *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 2e4 + 5;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 0,10000,1
+
+int MAX[MX << 2], col[MX << 2];
+
+struct Que {
+    int L, R, top, d;
+    bool operator<(const Que &b)const {
+        if(top == b.top) return d > b.d;
+        return top < b.top;
+    }
+    Que(int _top = 0, int _L = 0, int _R = 0, int _d = 0) {
+        L = _L; R = _R; top = _top; d = _d;
+    }
+} Q[MX];
+
+void push_up(int rt) {
+    MAX[rt] = max(MAX[rt << 1], MAX[rt << 1 | 1]);
+}
+
+void push_down(int rt) {
+    if(col[rt]) {
+        col[rt << 1] += col[rt];
+        col[rt << 1 | 1] += col[rt];
+        MAX[rt << 1] += col[rt];
+        MAX[rt << 1 | 1] += col[rt];
+        col[rt] = 0;
+    }
+}
+
+void update(int L, int R, int d, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        MAX[rt] += d;
+        col[rt] += d;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    push_down(rt);
+    if(L <= m) update(L, R, d, lson);
+    if(R > m) update(L, R, d, rson);
+    push_up(rt);
+}
+
+int main() {
+    int n;
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%d", &n)) {
+        memset(MAX, 0, sizeof(MAX));
+        memset(col, 0, sizeof(col));
+
+        for(int i = 1; i <= n; i++) {
+            int x1, x2, y1, y2;
+            scanf("%d%d%d%d", &x1, &x2, &y1, &y2);
+            Q[i] = Que(y1, x1, x2, 1);
+            Q[i + n] = Que(y2, x1, x2, -1);
+        }
+        sort(Q + 1, Q + 1 + 2 * n);
+
+        int ans = 0;
+        for(int i = 1; i <= 2 * n; i++) {
+            update(Q[i].L, Q[i].R, Q[i].d, root);
+            ans = max(ans, MAX[1]);
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

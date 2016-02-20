@@ -1,0 +1,103 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1220                  *
+*      VjudgeProblemID:32790               *
+*      SubmitTime:2015/8/17 14:34:13       *
+*      SubmitType:G++                      *
+*      Memory:15876KB                      *
+*      CodeLen:1832B                       *
+*      RunTime:46ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+const int MX = 1e6;
+
+
+int B[MX], C[MX];
+struct P {
+    string st;
+    int num;
+    P () {
+        num = 0;
+    }
+    bool operator < (const P& X) const {
+        return num < X.num;
+    }
+} ans[MX];
+
+
+
+int main() {
+    int a, b, c; //FIN;
+    while (~scanf("%d %d %d", &a, &b, &c)) {
+        memset(B, 0, sizeof(B));
+        memset(C, 0, sizeof(C));
+        map<string, int> M;
+        int tot = 1;
+        for (int i = 0; i < a; i++) {
+            string name;
+            cin >> name;
+            if (M[name] == 0) { M[name] = tot++; ans[tot - 1].st = name; }
+        }
+
+        for (int i = 0; i < b; i++) {
+            string name;
+            cin >> name;
+            if (M[name]) {
+                int id = M[name];
+                B[id] = 1;
+                ans[id].num = i;
+            }
+        }
+
+        for (int i = 0; i < c; i++) {
+            string name;
+            cin >> name;
+            if (M[name]) {
+                int id = M[name];
+                C[id] = 1;
+            }
+        }
+
+
+        bool first = true;
+        int sum = 0;
+        for (int i = 1; i <= tot; i++) {
+            if (B[i] && !C[i]) {
+
+                ans[sum++].st = ans[i].st;
+                ans[sum - 1].num = ans[i].num;
+            }
+        }
+
+        sort(ans, ans + sum);
+
+        for (int i = 0; i < sum; i++) {
+            if (first) first = false;
+            else cout << ' ';
+
+            cout << ans[i].st;
+        }
+
+        if (first) printf("No enemy spy");
+        puts("");
+    }
+    return 0;
+}

@@ -1,0 +1,66 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3258                   *
+*      VjudgeProblemID:16277               *
+*      SubmitTime:2014/12/2 13:37:06       *
+*      SubmitType:C++                      *
+*      Memory:328KB                        *
+*      CodeLen:1012B                       *
+*      RunTime:94ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+int L,N,M;
+int s[50050];
+
+int func(int x){
+    int ans=0,last=0;
+    for(int i=0;i<N-1;i++){
+        if(s[i]>=last+x){
+            last=s[i];
+            ans++;
+        }
+    }
+    if(s[N-1]+x<=L&&s[N-1]>=last+x){
+        ans++;
+    }
+    return N-ans;
+}
+
+int main(){
+    while(~scanf("%d%d%d",&L,&N,&M)){
+
+        for(int i=0;i<N;i++){
+            scanf("%d",&s[i]);
+        }
+        if(N==0||N-M==0){
+            printf("%d\n",L);
+            continue;
+        }
+        sort(s,s+N);
+        int l=1,r=1000000000,m;
+        while(l<r-1){
+            m=(l+r)/2;//printf("[%d,%d,%d]\n",l,r,func(m));
+            if(func(m)<=M){
+                l=m;
+            }else{
+                r=m;
+            }
+        }
+
+        //printf("[%d,%d]\n",l,r);
+        if(r-l==2){
+            printf("%d\n",(r+l)/2);
+        }else{
+            printf("%d\n",l);
+        }
+    }
+    return 0;
+}

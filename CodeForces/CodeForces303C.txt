@@ -1,0 +1,82 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces303C            *
+*      VjudgeProblemID:38674               *
+*      SubmitTime:2015/7/28 20:16:57       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:11556KB                      *
+*      CodeLen:1376B                       *
+*      RunTime:186ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e6 + 5;
+const int INF = 0x3f3f3f3f;
+const int mod = 1e9 + 7;
+
+int A[MX], S[MX], vis[MX];
+int main() {
+    int n, k, Max = 0;
+    scanf("%d%d", &n, &k);
+
+    for(int i = 1; i <= n; i++) {
+        scanf("%d", &A[i]);
+        Max = max(Max, A[i]);
+    }
+
+    for(int i = 1; i <= n; i++) {
+        for(int j = i + 1; j <= n; j++) {
+            S[abs(A[i] - A[j])]++;
+        }
+    }
+
+    if(k >= n - 1) {
+        printf("1\n");
+        return 0;
+    }
+
+    int ans = 0;
+    for(int i = n - k; i <= Max + 1; i++) {
+        int cnt = 0, sign = false;
+        for(int j = i; j <= Max + 1; j += i) {
+            cnt += S[j];
+            if(cnt > k * (k + 1) / 2) {
+                sign = true;
+                break;
+            }
+        }
+        if(sign) continue;
+
+        cnt = 0;
+        sign = false;
+        for(int j = 1; j <= n; j++) {
+            if(vis[A[j] % i] != i) {
+                vis[A[j] % i] = i;
+            } else cnt++;
+            if(cnt > k) {
+                sign = true;
+                break;
+            }
+        }
+        if(sign) continue;
+
+        ans = i;
+        break;
+    }
+
+    printf("%d\n", ans);
+    return 0;
+}

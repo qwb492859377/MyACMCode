@@ -1,0 +1,107 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2177                   *
+*      VjudgeProblemID:33487               *
+*      SubmitTime:2015/12/6 20:59:37       *
+*      SubmitType:G++                      *
+*      Memory:1576KB                       *
+*      CodeLen:2448B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const double p = (sqrt(5.0) + 1) / 2;
+
+int solve1(int x) {
+    int l = 0, r = 1e6, m;
+    while(l <= r) {
+        m = (l + r) >> 1;
+        int f = p * m;
+        if(f == x) return m;
+        else if(f < x) l = m + 1;
+        else r = m - 1;
+    }
+    return -1;
+}
+
+int solve2(int y) {
+    int l = 0, r = 1e6, m;
+    while(l <= r) {
+        m = (l + r) >> 1;
+        int f = p * m + m;
+        if(f == y) return m;
+        else if(f < y) l = m + 1;
+        else r = m - 1;
+    }
+    return -1;
+}
+
+int main() {
+    int a, b; //FIN;
+    while(~scanf("%d%d", &a, &b), a + b) {
+        set<PII>m;
+        int k = b - a;
+        int x = p * k, y = x + k;
+        if(a == x && b == y) printf("0\n");
+        else {
+            m.insert(PII(x, y));
+            printf("1\n%d %d\n", x, y);
+
+            int nk, nx, ny;
+            nk = solve1(a);
+            if(nk > 0) {
+                nx = p * nk; ny = nx + nk;
+                if(nx <= a && ny <= b && m.find(PII(nx, ny)) == m.end()) {
+                    m.insert(PII(nx, ny));
+                    printf("%d %d\n", nx, ny);
+                }
+            }
+            nk = solve1(b);
+            if(nk > 0) {
+                nx = p * nk; ny = nx + nk;
+                if(nx <= a && ny <= b && m.find(PII(nx, ny)) == m.end()) {
+                    m.insert(PII(nx, ny));
+                    printf("%d %d\n", nx, ny);
+                }
+            }
+            nk = solve2(a);
+            if(nk > 0) {
+                nx = p * nk; ny = nx + nk;
+                if(nx <= a && ny <= b && m.find(PII(nx, ny)) == m.end()) {
+                    m.insert(PII(nx, ny));
+                    printf("%d %d\n", nx, ny);
+                }
+            }
+            nk = solve2(b);
+            if(nk > 0) {
+                nx = p * nk; ny = nx + nk;
+                if(nx <= a && ny <= b && m.find(PII(nx, ny)) == m.end()) {
+                    m.insert(PII(nx, ny));
+                    printf("%d %d\n", nx, ny);
+                }
+            }
+        }
+    }
+    return 0;
+}

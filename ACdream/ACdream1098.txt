@@ -1,0 +1,36 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ACdream1098               *
+*      VjudgeProblemID:71720               *
+*      SubmitTime:2015/11/5 12:56:36       *
+*      SubmitType:C                        *
+*      Memory:1084KB                       *
+*      CodeLen:457B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    while(T--) {
+        int A, B, R1, R2;
+        scanf("%d%d%d%d", &A, &B, &R1, &R2);
+        if(2 * R1 <= A && 2 * R1 <= B && 2 * R2 <= A && 2 * R2 <= B) {
+            if((A - R2 - R1) * (A - R2 - R1) + (B - R2 - R1) * (B - R2 - R1) >= (R1 + R2) * (R1 + R2)) {
+                printf("YES\n");
+                continue;
+            }
+        }
+        printf("NO\n");
+    }
+    return 0;
+}
+NO\n");
+            }
+        }
+    }
+    return 0;
+}

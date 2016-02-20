@@ -1,0 +1,112 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces52C             *
+*      VjudgeProblemID:22950               *
+*      SubmitTime:2015/1/26 17:48:40       *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:12536KB                      *
+*      CodeLen:2015B                       *
+*      RunTime:686ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<string>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+const int maxn=200000+5;
+typedef __int64 LL;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define INF (LL)1 << 60
+LL sum[maxn<<2],col[maxn<<2];
+
+void push_up(int rt){
+    sum[rt]=min(sum[rt<<1],sum[rt<<1|1]);
+}
+
+void push_down(int rt){
+    if(col[rt]){
+        col[rt<<1]+=col[rt];
+        col[rt<<1|1]+=col[rt];
+        sum[rt<<1]+=col[rt];
+        sum[rt<<1|1]+=col[rt];
+        col[rt]=0;
+    }
+}
+
+void build(int l,int r,int rt){
+    col[rt]=0;
+    if(l==r){
+        scanf("%I64d",&sum[rt]);
+        return;
+    }
+    int m=(l+r)>>1;
+    build(lson);
+    build(rson);
+    push_up(rt);
+}
+
+void update(int a,int b,LL c,int l,int r,int rt){
+    if(a<=l&&r<=b){
+        col[rt]+=c;
+        sum[rt]+=c;
+        return;
+    }
+
+    push_down(rt);
+    int m=(l+r)>>1;
+    if(a<=m) update(a,b,c,lson);
+    if(b>m)  update(a,b,c,rson);
+    push_up(rt);
+}
+
+LL query(int a,int b,int l,int r,int rt){
+    if(a<=l&&r<=b){
+        return sum[rt];
+    }
+    push_down(rt);
+
+    LL ans=INF;
+    int m=(l+r)>>1;
+    if(a<=m) ans=min(ans,query(a,b,lson));
+    if(b>m)  ans=min(ans,query(a,b,rson));
+    return ans;
+}
+
+int main(){
+    int n,m;
+    char line[1000];
+    scanf("%d",&n);
+    build(0,n-1,1);
+    scanf("%d",&m);getchar();
+    for(int i=0;i<m;i++){
+        int a,b;
+        LL c;
+
+        gets(line);
+        if(sscanf(line,"%d%d%I64d",&a,&b,&c)==2){
+            if(a<=b){
+                printf("%I64d\n",query(a,b,0,n-1,1));
+            }else{
+                LL ans=INF;
+                ans=min(ans,query(a,n-1,0,n-1,1));
+                ans=min(ans,query(0,b,0,n-1,1));
+                printf("%I64d\n",ans);
+            }
+        }else{
+            //²åÈë
+            if(a<=b){
+                update(a,b,c,0,n-1,1);
+            }else{
+                update(a,n-1,c,0,n-1,1);
+                update(0,b,c,0,n-1,1);
+            }
+        }
+    }
+    return 0;
+}

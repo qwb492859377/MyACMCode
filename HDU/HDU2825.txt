@@ -1,0 +1,161 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2825                   *
+*      VjudgeProblemID:16883               *
+*      SubmitTime:2015/10/23 22:35:52      *
+*      SubmitType:G++                      *
+*      Memory:4856KB                       *
+*      CodeLen:3520B                       *
+*      RunTime:546ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+/*MX为总长度*/
+const int MN = 25 + 5;
+const int MX = 2e2 + 5;
+const int mod = 20090717;
+const int P = 26;
+
+LL dp[2][1 << 10][MX];
+
+struct AC_machine {
+    int rear, root, m;
+    int Next[MX][P], Fail[MX], End[MX];
+
+    void Init(int _m) {
+        m = _m;
+        rear = 0;
+        root = New();
+    }
+
+    int New() {
+        End[rear] = 0;
+        for(int i = 0; i < P; i++) {
+            Next[rear][i] = -1;
+        }
+        return rear++;
+    }
+
+    void Add(char *A, int u) {
+        int now = root, n = strlen(A);
+        for(int i = 0; i < n; i++) {
+            int id = A[i] - 'a';
+            if(Next[now][id] == -1) {
+                Next[now][id] = New();
+            }
+            now = Next[now][id];
+        }
+        End[now] |= 1 << u;
+    }
+
+    void Build() {
+        queue<int>Q;
+        Fail[root] = root;
+        for(int i = 0; i < P; i++) {
+            if(Next[root][i] == -1) {
+                Next[root][i] = root;
+            } else {
+                Fail[Next[root][i]] = root;
+                Q.push(Next[root][i]);
+            }
+        }
+
+        while(!Q.empty()) {
+            int u = Q.front(); Q.pop();
+
+            End[u] |= End[Fail[u]];
+            for(int i = 0; i < P; i++) {
+                if(Next[u][i] == -1) {
+                    Next[u][i] = Next[Fail[u]][i];
+                } else {
+                    Fail[Next[u][i]] = Next[Fail[u]][i];
+                    Q.push(Next[u][i]);
+                }
+            }
+        }
+    }
+
+    LL Solve(int N, int K) {
+        int cur = 0, cnxt = 1;
+        for(int S = 0; S < (1 << m); S++) {
+            for(int j = 0; j < rear; j++) {
+                dp[cur][S][j] = 0;
+            }
+        }
+
+        dp[cur][0][0] = 1;
+        for(int i = 1; i <= N; i++) {
+            for(int S = 0; S < (1 << m); S++) {
+                for(int j = 0; j < rear; j++) {
+                    dp[cnxt][S][j] = 0;
+                }
+            }
+
+
+            for(int S = 0; S < (1 << m); S++) {
+                for(int j = 0; j < rear; j++) {
+                    if(dp[cur][S][j]) {
+                        for(int k = 0; k < P; k++) {
+                            int nxt = Next[j][k];
+
+                            dp[cnxt][S | End[nxt]][nxt] += dp[cur][S][j];
+                            dp[cnxt][S | End[nxt]][nxt] %= mod;
+                        }
+                    }
+                }
+            }
+            swap(cur, cnxt);
+        }
+
+        LL ans = 0;
+        for(int S = 0; S < (1 << m); S++) {
+            int cnt = 0;
+            for(int i = 0; i < m; i++) {
+                if(S >> i & 1) cnt++;
+            }
+            if(cnt < K) continue;
+
+            for(int j = 0; j < rear; j++) {
+                ans += dp[cur][S][j];
+                ans %= mod;
+            }
+        }
+        return ans;
+    }
+} AC;
+
+char word[MX];
+
+int main() {
+    int n, m, k; //FIN;
+    while(~scanf("%d%d%d", &n, &m, &k), n) {
+        AC.Init(m);
+        for(int i = 0; i < m; i++) {
+            scanf("%s", word);
+            AC.Add(word, i);
+        }
+        AC.Build();
+        printf("%I64d\n", AC.Solve(n, k));
+    }
+    return 0;
+}

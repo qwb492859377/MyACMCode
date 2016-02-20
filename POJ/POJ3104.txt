@@ -1,0 +1,67 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3104                   *
+*      VjudgeProblemID:16416               *
+*      SubmitTime:2015/2/26 22:37:10       *
+*      SubmitType:C++                      *
+*      Memory:524KB                        *
+*      CodeLen:989B                        *
+*      RunTime:735ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+const int maxn=100000+5;
+
+int n,m;
+int A[maxn];
+
+bool judge(int x){
+    LL cnt=0;
+    for(int i=1;i<=n;i++){
+        if(A[i]-x<=0) continue;
+        int w=A[i]-x;
+        cnt+=w/(m-1)+(w%(m-1)!=0);
+    }
+    if(cnt<=x) return true;
+    return false;
+}
+
+int main(){
+    while(~scanf("%d",&n)){
+        int maxx=0;
+        for(int i=1;i<=n;i++){
+            scanf("%d",&A[i]);
+            maxx=max(maxx,A[i]);
+        }
+        scanf("%d",&m);
+        if(m==1){
+            printf("%d\n",maxx);
+            continue;
+        }
+        int left=0,right=1e9,mid,ans;
+        while(left<=right){
+            mid=(left+right)/2;
+            if(judge(mid)){
+                ans=mid;
+                right=mid-1;
+            }else{
+                left=mid+1;
+            }
+        }
+        printf("%d\n",ans);
+    }
+    return 0;
+}
+;
+    }
+    return 0;
+}

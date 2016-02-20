@@ -1,0 +1,106 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces510C            *
+*      VjudgeProblemID:115824              *
+*      SubmitTime:2015/10/9 15:52:35       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:60KB                         *
+*      CodeLen:2148B                       *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 100 + 5;
+
+int G[MX][MX];//a<b  a->b
+int IN[MX], P[MX], rear;
+char name[MX][MX];
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        rear = 0;
+        memset(G, 0, sizeof(G));
+        memset(IN, 0, sizeof(IN));
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%s", name[i]);
+        }
+
+        bool check = true;
+        for(int i = 2; i <= n; i++) {
+            int n1 = strlen(name[i - 1]);
+            int n2 = strlen(name[i]);
+            int m = min(n1, n2);
+
+            bool sign = true;
+            for(int j = 0; j < m; j++) {
+                int p1 = name[i - 1][j] - 'a';
+                int p2 = name[i][j] - 'a';
+                if(p1 != p2) {
+                    if(!G[p1][p2]) {
+                        G[p1][p2] = 1;
+                        IN[p2]++;
+                    }
+                    sign = false;
+                    break;
+                }
+            }
+
+            if(sign && n1 > n2) {
+                check = false;
+                break;
+            }
+        }
+
+        if(!check) {
+            printf("Impossible\n");
+            continue;
+        }
+
+        priority_queue<int, vector<int> , greater<int> >Q;
+        for(int i = 0; i < 26; i++) {
+            if(!IN[i]) Q.push(i);
+        }
+
+        while(!Q.empty()) {
+            int u = Q.top();
+            Q.pop();
+            P[++rear] = u;
+
+            for(int v = 0; v < 26; v++) {
+                if(G[u][v]) {
+                    IN[v]--;
+                    if(!IN[v]) Q.push(v);
+                }
+            }
+        }
+
+        if(rear != 26) printf("Impossible\n");
+        else {
+            for(int i = 1; i <= 26; i++) printf("%c", P[i] + 'a');
+            printf("\n");
+        }
+    }
+    return 0;
+}

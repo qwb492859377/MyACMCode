@@ -1,0 +1,74 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2897                   *
+*      VjudgeProblemID:30492               *
+*      SubmitTime:2015/12/9 0:57:53        *
+*      SubmitType:G++                      *
+*      Memory:1564KB                       *
+*      CodeLen:1123B                       *
+*      RunTime:109ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 100 + 5;
+/*
+f´ò±í
+int f[MX];
+int main() {
+    int p, q;
+    while(~scanf("%d%d", &p, &q)) {
+        f[0] = 1;
+        for(int i = 1; i <= p; i++) {
+            f[i] = 0;
+        }
+        for(int n = p + 1; n < MX; n++) {
+            f[n] = 0;
+            for(int i = p; i <= q; i++) {
+                if(!f[n - i]) f[n] = 1;
+            }
+        }
+
+        for(int i = 1; i < MX; i++) {
+            if(f[i]) printf("%d\n", i);
+        }
+    }
+    return 0;
+}*/
+
+
+int main() {
+    int n, p, q; //FIN;
+    while(~scanf("%d%d%d", &n, &p, &q)) {
+        int t = (n - 1) % (p + q) + 1;//fuck(t);
+        if(p + 1 <= t && t <= p + q) printf("WIN\n");
+        else printf("LOST\n");
+    }
+    return 0;
+}
+le(~scanf("%d%d%d", &n, &p, &q)) {
+        int t = (n - 1) % (p + q) + 1;
+        if(p + 1 <= t && t <= p + q) printf("WIN\n");
+        else printf("LOST\n");
+    }
+    return 0;
+}

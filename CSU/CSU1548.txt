@@ -1,0 +1,63 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1548                   *
+*      VjudgeProblemID:142542              *
+*      SubmitTime:2015/9/20 23:15:07       *
+*      SubmitType:C++                      *
+*      Memory:1496KB                       *
+*      CodeLen:1073B                       *
+*      RunTime:112ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+double X, Y, s1, s2, c1, c2;
+
+double f(double m) {
+    return sqrt(m * m + s1 * s1) * c1 + sqrt((Y - m) * (Y - m) + s2 * s2) * c2;
+}
+
+double solve() {
+    double L = 0, R = Y, M, MM;
+    for(int i = 1; i <= 100; i++) {
+        M = (L + R) / 2;
+        MM = (M + R) / 2;
+        if(f(M) <= f(MM)) R = MM;
+        else L = M;
+    }
+    return f(L);
+}
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d%lf%lf%lf%lf", &n, &X, &Y, &c1, &c2)) {
+        s2 = 0;
+        for(int i = 1; i <= n; i++) {
+            double width;
+            scanf("%*lf%lf", &width);
+            s2 += width;
+        }
+        s1 = X - s2;
+        printf("%.2lf\n", solve());
+    }
+    return 0;
+}

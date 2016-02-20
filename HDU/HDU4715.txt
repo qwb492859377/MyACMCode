@@ -1,0 +1,70 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4715                   *
+*      VjudgeProblemID:46476               *
+*      SubmitTime:2015/8/19 14:24:21       *
+*      SubmitType:C++                      *
+*      Memory:3024KB                       *
+*      CodeLen:1178B                       *
+*      RunTime:296ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e6 + 5;
+const int INF = 0x3f3f3f3f;
+const double exps = 1e-8;
+bool isprimes[MX];
+int prime[MX];
+int cnt;
+void primes() {
+    isprimes[0] = isprimes[1] = true;
+    for(int i = 2; i < MX; i ++) {
+        if(!isprimes[i]) {
+            prime[cnt ++] = i;
+            for(int j = i * 2; j < MX; j += i) {
+                isprimes[j]  = true;
+            }
+        }
+    }
+}
+
+int main() {
+    int t, x;
+    primes();
+    scanf("%d", &t);
+    while(t --) {
+        bool flag  = true;
+        scanf("%d", &x);
+        int c = 0;
+        while(c < cnt) {
+            if(prime[c] >= x && !isprimes[prime[c] - x]) {
+                flag = false;
+                printf("%d %d\n", prime[c], prime[c] - x);
+                break;
+            }
+            c ++;
+        }
+        if(flag) {
+            printf("FAIL\n");
+        }
+    }
+    return 0;
+}

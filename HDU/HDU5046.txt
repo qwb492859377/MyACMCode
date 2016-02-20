@@ -1,0 +1,160 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU5046                   *
+*      VjudgeProblemID:53579               *
+*      SubmitTime:2015/9/15 13:50:03       *
+*      SubmitType:C++                      *
+*      Memory:1852KB                       *
+*      CodeLen:3462B                       *
+*      RunTime:826ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 60 + 5;
+const int MN = 3600 + 5;
+const int INF = 0x3f3f3f3f;
+
+struct DLX {
+    int m, n, ans;
+    int H[MX], S[MX], vis[MX];
+    int Row[MN], Col[MN], rear;
+    int L[MN], R[MN], U[MN], D[MN];
+
+    void Init(int _m, int _n) {
+        m = _m; n = _n;
+        rear = n; ans = INF;
+        for(int i = 0; i <= n; i++) {
+            S[i] = 0;
+            L[i] = i - 1;
+            R[i] = i + 1;
+            U[i] = D[i] = i;
+        }
+        L[0] = n; R[n] = 0;
+        for(int i = 1; i <= m; i++) {
+            H[i] = -1;
+        }
+    }
+
+    void Link(int r, int c) {
+        int rt = ++rear;
+        Row[rt] = r; Col[rt] = c; S[c]++;
+
+        D[rt] = D[c]; U[D[c]] = rt;
+        U[rt] = c; D[c] = rt;
+        if(H[r] == -1) {
+            H[r] = L[rt] = R[rt] = rt;
+        } else {
+            int id = H[r];
+            R[rt] = R[id]; L[R[id]] = rt;
+            L[rt] = id; R[id] = rt;
+        }
+    }
+
+    void Remove(int c) {
+        for(int i = D[c]; i != c; i = D[i]) {
+            R[L[i]] = R[i]; L[R[i]] = L[i];
+        }
+    }
+
+    void Resume(int c) {
+        for(int i = U[c]; i != c; i = U[i]) {
+            R[L[i]] = L[R[i]] = i;
+        }
+    }
+
+    int h() {
+        int ret = 0;
+        memset(vis, 0, sizeof(vis));
+        for(int c = R[0]; c != 0; c = R[c]) {
+            if(!vis[c]) {
+                ret++;
+                vis[c] = 1;
+                for(int i = D[c]; i != c; i = D[i]) {
+                    for(int j = R[i]; j != i; j = R[j]) {
+                        vis[Col[j]] = 1;
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+
+    bool Dance(int cnt, int K) {
+        if(cnt + h() > K) return false;
+        if(R[0] == 0) return true;
+
+        int c = R[0];
+        for(int i = R[0]; i != 0; i = R[i]) {
+            if(S[i] < S[c]) c = i;
+        }
+
+        for(int i = D[c]; i != c; i = D[i]) {
+            Remove(i);
+            for(int j = R[i]; j != i; j = R[j]) Remove(j);
+            if(Dance(cnt + 1, K)) return true;
+            for(int j = L[i]; j != i; j = L[j]) Resume(j);
+            Resume(i);
+        }
+        return false;
+    }
+} G;
+
+LL X[MX], Y[MX], W[MX][MX];
+
+LL dist(int i, int j) {
+    return abs(X[i] - X[j]) + abs(Y[i] - Y[j]);
+}
+
+int main() {
+    int T, n, K, ansk = 0; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d%d", &n, &K);
+        for(int i = 1; i <= n; i++) {
+            scanf("%I64d%I64d", &X[i], &Y[i]);
+        }
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= n; j++) {
+                W[i][j] = dist(i, j);
+            }
+        }
+
+        LL L = 0, R = 4e9, m, ans;
+        while(L <= R) {
+            m = (L + R) >> 1;
+
+            G.Init(n, n);
+            for(int i = 1; i <= n; i++) {
+                for(int j = 1; j <= n; j++) {
+                    if(W[i][j] <= m) G.Link(i, j);
+                }
+            }
+
+            if(G.Dance(0, K)) {
+                ans = m;
+                R = m - 1;
+            } else L = m + 1;
+        }
+        printf("Case #%d: %I64d\n", ++ansk, ans);
+    }
+    return 0;
+}

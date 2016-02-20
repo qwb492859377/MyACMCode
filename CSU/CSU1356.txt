@@ -1,0 +1,73 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1356                   *
+*      VjudgeProblemID:49927               *
+*      SubmitTime:2015/4/15 11:57:02       *
+*      SubmitType:C++                      *
+*      Memory:5680KB                       *
+*      CodeLen:1097B                       *
+*      RunTime:364ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=100000+5;
+
+int n,m;
+int vis[2][MX];
+vector<int>G[MX];
+
+void DFS(int f,int d){
+    vis[d][f]=1;
+
+    for(int i=0;i<G[f].size();i++){
+        if(vis[(d+1)%2][G[f][i]]) continue;
+        DFS(G[f][i],(d+1)%2);
+    }
+}
+
+bool check(){
+    bool sign=false;
+    for(int i=0;i<n;i++){
+        if(!vis[0][i]){
+            sign=true;
+            break;
+        }
+    }
+    if(!sign) return true;
+
+    for(int i=0;i<n;i++){
+        if(!vis[1][i]) return false;
+    }
+    return true;
+}
+
+int main(){
+    int T,s,u,v,ansk=0;
+    scanf("%d",&T);
+    while(T--){
+        scanf("%d%d%d",&n,&m,&s);
+        memset(vis,0,sizeof(vis));
+        for(int i=0;i<n;i++){
+            G[i].clear();
+        }
+
+        for(int i=1;i<=m;i++){
+            scanf("%d%d",&u,&v);
+            G[u].push_back(v);
+            G[v].push_back(u);
+        }
+
+        DFS(s,0);
+        printf("Case %d: %s\n",++ansk,check()?"YES":"NO");
+    }
+    return 0;
+}

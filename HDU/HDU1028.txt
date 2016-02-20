@@ -1,0 +1,49 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1028                   *
+*      VjudgeProblemID:18473               *
+*      SubmitTime:2015/8/14 15:11:44       *
+*      SubmitType:C++                      *
+*      Memory:1616KB                       *
+*      CodeLen:658B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 200 + 5;
+
+LL dp[MX];
+
+int main() {
+    int V;
+    //freopen("input.txt","r",stdin);
+    while(~scanf("%d", &V)) {
+        memset(dp, 0, sizeof(dp));
+
+        dp[0] = 1;
+        for(int i = 1; i <= V; i++) {
+            for(int j = i; j <= V; j++) {
+                dp[j] += dp[j - i];
+            }
+        }
+        printf("%I64d\n", dp[V]);
+    }
+    return 0;
+}

@@ -1,0 +1,69 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces583B            *
+*      VjudgeProblemID:252504              *
+*      SubmitTime:2015/10/17 16:27:41      *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:12KB                         *
+*      CodeLen:1198B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1000;
+
+int vis[MX], A[MX];
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        memset(vis, 0, sizeof(vis));
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+
+        int cnt = 0, ans = 0;
+        while(cnt < n) {
+            for(int i = 1; i <= n; i++) {
+                if(!vis[i] && cnt >= A[i]) {
+                    vis[i] = 1;
+                    cnt++;
+                }
+            }
+            if(cnt == n) break;
+
+            ans++;
+            for(int i = n; i >= 1; i--) {
+                if(!vis[i] && cnt >= A[i]) {
+                    vis[i] = 1;
+                    cnt++;
+                }
+            }
+            if(cnt == n) break;
+
+            ans++;
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

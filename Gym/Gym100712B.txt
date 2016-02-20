@@ -1,0 +1,68 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:Gym100712B                *
+*      VjudgeProblemID:195698              *
+*      SubmitTime:2015/7/19 13:10:06       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:2348KB                       *
+*      CodeLen:1135B                       *
+*      RunTime:46ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 200000 + 5;
+const int INF = 0x3f3f3f3f;
+
+char S[MX];
+int A[MX],B[MX],C[MX];
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int T,L;
+    scanf("%d",&T);
+    while(T--){
+        memset(A,0,sizeof(A));
+        memset(B,0,sizeof(B));
+        memset(C,0,sizeof(C));
+
+        scanf("%d%s",&L,S+1);
+
+        for(int i=1;i<=L;i++){
+            A[i]=A[i-1];
+            B[i]=B[i-1];
+            C[i]=C[i-1];
+            if(S[i]=='R') A[i]++;
+            if(S[i]=='P') B[i]++;
+            if(S[i]=='S') C[i]++;
+        }
+
+        int ans=0;
+        for(int i=0;i<=L;i++){
+            for(int j=i;j<=L;j++){
+                int cnt1=C[i],cnt2=A[i];
+                if(j>=i) cnt1+=A[j]-A[i],cnt2+=B[j]-B[i];
+                if(L>=j) cnt1+=B[L]-B[j],cnt2+=C[L]-C[j];
+
+                if(cnt1>L-cnt1-cnt2){
+                    ans++;
+                }
+            }
+        }
+
+        printf("%d\n",ans);
+    }
+    return 0;
+}

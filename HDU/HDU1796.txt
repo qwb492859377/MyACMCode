@@ -1,0 +1,84 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1796                   *
+*      VjudgeProblemID:13388               *
+*      SubmitTime:2015/8/15 10:20:10       *
+*      SubmitType:C++                      *
+*      Memory:1624KB                       *
+*      CodeLen:1017B                       *
+*      RunTime:436ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e2 + 5;
+
+LL n, ans;
+int S[MX], m;
+
+LL gcd(LL a, LL b) {
+    return b ? gcd(b, a % b) : a;
+}
+
+LL lcm(LL a, LL b) {
+    return a / gcd(a, b) * b;
+}
+
+LL solve(LL x) {
+    return (n - 1) / x;
+}
+
+void DFS(int cur, int cnt, LL x) {
+    if(x >= n) return;
+
+    if(cnt) ans += solve(x) * (cnt % 2 ? 1 : -1);
+    for(int i = cur + 1; i <= m; i++) {
+        DFS(i, cnt + 1, lcm(x, S[i]));
+    }
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%I64d%d", &n, &m)) {
+        int tot = 0, t;
+        for(int i = 0; i < m; i++) {
+            scanf("%d", &t);
+            if(t) S[++tot] = t;
+        }
+        m = tot;
+
+        ans = 0;
+        DFS(0, 0, 1);
+        printf("%I64d\n", ans);
+    }
+    return 0;
+}
+      sign = true;
+                        break;
+                    }
+                    cnt++;
+                }
+            }
+            if(sign) continue;
+            ans += solve(x) * (cnt % 2 ? 1 : -1);
+        }
+        printf("%I64d\n", ans);
+    }
+    return 0;
+}

@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1076                   *
+*      VjudgeProblemID:16443               *
+*      SubmitTime:2014/12/21 9:40:25       *
+*      SubmitType:C++                      *
+*      Memory:1100KB                       *
+*      CodeLen:675B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+bool is_leap(int Y){
+    return (Y%4==0 && Y%100!=0)||Y%400==0;
+}
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        int Y,m;
+        scanf("%d%d",&Y,&m);
+        m--;
+        while(!is_leap(Y)){
+            Y++;
+        }
+        int dy=4*m,cot=m;
+        for(int i=1+Y/100;i<=(Y+dy)/100;i++){
+            if(!is_leap(i*100)){
+                cot--;
+            }
+        }
+
+        while(cot<m){
+            dy+=4;
+            if(is_leap(Y+dy)){
+                cot++;
+            }
+        }
+
+        printf("%d\n",Y+dy);
+    }
+    return 0;
+}

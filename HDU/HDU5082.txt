@@ -1,0 +1,52 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU5082                   *
+*      VjudgeProblemID:61847               *
+*      SubmitTime:2015/8/20 22:03:33       *
+*      SubmitType:C++                      *
+*      Memory:1728KB                       *
+*      CodeLen:802B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e3 + 5;
+
+char S1[MX], S2[MX];
+
+int main() {
+    //FIN;
+    while(~scanf("%s%s", S1, S2)) {
+        for(int i = strlen(S1) - 1; i >= 0 ; i--) {
+            if(S1[i] == '_') {
+                printf("%s_small_", S1 + i + 1);
+                break;
+            }
+        }
+        for(int i = strlen(S2) - 1; i >= 0; i--) {
+            if(S2[i] == '_') {
+                printf("%s\n", S2 + i + 1);
+                break;
+            }
+        }
+    }
+    return 0;
+}

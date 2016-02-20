@@ -1,0 +1,66 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1321                   *
+*      VjudgeProblemID:15202               *
+*      SubmitTime:2015/7/24 22:09:30       *
+*      SubmitType:C++                      *
+*      Memory:124KB                        *
+*      CodeLen:1031B                       *
+*      RunTime:219ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 10 + 5;
+const int INF = 0x3f3f3f3f;
+
+int n, k;
+char S[MX][MX];
+int vis[2][MX];
+
+void DFS(int id, int &ans, int cnt) {
+    int x = id / n, y = id % n;
+    if(S[x][y] == '.') return;
+
+    cnt++;
+    if(k == cnt) {
+        ans++;
+    }
+
+    vis[0][x] = vis[1][y] = 1;
+    for(int i = id + 1; i < n * n; i++) {
+        int nx = i / n, ny = i % n;
+        if(vis[0][nx] || vis[1][ny]) continue;
+
+        DFS(i, ans, cnt);
+    }
+    vis[0][x] = vis[1][y] = 0;
+}
+
+int main() {
+    //freopen("input.txt","r",stdin);
+    while(~scanf("%d%d", &n, &k), n > 0) {
+        memset(vis, 0, sizeof(vis));
+        for(int i = 0; i < n; i++) {
+            scanf("%s", S[i]);
+        }
+
+        int ans = 0;
+        for(int i = 0; i < n * n; i++) {
+            DFS(i, ans, 0);
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

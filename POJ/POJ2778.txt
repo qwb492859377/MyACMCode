@@ -1,0 +1,185 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2778                   *
+*      VjudgeProblemID:16397               *
+*      SubmitTime:2015/10/22 21:31:00      *
+*      SubmitType:G++                      *
+*      Memory:1208KB                       *
+*      CodeLen:3670B                       *
+*      RunTime:579ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+/*MX为总长度*/
+const int MX = 200 + 5;
+const int mod = 100000;
+const int matMX = 150 + 5;
+
+struct Mat {
+    int m, n;
+    LL S[matMX][matMX];
+    Mat(int a, int b) {
+        m = a;
+        n = b;
+        memset(S, 0, sizeof(S));
+    }
+    Mat(int a, int b, LL w[][matMX]) {
+        m = a;
+        n = b;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                S[i][j] = w[i][j];
+            }
+        }
+    }
+};
+
+Mat mat_mul(Mat &A, Mat &B) {
+    Mat C(A.m, B.n);
+    for(int i = 0; i < A.m; i++) {
+        for(int j = 0; j < B.n; j++) {
+            for(int k = 0; k < A.n; k++) {
+                C.S[i][j] = (C.S[i][j] + A.S[i][k] * B.S[k][j]) % mod;
+            }
+        }
+    }
+    return C;
+}
+
+Mat Blank(int m, int n) {
+    Mat ret(m, n);
+    for(int i = 0; i < m; i++) {
+        ret.S[i][i] = 1;
+    }
+    return ret;
+}
+
+Mat mat_pow(Mat &A, LL b) {
+    Mat ret = Blank(A.m, A.n);
+    while(b) {
+        if(b & 1) ret = mat_mul(ret, A);
+        A = mat_mul(A, A);
+        b >>= 1;
+    }
+    return ret;
+}
+
+struct AC_machine {
+    int rear, root;
+    int Next[MX][4], Fail[MX], End[MX];
+
+    void Init() {
+        rear = 0;
+        root = New();
+    }
+
+    int New() {
+        rear++;
+        End[rear] = 0;
+        for(int i = 0; i < 4; i++) {
+            Next[rear][i] = -1;
+        }
+        return rear;
+    }
+
+    inline int ID(char x) {
+        if(x == 'A') return 0;
+        if(x == 'G') return 1;
+        if(x == 'C') return 2;
+        return 3;
+    }
+
+    void Add(char *A) {
+        int n = strlen(A), now = root;
+        for(int i = 0; i < n; i++) {
+            int id = ID(A[i]);
+            if(Next[now][id] == -1) {
+                Next[now][id] = New();
+            }
+            now = Next[now][id];
+        }
+        End[now]++;
+    }
+
+    void Build() {
+        queue<int>Q;
+        Fail[root] = root;
+        for(int i = 0; i < 4; i++) {
+            if(Next[root][i] == -1) {
+                Next[root][i] = root;
+            } else {
+                Fail[Next[root][i]] = root;
+                Q.push(Next[root][i]);
+            }
+        }
+
+        while(!Q.empty()) {
+            int u = Q.front(); Q.pop();
+
+            if(End[Fail[u]]) End[u] = 1;
+            for(int i = 0; i < 4; i++) {
+                if(Next[u][i] == -1) {
+                    Next[u][i] = Next[Fail[u]][i];
+                } else {
+                    Fail[Next[u][i]] = Next[Fail[u]][i];
+                    Q.push(Next[u][i]);
+                }
+            }
+        }
+    }
+
+    Mat Query() {
+        Mat A(rear, rear);
+        for(int i = 1; i <= rear; i++) {
+            for(int j = 0; j < 4; j++) {
+                int chd = Next[i][j];
+                if(End[chd] == 0) A.S[i - 1][chd - 1]++;
+            }
+        }
+        return A;
+    }
+} AC;
+
+char word[MX];
+
+int main() {
+    int m, n; //FIN;
+    while(~scanf("%d%d", &m, &n)) {
+        AC.Init();
+        for(int i = 1; i <= m; i++) {
+            scanf("%s", word);
+            AC.Add(word);
+        }
+        AC.Build();
+
+        Mat mat = AC.Query();
+        Mat ret = mat_pow(mat, n);
+
+        LL ans = 0;
+        for(int i = 0; i < ret.m; i++) {
+            ans = (ans + ret.S[0][i]) % mod;
+        }
+        printf("%I64d\n", ans);
+    }
+    return 0;
+}

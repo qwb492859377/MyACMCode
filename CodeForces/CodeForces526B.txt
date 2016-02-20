@@ -1,0 +1,47 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces526B            *
+*      VjudgeProblemID:146097              *
+*      SubmitTime:2015/4/9 17:44:46        *
+*      SubmitType:Microsoft Visual C++ 2010*
+*      Memory:880KB                        *
+*      CodeLen:593B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<queue>
+#include<iostream>
+#include<iomanip>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=200000+5;
+
+int W[MX],n,ans=0;
+
+int solve(int rt,int depth){
+    if(depth>=n) return 0;
+
+    int L=solve(rt<<1,depth+1)+W[rt<<1];
+    int R=solve(rt<<1|1,depth+1)+W[rt<<1|1];
+
+    ans+=abs(L-R);
+    return max(L,R);
+}
+
+int main(){
+    scanf("%d",&n);
+    for(int i=2;i<=(1<<(n+1))-1;i++){
+        scanf("%d",&W[i]);
+    }
+
+    solve(1,0);
+    printf("%d\n",ans);
+    return 0;
+}

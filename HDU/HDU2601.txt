@@ -1,0 +1,124 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2601                   *
+*      VjudgeProblemID:17433               *
+*      SubmitTime:2015/7/28 10:51:16       *
+*      SubmitType:C++                      *
+*      Memory:2032KB                       *
+*      CodeLen:1061B                       *
+*      RunTime:93ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e5 + 5;
+const int INF = 0x3f3f3f3f;
+
+int prime[100000], vis[MX], rear = 0;
+void init() {
+    rear = 0;
+    vis[1] = 1;
+    for(int i = 2; i < MX; i++) {
+        if(vis[i]) continue;
+        prime[++rear] = i;
+
+        if((LL)i * i >= MX) continue;
+        for(int j = i * i; j < MX; j += i) {
+            vis[j] = 1;
+        }
+    }
+}
+
+int main() {
+    int T;
+    init();
+    scanf("%d", &T);
+    while(T--) {
+        LL n;
+        scanf("%I64d", &n);
+        n++;
+
+        int ans = 1, s;
+        for(int i = 1; (LL)prime[i]*prime[i] <= n; i++) {
+            s = 0;
+            while(n % prime[i] == 0) {
+                s++;
+                n /= prime[i];
+            }
+            ans *= s + 1;
+            if(n == 1) break;
+        }
+        if(n != 1) ans *= 2;
+
+        printf("%d\n", (ans + 1)/2 - 1);
+    }
+    return 0;
+}
+cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e5 + 5;
+const int INF = 0x3f3f3f3f;
+
+int prime[100000], vis[MX], rear = 0;
+void init() {
+    rear = 0;
+    vis[1] = 1;
+    for(int i = 2; i < MX; i++) {
+        if(vis[i]) continue;
+        prime[++rear] = i;
+
+        if((LL)i * i >= MX) continue;
+        for(int j = i * i; j < MX; j += i) {
+            vis[j] = 1;
+        }
+    }
+}
+
+int main() {
+    int T;
+    init();
+    scanf("%d", &T);
+    while(T--) {
+        LL n;
+        scanf("%I64d", &n);
+        n++;
+
+        int ans = 1, s;
+        for(int i = 1; (LL)prime[i]*prime[i]<=n; i++) {
+            s = 0;
+            while(n % prime[i] == 0) {
+                s++;
+                n /= prime[i];
+            }
+            ans *= s + 1;
+            if(n == 1) break;
+        }
+        if(n != 1) ans *= 2;
+
+        int ret = ans / 2;
+        if(ans & 1) ret++;
+        printf("%d\n", ret - 1);
+    }
+    return 0;
+}

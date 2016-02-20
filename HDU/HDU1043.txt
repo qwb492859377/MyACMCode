@@ -1,0 +1,138 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1043                   *
+*      VjudgeProblemID:17579               *
+*      SubmitTime:2015/2/22 14:23:55       *
+*      SubmitType:C++                      *
+*      Memory:15852KB                      *
+*      CodeLen:2374B                       *
+*      RunTime:171ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef int Eight[9];
+typedef __int64 LL;
+const int maxn=362880+5;
+const int hashsize=1000007;
+
+Eight S[maxn],t;
+int head[hashsize],next[maxn],rear=0;
+int dist[][2]={{-1,0},{0,1},{0,-1},{1,0}};//иосрвСоб
+char dalb[]={'d','l','r','u'};
+
+struct LAST{
+    int id,d;
+}last[maxn];
+
+int hash(Eight&e){
+    LL w=0;
+    for(int i=0;i<9;i++){
+        w=w*10+e[i];
+    }
+    return w%hashsize;
+}
+
+int hash_find(Eight&e){
+    int h=hash(e);
+    for(int i=head[h];i!=-1;i=next[i]){
+        if(memcmp(S[i],e,sizeof(Eight))==0){
+            return i;
+        }
+    }
+    return -1;
+}
+
+int hash_insert(Eight&e){
+    int h=hash(e);
+    memcpy(S[rear],e,sizeof(Eight));
+    next[rear]=head[h];
+    head[h]=rear;
+    return rear++;
+}
+
+void print_ans(int id){
+    printf("%c",dalb[last[id].d]);
+    if(last[id].d!=-1){
+        print_ans(last[id].id);
+    }
+}
+
+int main(){
+    memset(head,-1,sizeof(head));
+    memset(next,-1,sizeof(next));
+    memset(last,-1,sizeof(last));
+
+    Eight begin={1,2,3,4,5,6,7,8,0};
+    int id=hash_insert(begin);
+    last[id].id=-1;
+    queue<int>work;
+    work.push(id);
+
+    while(!work.empty()){
+        int p=work.front();
+        work.pop();
+        Eight &f=S[p];
+
+        int x,y;
+        for(int i=0;i<9;i++){
+            if(!f[i]){
+                x=i/3;
+                y=i%3;
+                break;
+            }
+        }
+        for(int k=0;k<4;k++){
+            int nx=x+dist[k][0];
+            int ny=y+dist[k][1];
+            if(nx<0||nx>2||ny<0||ny>2) continue;
+            memcpy(t,f,sizeof(Eight));
+            int w=t[nx*3+ny];
+            t[nx*3+ny]=0;
+            t[x*3+y]=w;
+
+            if(hash_find(t)==-1){
+                int id=hash_insert(t);
+                last[id].id=p;
+                last[id].d=k;
+                work.push(id);
+            }
+        }
+    }
+
+    char line[100];
+    while(gets(line)){
+        int cur=0,cur2=0;
+        while(cur<strlen(line)){
+            if(line[cur]=='x') t[cur2++]=0;
+            else if('0'<=line[cur]&&line[cur]<='9') t[cur2++]=line[cur]-'0';
+            cur++;
+        }
+
+        int id=hash_find(t);
+        if(id==-1){
+            printf("unsolvable\n");
+        }else{
+            print_ans(id);
+            printf("\n");
+        }
+    }
+    return 0;
+}
+xists(temp,id,true)){
+            if(id){
+                print_ans(id);
+            }
+            printf("\n");
+        }else{
+            printf("unsolvable\n");
+        }
+    }
+    return 0;
+}

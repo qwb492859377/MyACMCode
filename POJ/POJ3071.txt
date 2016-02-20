@@ -1,0 +1,86 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3071                   *
+*      VjudgeProblemID:12596               *
+*      SubmitTime:2015/7/25 13:00:00       *
+*      SubmitType:C++                      *
+*      Memory:1080KB                       *
+*      CodeLen:1478B                       *
+*      RunTime:79ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 150 + 5;
+const int INF = 0x3f3f3f3f;
+#define For(i,x,y) for(int i=x;i<=y;i++)
+#define Mem(x,y) memset(x,y,sizeof(x))
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,n,1
+
+int n;
+double A[MX][MX];
+double dp[MX << 2][MX];
+
+void solve(int l, int r, int rt) {
+    if(l == r) {
+        dp[rt][l] = 1;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    solve(lson);
+    solve(rson);
+    For(x, l, r) {
+        if(x <= m) {
+            For(i, m + 1, r) {
+                dp[rt][x] += dp[rt << 1 | 1][i] * A[x][i];
+            }
+            dp[rt][x] *= dp[rt << 1][x];
+        } else {
+            For(i, l, m) {
+                dp[rt][x] += dp[rt << 1][i] * A[x][i];
+            }
+            dp[rt][x] *= dp[rt << 1 | 1][x];
+        }
+    }
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int n;
+    while(~scanf("%d", &n), n >= 0) {
+        Mem(dp, 0);
+
+        n = 1 << n;
+        For(i, 1, n) {
+            For(j, 1, n) {
+                scanf("%lf", &A[i][j]);
+            }
+        }
+
+        solve(root);
+        double Max = 0;
+        int ans;
+        For(i, 1, n) {
+            if(dp[1][i] > Max) {
+                Max = dp[1][i];
+                ans = i;
+            }
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

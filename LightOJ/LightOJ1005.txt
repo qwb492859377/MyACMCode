@@ -1,0 +1,52 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:LightOJ1005               *
+*      VjudgeProblemID:25831               *
+*      SubmitTime:2015/3/4 13:21:23        *
+*      SubmitType:C++                      *
+*      Memory:1096KB                       *
+*      CodeLen:637B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=30;
+
+LL C[MX+5][MX+5],F[MX];
+
+int main(){
+    memset(C,0,sizeof(C));
+    memset(F,0,sizeof(F));
+
+    C[0][0]=1;F[0]=1;
+    for(int i=1;i<=MX;i++){
+        F[i]=F[i-1]*i;
+        C[i][0]=C[i][i]=1;
+        for(int j=1;j<i;j++){
+            C[i][j]=C[i-1][j-1]+C[i-1][j];
+        }
+    }
+
+    int T,n,k,ansk=0;
+    scanf("%d",&T);
+    while(T--){
+        scanf("%d%d",&n,&k);
+        printf("Case %d: %lld\n",++ansk,C[n][k]*C[n][k]*F[k]);
+    }
+    return 0;
+}
+C[n][k]*C[n][k]*F[k];
+        }
+        printf("Case %d: %lld\n",++ansk,ans);
+    }
+    return 0;
+}

@@ -1,0 +1,78 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1856                   *
+*      VjudgeProblemID:11137               *
+*      SubmitTime:2015/1/20 14:41:18       *
+*      SubmitType:C++                      *
+*      Memory:6712KB                       *
+*      CodeLen:1329B                       *
+*      RunTime:171ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=100000+5;
+const int hashsize=1000007;
+int head[hashsize],next[maxn],tableA[maxn],rear=0;
+int save[maxn],p[maxn],cnt[maxn];
+
+int hash_getid(int x){
+    int h=x%hashsize;
+    for(int i=head[h];i!=-1;i=next[i]){
+        if(tableA[i]==x){
+            return i;
+        }
+    }
+    rear++;
+    tableA[rear]=x;
+    next[rear]=head[h];
+    head[h]=rear;
+    return rear;
+}
+
+int find(int x){
+    return p[x]==x?x:p[x]=find(p[x]);
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    for(int i=1;i<=100000;i++){
+        save[i]=i;
+    }
+
+    int n;
+    while(~scanf("%d",&n)){
+        rear=0;
+        memset(head,-1,sizeof(head));
+        memset(next,-1,sizeof(next));
+        memset(cnt,0,sizeof(cnt));
+        memcpy(p,save,sizeof(save));
+        if(n==0){
+            printf("1\n");
+            continue;
+        }
+
+        int u,v;
+        for(int i=1;i<=n;i++){
+            scanf("%d%d",&u,&v);
+            int p1=find(hash_getid(u));
+            int p2=find(hash_getid(v));
+            p[p2]=p1;
+        }
+
+        int ans=0;
+        for(int i=1;i<=rear;i++){
+            int w=find(i);
+            cnt[w]++;
+            ans=max(ans,cnt[w]);
+        }
+        printf("%d\n",ans);
+    }
+    return 0;
+}

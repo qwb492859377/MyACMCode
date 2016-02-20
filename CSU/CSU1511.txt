@@ -1,0 +1,74 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1511                   *
+*      VjudgeProblemID:70424               *
+*      SubmitTime:2015/8/16 19:58:56       *
+*      SubmitType:C++                      *
+*      Memory:1492KB                       *
+*      CodeLen:1295B                       *
+*      RunTime:124ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 10;
+
+struct Point {
+    int x, y, t;
+    Point(){}
+    Point(int _x, int _y, int _t) {
+        x = _x; y = _y; t = _t;
+    }
+};
+
+int vis[MX][MX];
+
+int BFS(Point A, Point B) {
+    queue<Point>Q;
+    A.t = 0;
+    Q.push(A);
+    while(!Q.empty()) {
+        Point f = Q.front();
+        Q.pop();
+
+        vis[f.x][f.y] = 1;
+        if(f.x == B.x && f.y == B.y) return f.t;
+
+        for(int i = -1; i <= 1; i++) {
+            for(int j = -1; j <= 1; j++) {
+                int nx = f.x + i, ny = f.y + j;
+                if(nx < 1 || nx > 8 || ny < 1 || ny > 8 || vis[nx][ny]) continue;
+                vis[nx][ny] = 1;
+                Q.push(Point(nx, ny, f.t + 1));
+            }
+        }
+    }
+}
+
+int main() {
+    Point A, B, C; int ansk = 0;//FIN;
+    while(~scanf("%d%d%d%d%d%d", &A.x, &A.y, &B.x, &B.y, &C.x, &C.y)) {
+        memset(vis, 0, sizeof(vis));
+
+        vis[C.x][C.y] = 1;
+        printf("Case %d: %d\n", ++ansk, BFS(A, B));
+    }
+    return 0;
+}

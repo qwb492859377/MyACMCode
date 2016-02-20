@@ -1,0 +1,87 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1821                   *
+*      VjudgeProblemID:10478               *
+*      SubmitTime:2015/12/16 15:19:19      *
+*      SubmitType:G++                      *
+*      Memory:9056KB                       *
+*      CodeLen:1714B                       *
+*      RunTime:157ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MK = 1e2 + 5;
+const int MX = 2e4 + 5;
+const int INF = 0x3f3f3f3f;
+
+int N, K, r, c, dp[MK][MX];
+struct Team {
+    int L, P, S;
+    bool operator<(const Team &C) const {
+        return S < C.S;
+    }
+} A[MK];
+struct Data {
+    int id, x;
+    Data() { }
+    Data(int _id, int _x) {
+        id = _id; x = _x;
+    }
+} Q[MX];
+
+int solve() {
+    memset(dp, 0, sizeof(dp));
+    for(int i = 1; i <= K; i++) {
+        r = c = 0;
+        Q[r++] = Data(0, 0);
+        for(int j = 1; j <= N; j++) {
+            dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+            if(j >= A[i].S) {
+                while(c < r && Q[c].id + A[i].L < j) c++;
+                if(c < r) {
+                    int Max = Q[c].x;
+                    dp[i][j] = max(dp[i][j], Max + j * A[i].P);
+                }
+            }
+            if(j < A[i].S) {
+                Data temp(j, dp[i - 1][j] - j * A[i].P);
+                while(c < r && Q[r - 1].x < temp.x) r--;
+                Q[r++] = temp;
+            }
+        }
+    }
+    return dp[K][N];
+}
+
+int main() {
+    //FIN;
+    while(~scanf("%d%d", &N, &K)) {
+        for(int i = 1; i <= K; i++) {
+            scanf("%d%d%d", &A[i].L, &A[i].P, &A[i].S);
+        }
+        sort(A + 1, A + 1 + K);
+        printf("%d\n", solve());
+    }
+    return 0;
+}

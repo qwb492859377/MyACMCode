@@ -1,0 +1,117 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1350                   *
+*      VjudgeProblemID:51719               *
+*      SubmitTime:2015/12/3 16:45:01       *
+*      SubmitType:C++                      *
+*      Memory:5000KB                       *
+*      CodeLen:2016B                       *
+*      RunTime:596ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+#pragma comment(linker, "/STACK:102400000,102400000")
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e5 + 5;
+
+PII S[MX << 2];
+int rear;
+
+void push(PII x) {
+    int now = ++rear, pre = now >> 1;
+    S[now] = x;
+    while(pre && S[pre] < S[now]) {
+        swap(S[now], S[pre]);
+        now = pre, pre = now >> 1;
+    }
+}
+
+void pop() {
+    S[1] = S[rear--];
+
+    int now = 1;
+    while((now << 1) <= rear) {
+        int lt = now << 1, rt = now << 1 | 1;
+        if(rt <= rear) {
+            if(S[lt] < S[now] && S[rt] < S[now]) break;
+            if(S[now] < S[lt] && S[rt] < S[lt]) swap(S[now], S[lt]), now = lt;
+            else swap(S[now], S[rt]), now = rt;
+        } else {
+            if(S[lt] < S[now]) break;
+            swap(S[now], S[lt]), now = lt;
+        }
+    }
+}
+
+int A[MX];
+
+int main() {
+    int T, n, d; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        rear = 0;
+        scanf("%d%d", &n, &d);
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+            push(PII(A[i], i));
+        }
+
+        LL ans = 0;
+        while(rear) {
+            PII f = S[1]; pop();
+
+            int h = f.first, id = f.second;
+            if(h != A[id]) continue;
+
+            if(id > 1 && h - A[id - 1] > d) {
+                ans += h - A[id - 1] - d;
+                A[id - 1] = h - d;
+                push(PII(A[id - 1], id - 1));
+            }
+
+            if(id < n && h - A[id + 1] > d) {
+                ans += h - A[id + 1] - d;
+                A[id + 1] = h - d;
+                push(PII(A[id + 1], id + 1));
+            }
+        }
+        printf("%lld\n", ans);
+    }
+    return 0;
+}
+        }
+
+            if(id < n && h - A[id + 1] > d) {
+                ans += h - A[id + 1] - d;
+                A[id + 1] = h - d;
+                Q.push(PII(A[id + 1], id + 1));
+            }
+        }
+        printf("%lld\n", ans);
+    }
+    return 0;
+}
+    }
+    return 0;
+}

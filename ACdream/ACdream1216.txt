@@ -1,0 +1,75 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ACdream1216               *
+*      VjudgeProblemID:71845               *
+*      SubmitTime:2015/8/26 12:13:56       *
+*      SubmitType:C++                      *
+*      Memory:3628KB                       *
+*      CodeLen:1332B                       *
+*      RunTime:140ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e5 + 5;
+const int INF = 0x3f3f3f3f;
+
+struct Node {
+    int x, y, id;
+    bool operator<(const Node &b)const {
+        if(x == b.x) return y > b.y;
+        return x < b.x;
+    }
+} A[MX];
+
+int d[MX], mark[MX];
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        memset(d, INF, sizeof(d));
+        memset(mark, 0, sizeof(mark));
+
+        for(int i = 1; i <= n; i++) {
+            A[i].id = i;
+            scanf("%d%d", &A[i].x, &A[i].y);
+        }
+        sort(A + 1, A + 1 + n);
+
+        int ans = 0;
+        for(int i = 1; i <= n; i++) {
+            int p = lower_bound(d + 1, d + 1 + n, A[i].y) - d;
+
+            mark[i] = p;
+            ans = max(ans, p);
+            d[p] = A[i].y;
+        }
+
+        printf("%d\n", ans);
+        for(int i = n, j = ans; i >= 1; i--) {
+            if(mark[i] == j) {
+                printf("%d%c", A[i].id, j == 1 ? '\n' : ' ');
+                j--;
+            }
+
+        }
+    }
+    return 0;
+}

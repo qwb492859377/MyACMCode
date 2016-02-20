@@ -1,0 +1,52 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces315B            *
+*      VjudgeProblemID:45198               *
+*      SubmitTime:2015/7/29 22:16:05       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:1380KB                       *
+*      CodeLen:775B                        *
+*      RunTime:78ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e5 + 5;
+const int INF = 0x3f3f3f3f;
+
+LL A[MX], B[MX], sum = 0;
+
+int main() {
+    int n, m;
+    //freopen("input.txt", "r", stdin);
+    scanf("%d%d", &n, &m);
+    for(int i = 1; i <= n; i++) {
+        scanf("%I64d", &A[i]);
+    }
+
+    for(int i = 1; i <= m; i++) {
+        int a, b, c;
+        scanf("%d%d", &a, &b);
+        if(a == 3) {
+            printf("%I64d\n", A[b] + sum - B[b]);
+        } else if(a == 2) {
+            sum += b;
+        } else {
+            scanf("%d", &c);
+            B[b] = sum;
+            A[b] = c;
+        }
+    }
+    return 0;
+}

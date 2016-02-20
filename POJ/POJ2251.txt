@@ -1,0 +1,97 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2251                   *
+*      VjudgeProblemID:15203               *
+*      SubmitTime:2015/7/20 9:59:07        *
+*      SubmitType:C++                      *
+*      Memory:448KB                        *
+*      CodeLen:2028B                       *
+*      RunTime:16ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 50 + 5;
+const int INF = 0x3f3f3f3f;
+
+int H, M, N;
+char S[MX][MX][MX];
+bool vis[MX][MX][MX];
+int dist[][3] = {{1, 0, 0}, { -1, 0, 0}, {0, 1, 0}, {0, -1, 0}, {0, 0, 1}, {0, 0, -1}};
+
+struct Point {
+    int x, y, h, t;
+    Point(int a, int b, int c, int d = 0) {
+        x = a;
+        y = b;
+        h = c;
+        t = d;
+    }
+} FST(0, 0, 0);
+
+int main() {
+    //freopen("input.txt","r",stdin);
+    while(~scanf("%d%d%d", &H, &M, &N), H + M + N) {
+        memset(vis, 0, sizeof(vis));
+
+        bool sign = false;
+        for(int i = 1; i <= H; i++) {
+            for(int x = 1; x <= M; x++) {
+                scanf("%s", S[i][x] + 1);
+                for(int y = 1; y <= N; y++) {
+                    if(S[i][x][y] == 'S') FST = Point(x, y, i), sign = true;
+                }
+            }
+        }
+
+        if(!sign) {
+            printf("Trapped!\n");
+            continue;
+        }
+
+        queue<Point>work;
+        work.push(FST);
+
+        int ans = -1;
+        while(!work.empty()) {
+            Point fp = work.front();
+            work.pop();
+
+            vis[fp.x][fp.y][fp.h] = 1;
+            if(S[fp.h][fp.x][fp.y] == 'E') {
+                ans = fp.t;
+                break;
+            }
+
+            for(int k = 0; k < 6; k++) {
+                int nx = fp.x + dist[k][0];
+                int ny = fp.y + dist[k][1];
+                int nh = fp.h + dist[k][2];
+
+                if(nx < 1 || nx > M || ny < 1 || ny > N || nh < 1 || nh > H) continue;
+                if(S[nh][nx][ny] == '#' || vis[nx][ny][nh]) continue;
+
+                vis[nx][ny][nh] = 1;
+                work.push(Point(nx, ny, nh, fp.t + 1));
+            }
+        }
+
+        if(ans == -1) {
+            printf("Trapped!\n");
+        } else {
+            printf("Escaped in %d minute(s).\n", ans);
+        }
+    }
+    return 0;
+}

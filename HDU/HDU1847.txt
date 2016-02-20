@@ -1,0 +1,42 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1847                   *
+*      VjudgeProblemID:20980               *
+*      SubmitTime:2015/12/4 13:39:15       *
+*      SubmitType:G++                      *
+*      Memory:1556KB                       *
+*      CodeLen:583B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1e4 + 5;
+const int INF = 0x7ffffff;
+
+int main() {
+    int n;
+    while(~scanf("%d", &n)) {
+        printf("%s\n", n % 3 ? "Kiki" : "Cici");
+    }
+    return 0;
+}

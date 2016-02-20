@@ -1,0 +1,54 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1588                   *
+*      VjudgeProblemID:165101              *
+*      SubmitTime:2016/1/2 15:59:17        *
+*      SubmitType:C++                      *
+*      Memory:1496KB                       *
+*      CodeLen:764B                        *
+*      RunTime:140ms                       *
+********************************************
+*/
+#include<iostream>
+#include<functional>
+#include<queue>
+#include<stdio.h>
+using namespace std;
+int a[1005];
+int main() {
+    int t, n;
+    scanf("%d", &t);
+    priority_queue<int, vector<int>, greater<int> >q;
+    while(t--) {
+        int sum = 0, s = 0, i;
+        scanf("%d", &n);
+
+        for(i = 0; i < n; i++) {
+            scanf("%d", &a[i]);
+            q.push(a[i]);
+        }
+        while(!q.empty()) {
+            int m, m1;
+            m = q.top();
+            q.pop();
+            if(q.empty()) {
+                break;
+            } else {
+                m1 = q.top();
+                q.pop();
+                s = m + m1;
+                sum += s;
+                q.push(s);
+            }
+        }
+        printf("%d\n", sum);
+    }
+    return 0;
+}            ans+=A[id2];
+        }
+
+        printf("%d\n",ans);
+    }
+    return 0;
+}

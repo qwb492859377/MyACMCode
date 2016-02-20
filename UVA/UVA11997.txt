@@ -1,0 +1,77 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:UVA11997                  *
+*      VjudgeProblemID:18702               *
+*      SubmitTime:2015/4/14 13:51:34       *
+*      SubmitType:C++ 4.8.2                *
+*      Memory:0KB                          *
+*      CodeLen:1104B                       *
+*      RunTime:215ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=750+5;
+
+int n;
+LL S[MX][MX];
+
+struct Node{
+    LL s;
+    int id;
+    bool operator<(const Node&p) const{
+        return s>p.s;
+    }
+    Node(LL x1,int x2){
+        s=x1;id=x2;
+    }
+};
+
+void Merge(LL*A,LL*B,LL*C){
+    priority_queue<Node>work;
+    for(int i=1;i<=n;i++){
+        work.push(Node(A[i]+B[1],1));
+    }
+
+    for(int i=1;i<=n;i++){
+        Node fp=work.top();
+        work.pop();
+
+        C[i]=fp.s;
+        int id=fp.id;
+        if(id+1<=n){
+            work.push(Node(C[i]-B[id]+B[id+1],id+1));
+        }
+    }
+}
+
+int main(){
+    while(~scanf("%d",&n)){
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=n;j++){
+                scanf("%lld",&S[i][j]);
+            }
+            sort(S[i]+1,S[i]+1+n);
+        }
+
+        for(int i=2;i<=n;i++){
+            Merge(S[1],S[i],S[1]);
+        }
+
+        for(int i=1;i<=n;i++){
+            printf("%lld%c",S[1][i],i==n?'\n':' ');
+        }
+    }
+    return 0;
+}
+    }
+    return 0;
+}

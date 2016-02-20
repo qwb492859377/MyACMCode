@@ -1,0 +1,91 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1753                   *
+*      VjudgeProblemID:16122               *
+*      SubmitTime:2015/7/21 9:26:40        *
+*      SubmitType:C++                      *
+*      Memory:596KB                        *
+*      CodeLen:1756B                       *
+*      RunTime:110ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 100000 + 5;
+const int INF = 0x3f3f3f3f;
+
+char S[10][10];
+int vis[MX];
+int dist[][2] = {{1, 0}, { -1, 0}, {0, 1}, {0, -1}};
+
+int Hash() {
+    int ret = 0;
+    for(int x = 1; x <= 4; x++) {
+        for(int y = 1; y <= 4; y++) {
+            ret = (ret << 1) + (S[x][y] == 'b' ? 1 : 0);
+        }
+    }
+    return ret;
+}
+
+int ID(int x, int y) {
+    return (x - 1) * 4 + y - 1;
+}
+
+int change(int h, int x, int y) {
+    h ^= 1 << ID(x, y);
+    for(int k = 0; k < 4; k++) {
+        int nx = x + dist[k][0];
+        int ny = y + dist[k][1];
+        if(nx < 1 || nx > 4 || ny < 1 || ny > 4) continue;
+
+        h ^= 1 << ID(nx, ny);
+    }
+    return h;
+}
+
+int main() {
+    while(~scanf("%s%s%s%s", S[1] + 1, S[2] + 1, S[3] + 1, S[4] + 1)) {
+        memset(vis, 0, sizeof(vis));
+        int h = Hash();
+
+        queue<PII>work;
+        work.push(PII(h, 0));
+
+        int ans = -1;
+        while(!work.empty()) {
+            PII f = work.front();
+            work.pop();
+
+            vis[f.first] = 1;
+            if(f.first == 0 || f.first == 65535) {
+                ans = f.second;
+                break;
+            }
+
+            for(int x = 1; x <= 4; x++) {
+                for(int y = 1; y <= 4; y++) {
+                    int t = change(f.first, x, y);
+                    if(!vis[t]) {
+                        vis[t] = 1;
+                        work.push(PII(t, f.second + 1));
+                    }
+                }
+            }
+        }
+        if(ans == -1) printf("Impossible\n");
+        else printf("%d\n", ans);
+    }
+    return 0;
+}

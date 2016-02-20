@@ -1,0 +1,53 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces356B            *
+*      VjudgeProblemID:47094               *
+*      SubmitTime:2015/1/15 13:45:14       *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:103684KB                     *
+*      CodeLen:766B                        *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+const int maxn=1e6+5;
+
+int gcd(LL a,LL b){
+    return b?gcd(b,a%b):a;
+}
+
+int cnt[maxn][26];
+int main(){
+    LL m,n,l[2],p,g,ans;
+    char s[2][maxn];
+    while(~scanf("%I64d%I64d",&m,&n)){
+        memset(cnt,0,sizeof(cnt));
+
+        getchar();
+        gets(s[0]);
+        gets(s[1]);
+
+        l[0]=strlen(s[0]);
+        l[1]=strlen(s[1]);
+        g=gcd(l[0],l[1]);
+        ans=l[0]/g*l[1];
+
+        for(int i=0;i<l[0];i++){
+            cnt[i%g][s[0][i]-'a']++;
+        }
+        for(int i=0;i<l[1];i++){
+            ans-=cnt[i%g][s[1][i]-'a'];
+        }
+
+        ans=ans*(m*g/l[1]);
+        printf("%I64d\n",ans);
+    }
+    return 0;
+}

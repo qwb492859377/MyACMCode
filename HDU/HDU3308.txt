@@ -1,0 +1,120 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3308                   *
+*      VjudgeProblemID:18578               *
+*      SubmitTime:2015/7/18 0:31:37        *
+*      SubmitType:C++                      *
+*      Memory:5092KB                       *
+*      CodeLen:2388B                       *
+*      RunTime:561ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 100000 + 5;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 0,n-1,1
+
+int A[MX];
+int LA[MX << 2], MA[MX << 2], RA[MX << 2];
+
+void push_up(int rt, int m, int len) {
+    LA[rt] = LA[rt << 1];
+    RA[rt] = RA[rt << 1 | 1];
+    MA[rt] = max(MA[rt << 1], MA[rt << 1 | 1]);
+    if(A[m] < A[m + 1]) {
+        if(LA[rt] == len - (len >> 1)) {
+            LA[rt] += LA[rt << 1 | 1];
+            MA[rt] = max(MA[rt], LA[rt]);
+        }
+        if(RA[rt] == len >> 1) {
+            RA[rt] += RA[rt << 1];
+            MA[rt] = max(MA[rt], RA[rt]);
+        }
+        MA[rt] = max(MA[rt], RA[rt << 1] + LA[rt << 1 | 1]);
+    }
+}
+
+void build(int l, int r, int rt) {
+    if(l == r) {
+        LA[rt] = MA[rt] = RA[rt] = 1;
+        scanf("%d", &A[l]);
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    build(lson);
+    build(rson);
+    push_up(rt, m, r - l + 1);
+}
+
+int query(int L, int R, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        return MA[rt];
+    }
+
+    int m = (l + r) >> 1, ansm = 0, ansl = 0, ansr = 0;
+    if(L <= m) ansl = query(L, R, lson);
+    if(R > m)  ansr = query(L, R, rson);
+
+    if(L <= m && m < R && A[m] < A[m + 1]) {
+        ansm = min(RA[rt << 1], m - L + 1) + min(LA[rt << 1 | 1], R - m);
+    }
+    return max(ansm, max(ansl, ansr));
+}
+
+void update(int x, int d, int l, int r, int rt) {
+    if(l == r) {
+        A[l] = d;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    if(x <= m) update(x, d, lson);
+    else     update(x, d, rson);
+    push_up(rt, m, r - l + 1);
+}
+
+void ceshi(int l, int r, int rt) {
+    printf("[%d,%d,%d  %d,%d,%d]\n", l, r, rt, LA[rt], MA[rt], RA[rt]);
+    if(l == r) {
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    ceshi(lson);
+    ceshi(rson);
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int T, n, m;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d%d", &n, &m);
+        build(root);
+
+        //ceshi(root);
+
+        for(int i = 1; i <= m; i++) {
+            char op[10];
+            int a, b;
+            scanf("%s%d%d", op, &a, &b);
+            if(op[0] == 'Q') printf("%d\n", query(a, b, root));
+            else           update(a, b, root);
+        }
+    }
+    return 0;
+}

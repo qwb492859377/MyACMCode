@@ -1,0 +1,70 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:Gym100712F                *
+*      VjudgeProblemID:195708              *
+*      SubmitTime:2015/7/19 13:19:57       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:1368KB                       *
+*      CodeLen:1064B                       *
+*      RunTime:265ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 100000 + 5;
+const int INF = 0x3f3f3f3f;
+
+struct Edge{
+    int u,v,cost;
+    bool operator<(const Edge&b)const{
+        return cost<b.cost;
+    }
+}E[MX];
+
+int P[MX];
+
+int find(int x){
+    return P[x]==x?x:(P[x]=find(P[x]));
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        int n,m;
+        scanf("%d%d",&n,&m);
+        for(int i=1;i<=n;i++) P[i]=i;
+
+        for(int i=1;i<=m;i++){
+            scanf("%d%d%d",&E[i].u,&E[i].v,&E[i].cost);
+        }
+        sort(E+1,E+1+m);
+
+        int ans=0,cnt=0;
+        for(int i=1;i<=m;i++){
+            int u=E[i].u,v=E[i].v,cost=E[i].cost;
+
+            int p1=find(u),p2=find(v);
+            if(p1!=p2){
+                P[p1]=p2;
+                cnt++;
+                ans=cost;
+            }
+        }
+
+        printf("%d\n",ans);
+    }
+    return 0;
+}

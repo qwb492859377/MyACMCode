@@ -1,0 +1,61 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces66A             *
+*      VjudgeProblemID:21103               *
+*      SubmitTime:2014/12/29 12:56:16      *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:0KB                          *
+*      CodeLen:1070B                       *
+*      RunTime:60ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+
+char big[]="9223372036854775807";
+
+int main(){
+    char str[105];
+    while(~scanf("%s",str)){
+        int len=strlen(str);
+        if(len<19){
+            LL temp;
+            sscanf(str,"%I64d",&temp);
+            if(temp<=127){
+                printf("byte\n");
+            }else if(temp<=32767){
+                printf("short\n");
+            }else if(temp<=2147483647){
+                printf("int\n");
+            }else{
+                printf("long\n");
+            }
+            continue;
+        }else if(len>19){
+            printf("BigInteger\n");
+            continue;
+        }
+
+        bool sign=true;
+        for(int i=0;i<len;i++){
+            if(big[i]==str[i]){
+                continue;
+            }else{
+                sign=str[i]<big[i];
+                break;
+            }
+        }
+        if(sign){
+            printf("long\n");
+        }else{
+            printf("BigInteger\n");
+        }
+    }
+    return 0;
+}

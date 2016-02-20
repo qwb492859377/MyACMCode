@@ -1,0 +1,105 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2965                   *
+*      VjudgeProblemID:18024               *
+*      SubmitTime:2015/7/24 8:15:21        *
+*      SubmitType:C++                      *
+*      Memory:128KB                        *
+*      CodeLen:2222B                       *
+*      RunTime:79ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+
+const int MX = 20 + 5;
+const int INF = 0x3f3f3f3f;
+
+typedef bool Matrix[MX][MX];
+
+Matrix A;
+char S[MX][MX];
+int ax[MX], ay[MX];
+
+int gauss(int equ, int var) {
+    int max_r, col, k;
+    for(k = 0, col = 0; k < equ && col < var; k++, col++) {
+        max_r = k;
+        for(int i = k + 1; i < equ; i++) {
+            if(A[i][col] > A[max_r][col]) {
+                max_r = i;
+            }
+        }
+        if(A[max_r][col] == 0) {
+            k--;
+            continue;
+        }
+        if(max_r != k) {
+            for(int j = col; j < var + 1; j++) {
+                swap(A[k][j], A[max_r][j]);
+            }
+        }
+        for(int i = k + 1; i < equ; i++) {
+            if(A[i][col] != 0) {
+                for(int j = col; j < var + 1; j++) {
+                    A[i][j] ^= A[k][j];
+                }
+            }
+        }
+    }
+    for(int i = k; i < equ; i++) {
+        if(A[i][col] != 0) return -1;
+    }
+    if(k < var) return var - k;
+
+    for(int i = var - 1; i >= 0; i--) {
+        for(int j = i + 1; j < var; j++) {
+            A[i][var] ^= (A[i][j] && A[j][var]);
+        }
+    }
+    return 0;
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    memset(A, 0, sizeof(A));
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 4; j++) {
+            A[i * 4 + j][i * 4 + j] ^= 1;
+            for(int k = 0; k < 4; k++) {
+                A[i * 4 + j][i * 4 + k] ^= 1;
+                A[i * 4 + j][k * 4 + j] ^= 1;
+            }
+        }
+    }
+
+    while(~scanf("%s%s%s%s", S[0], S[1], S[2], S[3])) {
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                A[i * 4 + j][16] = S[i][j] == '+' ? 1 : 0;
+            }
+        }
+
+        gauss(16, 16);
+        int tot = 0;
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+
+                if(A[i * 4 + j][16]) {
+                    tot++;
+                    ax[tot] = i;
+                    ay[tot] = j;
+                }
+            }
+        }
+
+        printf("%d\n", tot);
+        for(int i = 1; i <= tot; i++) {
+            printf("%d %d\n", ax[i] + 1, ay[i] + 1);
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,89 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1553                   *
+*      VjudgeProblemID:143210              *
+*      SubmitTime:2015/11/18 23:23:21      *
+*      SubmitType:C++                      *
+*      Memory:3868KB                       *
+*      CodeLen:1734B                       *
+*      RunTime:968ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 10000 + 5;
+
+int A[MX];
+int MIN[MX][30], MAX[MX][30];
+
+void RMQ_init(int n) {
+    for(int i = 0; i < n + 1; i++) {
+        MAX[i][0] = MIN[i][0] = A[i];
+    }
+    for(int j = 1; (1 << j) <= n + 1; j++) {
+        for(int i = 0; i + (1 << j) - 1 < n + 1; i++) {
+            MAX[i][j] = max(MAX[i][j - 1], MAX[i + (1 << (j - 1))][j - 1]);
+            MIN[i][j] = min(MIN[i][j - 1], MIN[i + (1 << (j - 1))][j - 1]);
+        }
+    }
+}
+
+int RMQ_min(int L, int R) {
+    int k = 0;
+    while((1 << (k + 1)) <= R - L + 1) k++;
+    return min(MIN[L][k], MIN[R - (1 << k) + 1][k]);
+}
+
+int RMQ_max(int L, int R) {
+    int k = 0;
+    while((1 << (k + 1)) <= R - L + 1) k++;
+    return max(MAX[L][k], MAX[R - (1 << k) + 1][k]);
+}
+
+int solve(int n, int i, int k) {
+    int l = i, r = n, m, ans;
+    while(l <= r) {
+        m = (l + r) >> 1;
+        if(RMQ_max(i, m) - RMQ_min(i, m) <= k) {
+            ans = m;
+            l = m + 1;
+        } else r = m - 1;
+    }
+    return ans - i + 1;
+}
+
+int main() {
+    int n, k; //FIN;
+    while(~scanf("%d%d", &n, &k)) {
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+        RMQ_init(n);
+
+        int ans = 0;
+        for(int i = 1; i <= n; i++) {
+            ans = max(ans, solve(n, i, k));
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

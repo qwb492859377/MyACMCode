@@ -1,0 +1,79 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1507                   *
+*      VjudgeProblemID:70420               *
+*      SubmitTime:2015/8/16 19:45:22       *
+*      SubmitType:C++                      *
+*      Memory:1484KB                       *
+*      CodeLen:1291B                       *
+*      RunTime:4ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1000 + 5;
+
+char S[100];
+int score[] = {6, 2, 5, 5, 4, 5, 6, 3, 7, 6};
+
+int get_time() {
+    int a, b, c;
+    scanf("%d:%d:%d", &a, &b, &c);
+    return a * 60 * 60 + b * 60 + c;
+}
+
+int get_who() {
+    scanf("%s", S);
+    return S[0] == 'h';
+}
+
+int get(int x) {
+    if(x == 0) return score[x];
+
+    int ret = 0;
+    while(x) {
+        ret += score[x % 10];
+        x /= 10;
+    }
+    return ret;
+}
+
+int main() {
+    //FIN;
+    int ansk = 0;
+    while(~scanf("%s", S)) {
+        int last = get_time(), now;
+        int s[2] = {0, 0}, tmp, ans = 0;
+
+        while(scanf("%s", S), S[0] != 'E') {
+            now = get_time();
+
+            int who = get_who();
+            scanf("%d", &tmp);
+            ans += (get(s[0]) + get(s[1])) * (now - last);
+            s[who] += tmp;
+            last = now;
+        }
+        now = get_time();
+        ans += (get(s[0]) + get(s[1])) * (now - last);
+        printf("Case %d: %d\n", ++ansk, ans);
+    }
+    return 0;
+}

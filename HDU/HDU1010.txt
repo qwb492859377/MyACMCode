@@ -1,0 +1,113 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1010                   *
+*      VjudgeProblemID:16336               *
+*      SubmitTime:2015/7/21 14:02:23       *
+*      SubmitType:C++                      *
+*      Memory:1612KB                       *
+*      CodeLen:1615B                       *
+*      RunTime:436ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<cctype>
+#include<stack>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 10 + 5;
+const int INF = 0x3f3f3f3f;
+
+int m, n;
+int vis[MX][MX];
+char S[MX][MX];
+int dist[][2] = {{1, 0}, { -1, 0}, {0, 1}, {0, -1}};
+
+struct Point {
+    int x, y, t;
+    Point(int a, int b, int c) {
+        x = a;
+        y = b;
+        t = c;
+    }
+};
+
+bool DFS(int x, int y, int T) {
+    if(T == 0) {
+        if(S[x][y] == 'D') return true;
+        return false;
+    }
+
+    vis[x][y] = 1;
+    for(int k = 0; k < 4; k++) {
+        int nx = x + dist[k][0];
+        int ny = y + dist[k][1];
+        if(nx < 1 || nx > m || ny < 1 || ny > n) continue;
+        if(S[nx][ny] == 'X' || vis[nx][ny]) continue;
+
+        if(DFS(nx, ny, T - 1)) return true;
+    }
+    vis[x][y] = 0;
+    return false;
+}
+
+int main() {
+    int T;
+    while(~scanf("%d%d%d", &m, &n, &T), m + n) {
+        PII FST(-1, -1), END(-1, -1);
+        for(int i = 1; i <= m; i++) {
+            scanf("%s", S[i] + 1);
+            for(int j = 1; j <= n; j++) {
+                if(S[i][j] == 'S') FST = PII(i, j);
+                if(S[i][j] == 'D') END = PII(i, j);
+            }
+        }
+
+        int temp = abs(FST.first - END.first) + abs(FST.second - END.second);
+        if(FST.first == -1 || T % 2 != temp % 2) {
+            printf("NO\n");
+            continue;
+        }
+
+
+        memset(vis, 0, sizeof(vis));
+        printf("%s\n", DFS(FST.first, FST.second, T) ? "YES" : "NO");
+    }
+    return 0;
+}
+    while(~scanf("%d%d%d", &m, &n, &T), m + n) {
+        PII FST(-1, -1), END(-1, -1);
+        for(int i = 1; i <= m; i++) {
+            scanf("%s", S[i] + 1);
+            for(int j = 1; j <= n; j++) {
+                if(S[i][j] == 'S') FST = PII(i, j);
+                if(S[i][j] == 'D') END = PII(i, j);
+            }
+        }
+
+        int temp = abs(FST.first - END.first) + abs(FST.second - END.second);
+        if(FST.first == -1 || T % 2 != temp % 2) {
+            printf("NO\n");
+            continue;
+        }
+
+        int time = BFS(FST.first, FST.second);
+        if(time == -1 || T < time) {
+            printf("NO\n");
+            continue;
+        }
+
+        memset(vis, 0, sizeof(vis));
+        printf("%s\n", DFS(FST.first, FST.second, T) ? "YES" : "NO");
+    }
+    return 0;
+}

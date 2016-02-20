@@ -1,0 +1,38 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2021                   *
+*      VjudgeProblemID:26704               *
+*      SubmitTime:2015/11/18 11:17:45      *
+*      SubmitType:C++                      *
+*      Memory:1712KB                       *
+*      CodeLen:490B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+#define FIN freopen("input.txt","r",stdin)
+
+int money[] = {100, 50, 10, 5, 2, 1};
+
+int solve(int x) {
+    int i, ret = 0;
+    for(i = 0; i < 6; i++) {
+        ret += x / money[i];
+        x %= money[i];
+    }
+    return ret;
+}
+
+int main() {
+    int n, i; //FIN;
+    while(~scanf("%d", &n), n) {
+        int ans = 0, t;
+        for(i = 1; i <= n; i++) {
+            scanf("%d", &t);
+            ans += solve(t);
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

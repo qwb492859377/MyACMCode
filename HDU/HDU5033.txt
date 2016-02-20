@@ -1,0 +1,86 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU5033                   *
+*      VjudgeProblemID:53413               *
+*      SubmitTime:2015/6/5 20:47:45        *
+*      SubmitType:C++                      *
+*      Memory:7132KB                       *
+*      CodeLen:1914B                       *
+*      RunTime:608ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+const int N = 200010;
+const double PI = acos(-1.0);
+double ans[N], X[N], H[N];
+struct Point{
+    double x, h;
+    int id;
+    bool operator < (const Point &A)const{
+        return x<A.x;
+    }
+}p[N];
+int T, n, q;
+void cal(int st, int ed, int d){
+    int top=0;
+    for(int i=st; i!=ed; i+=d){
+        if(p[i].id){
+            while(top>1){
+                double k1 = H[top-1]/fabs(p[i].x-X[top-1]);
+                double k2 = H[top-2]/fabs(p[i].x-X[top-2]);
+                if(k1<=k2)  top--;
+                else    break;
+            }
+            ans[p[i].id] += atan(H[top-1]/fabs(p[i].x-X[top-1]));
+        }
+        else{
+            X[top] = p[i].x;
+            H[top] = p[i].h;
+            while(top && H[top]>=H[top-1]){
+                top--;
+                H[top]=H[top+1];
+                X[top]=X[top+1];
+            }
+            while(top>1){
+               double k1 = (H[top-1]-H[top])/fabs(X[top-1]-X[top]);
+               double k2 = (H[top-2]-H[top])/fabs(X[top-2]-X[top]);
+               if(k1<=k2){
+                    top--;
+                    H[top] = H[top+1];
+                    X[top] = X[top+1];
+               }
+               else break;
+            }
+            top++;
+        }
+    }
+}
+int main(){
+    scanf("%d", &T);
+    for(int t=1; t<=T; t++){
+        scanf("%d", &n);
+        for(int i=0; i<n; i++){
+            scanf("%lf %lf", &p[i].x, &p[i].h);
+            p[i].id = 0;
+        }
+        scanf("%d", &q);
+        for(int i=0; i<q; i++){
+            scanf("%lf", &p[n].x);
+            p[n].h = 0.0;
+            p[n].id = i+1;
+            ans[i+1]=0.0;
+            n++;
+        }
+        sort(p, p+n);
+        cal(0, n, 1);
+        cal(n-1, -1, -1);
+        printf("Case #%d:\n", t);
+        for(int i=1; i<=q; i++) printf("%.10f\n", (PI-ans[i])*180.0/PI);
+    }
+    return 0;
+}

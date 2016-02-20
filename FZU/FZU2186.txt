@@ -1,0 +1,126 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU2186                   *
+*      VjudgeProblemID:138104              *
+*      SubmitTime:2015/5/13 0:24:18        *
+*      SubmitType:GNU C++                  *
+*      Memory:1632KB                       *
+*      CodeLen:2412B                       *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int INF=0x3f3f3f3f;
+const int MX=105;
+
+int m,n,rear,dp[MX][3000];
+int vis[MX][MX],S[MX][MX],End[MX][MX],W[MX][MX];
+int dist[][2]={{-1,0},{0,-1},{1,0},{0,1}};
+
+struct Point{
+    int x,y,t;
+    Point(){}
+    Point(int a,int b,int c=0){
+        x=a;y=b;t=c;
+    }
+}Begin[MX];
+
+void BFS(int id){
+    memset(vis,0,sizeof(vis));
+
+    Point fp(Begin[id].x,Begin[id].y);
+    queue<Point>work;
+    work.push(fp);
+
+    while(!work.empty()){
+        fp=work.front();
+        work.pop();
+
+        vis[fp.x][fp.y]=1;
+        int nid=End[fp.x][fp.y];
+
+        if(nid!=-1){
+            W[id][nid]=fp.t;
+        }
+
+        for(int i=0;i<4;i++){
+            Point tp(fp.x+dist[i][0],fp.y+dist[i][1],fp.t+1);
+            if(tp.x<1||tp.x>m||tp.y<1||tp.y>n) continue;
+            if(S[tp.x][tp.y]<0||vis[tp.x][tp.y]) continue;
+
+            vis[tp.x][tp.y]=1;
+            work.push(tp);
+        }
+    }
+}
+
+int TSP(){
+    memset(dp,0x3f,sizeof(dp));
+
+    for(int S=0;S<=(1<<rear)-1;S++){
+        for(int i=1;i<=rear;i++){
+            if(S&(1<<(i-1))){
+                if(S==(1<<(i-1))) dp[i][S]=W[0][i];
+                else for(int j=1;j<=rear;j++){
+                    if(S&(1<<(j-1))&&j!=i){
+                        dp[i][S]=min(dp[i][S],dp[j][S^(1<<(i-1))]+W[i][j]);
+                    }
+                }
+            }
+        }
+    }
+
+    int ret=INF;
+    for(int i=1;i<=rear;i++){
+        ret=min(ret,dp[i][(1<<rear)-1]+W[0][i]);
+    }
+    return ret;
+}
+
+int main(){
+    while(~scanf("%d%d",&m,&n)){
+        rear=0;
+        memset(End,-1,sizeof(End));
+        memset(W,0x3f,sizeof(W));
+
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                scanf("%d",&S[i][j]);
+                if(S[i][j]>0){
+                    if(i==1&&j==1) continue;
+
+                    Begin[++rear]=Point(i,j);
+                    End[i][j]=rear;
+                }
+            }
+        }
+        Begin[0]=Point(1,1);
+        End[1][1]=0;
+
+        if(S[1][1]<0){
+            printf("-1\n");
+            continue;
+        }
+        if(!rear){
+            printf("0\n");
+            continue;
+        }
+
+        for(int i=0;i<=rear;i++){
+            BFS(i);
+        }
+
+        int ans=TSP();
+        printf("%d\n",ans==INF?-1:ans);
+    }
+    return 0;
+}

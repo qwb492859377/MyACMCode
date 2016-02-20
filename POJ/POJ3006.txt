@@ -1,0 +1,64 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3006                   *
+*      VjudgeProblemID:16373               *
+*      SubmitTime:2015/7/25 0:19:27        *
+*      SubmitType:C++                      *
+*      Memory:1412KB                       *
+*      CodeLen:942B                        *
+*      RunTime:47ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1000000 + 5;
+const int INF = 0x3f3f3f3f;
+
+int prime[100000], rear;
+bool vis[MX];
+
+void prime_init() {
+    vis[1] = 1;
+    for(int i = 2; i < MX; i++) {
+        if(vis[i]) continue;
+        prime[++rear] = i;
+
+        if((LL)i * i >= MX) continue;
+        for(int j = i * i; j < MX; j += i) {
+            vis[j] = 1;
+        }
+    }
+}
+
+int main() {
+    prime_init();
+    int a, b, th;
+    while(~scanf("%d%d%d", &a, &b, &th), a + b + th) {
+        int cnt = 0, ans;
+        for(int i = a; ; i += b) {
+            if(!vis[i]) {
+                cnt++;
+                if(cnt == th) {
+                    ans = i;
+                    break;
+                }
+            }
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}
+    }
+    return 0;
+}

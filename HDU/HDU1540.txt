@@ -1,0 +1,69 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1540                   *
+*      VjudgeProblemID:14794               *
+*      SubmitTime:2015/8/7 15:32:03        *
+*      SubmitType:C++                      *
+*      Memory:1696KB                       *
+*      CodeLen:1219B                       *
+*      RunTime:343ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<set>
+#include<stack>
+#include<string>
+#include<iostream>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<LL, int> PLI;
+
+const int MX = 1e3 + 5;
+const int INF = 0x3f3f3f3f;
+
+set<int>G;
+stack<int>Last;
+
+int main() {
+    int n, Q;
+    while(~scanf("%d%d", &n, &Q)) {
+        G.clear();
+        while(!Last.empty()) Last.pop();
+
+        G.insert(0);
+        G.insert(n + 1);
+
+        while(Q--) {
+            char op[5]; int x;
+            scanf("%s", op);
+            if(op[0] == 'D') {
+                scanf("%d", &x);
+                G.insert(x);
+                Last.push(x);
+            } else if(op[0] == 'Q') {
+                scanf("%d", &x);
+                int L = *(--G.upper_bound(x));
+                int R = *(G.lower_bound(x));
+                if(L == x || R == x) {
+                    printf("0\n");
+                } else {
+                    printf("%d\n", R - L - 1);
+                }
+            } else {
+                int t = Last.top();
+                Last.pop();
+                G.erase(t);
+            }
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,57 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4497                   *
+*      VjudgeProblemID:46336               *
+*      SubmitTime:2015/6/3 12:36:32        *
+*      SubmitType:C++                      *
+*      Memory:1604KB                       *
+*      CodeLen:778B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<cctype>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=20+5;
+
+int main(){
+    int T,G,L,S;
+    scanf("%d",&T);
+
+    while(T--){
+        scanf("%d%d",&G,&L);
+        if(L%G!=0){
+            printf("0\n");
+            continue;
+        }
+
+        S=L/G;
+        int e=sqrt(S+0.5);
+
+        LL ans=1;
+        for(int i=2;i<=e;i++){
+            if(S%i==0){
+                int t=0;
+                while(S%i==0){
+                    t++;
+                    S/=i;
+                }
+                ans*=(t==1)?6:6*t;
+            }
+        }
+
+        if(S>1){
+            ans*=6;
+        }
+        printf("%I64d\n",ans);
+    }
+    return 0;
+}

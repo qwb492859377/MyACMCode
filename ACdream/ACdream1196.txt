@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ACdream1196               *
+*      VjudgeProblemID:71823               *
+*      SubmitTime:2015/11/5 12:52:47       *
+*      SubmitType:C                        *
+*      Memory:1084KB                       *
+*      CodeLen:700B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+int min(int a, int b) {
+    return a < b ? a : b;
+}
+
+int max(int a, int b) {
+    return a > b ? a : b;
+}
+
+int main() {
+    int n, cur, d, ansk = 0;
+    while(~scanf("%d%d%d", &n, &cur, &d)) {
+        printf("Case #%d: ", ++ansk);
+
+        if(cur == 1) printf("[<<]");
+        else printf("(<<)");
+
+        int l = max(1, cur - d), r = min(n, cur + d);
+        if(l != 1) printf("[...]");
+        for(int i = l; i < cur; i++) printf("(%d)", i);
+        printf("[%d]", cur);
+        for(int i = cur + 1; i <= r; i++) printf("(%d)", i);
+        if(r != n) printf("[...]");
+
+        if(cur == n) printf("[>>]");
+        else printf("(>>)");
+
+        printf("\n");
+    }
+    return 0;
+}
+i);}
+    }
+    if(right){p("[...]");}
+    if(right_button){p("(>>)");}else{p("[>>]");}
+    p("\n");
+  }
+  return 0;
+}

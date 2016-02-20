@@ -1,0 +1,44 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces215B            *
+*      VjudgeProblemID:30900               *
+*      SubmitTime:2015/1/19 15:10:23       *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:0KB                          *
+*      CodeLen:633B                        *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int INF=1<<30;
+
+int main(){
+    int r1=-INF,p1=-INF,p2=INF,temp,n,A,B;
+    double r2,s;
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++){
+        scanf("%d",&temp);
+        r1=max(r1,temp);
+    }
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++){
+        scanf("%d",&temp);
+        p1=max(p1,temp);
+    }
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++){
+        scanf("%d",&temp);
+        p2=min(p2,temp);
+    }
+    scanf("%d%d",&A,&B);
+    s=1.0*A*p2/(B*p1);
+    r2=1.0*r1/sqrt(s+1);
+    printf("%.12lf",r2);
+    return 0;
+}

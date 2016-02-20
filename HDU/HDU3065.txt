@@ -1,0 +1,146 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3065                   *
+*      VjudgeProblemID:16405               *
+*      SubmitTime:2015/10/21 22:02:21      *
+*      SubmitType:G++                      *
+*      Memory:9520KB                       *
+*      CodeLen:3044B                       *
+*      RunTime:187ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+/*MX为总长度*/
+const int MX = 1e5 + 5;
+const int MS = 2e6 + 5;
+const int MN = 1e3 + 5;
+
+int ans[MN];
+vector<string>G;
+char word[MN], line[MS];
+
+struct AC_machine {
+    int rear, root;
+    int Next[MX][52], Fail[MX], End[MX];
+
+    void Init() {
+        rear = 0;
+        root = New();
+    }
+
+    int New() {
+        rear++;
+        End[rear] = 0;
+        for(int i = 0; i < 52; i++) {
+            Next[rear][i] = -1;
+        }
+        return rear;
+    }
+
+    void Add(char*A, int u) {
+        int n = strlen(A), now = root;
+        for(int i = 0; i < n; i++) {
+            int id = 'a' <= A[i] && A[i] <= 'z' ? A[i] - 'a' : 26 + A[i] - 'A';
+            if(Next[now][id] == -1) {
+                Next[now][id] = New();
+            }
+            now = Next[now][id];
+        }
+        End[now] = u;
+    }
+
+    void Build() {
+        queue<int>Q;
+        Fail[root] = root;
+        for(int i = 0; i < 52; i++) {
+            if(Next[root][i] == -1) {
+                Next[root][i] = root;
+            } else {
+                Fail[Next[root][i]] = root;
+                Q.push(Next[root][i]);
+            }
+        }
+
+        while(!Q.empty()) {
+            int u = Q.front();
+            Q.pop();
+
+            for(int i = 0; i < 52; i++) {
+                if(Next[u][i] == -1) {
+                    Next[u][i] = Next[Fail[u]][i];
+                } else {
+                    Fail[Next[u][i]] = Next[Fail[u]][i];
+                    Q.push(Next[u][i]);
+                }
+            }
+        }
+    }
+
+    void Query(char *S) {
+        int n = strlen(S), now = root, ret = 0;
+        for(int i = 0; i < n; i++) {
+            int id = -1;
+            if('a' <= S[i] && S[i] <= 'z') {
+                id = S[i] - 'a';
+            }
+            if('A' <= S[i] && S[i] <= 'Z') {
+                id = 26 + S[i] - 'A';
+            }
+            if(id == -1) {
+                now = root;
+                continue;
+            }
+
+            now = Next[now][id];
+            int temp = now;
+
+            while(temp != root) {
+                if(End[temp]) ans[End[temp]]++;
+                temp = Fail[temp];
+            }
+        }
+    }
+} AC;
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        AC.Init();
+        G.clear();
+        memset(ans, 0, sizeof(ans));
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%s\n", word);
+            G.push_back(string(word));
+            AC.Add(word, i);
+        }
+        AC.Build();
+
+        gets(line);
+        AC.Query(line);
+        for(int i = 0; i < G.size(); i++) {
+            if(ans[i + 1]) printf("%s: %d\n", G[i].c_str(), ans[i + 1]);
+        }
+    }
+    return 0;
+}

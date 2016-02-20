@@ -1,0 +1,50 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2005                   *
+*      VjudgeProblemID:32825               *
+*      SubmitTime:2014/11/16 8:50:40       *
+*      SubmitType:C++                      *
+*      Memory:228KB                        *
+*      CodeLen:584B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int mon[]={0,31,28,31,30,31,30,31,31,30,31,30,31};
+
+bool is_y(int year){
+  if(year%400==0){
+    return true;
+  }
+  if(year%100==0){
+    return false;
+  }
+  if(year%4==0){
+    return true;
+  }
+  return false;
+}
+
+int main(){
+  int year,month,day;
+  while(~scanf("%d/%d/%d",&year,&month,&day)){
+    if(is_y(year)){
+      mon[2]=29;
+    }else{
+      mon[2]=28;
+    }
+    int s=0;
+    for(int i=1;i<month;i++){
+      s+=mon[i];
+    }
+    printf("%d\n",s+day);
+  }
+  return 0;
+}

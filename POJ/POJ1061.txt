@@ -1,0 +1,80 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1061                   *
+*      VjudgeProblemID:10755               *
+*      SubmitTime:2015/8/15 9:31:05        *
+*      SubmitType:C++                      *
+*      Memory:132KB                        *
+*      CodeLen:1707B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 3e4 + 5;
+
+LL exgcd(LL a, LL b, LL &x, LL &y) {
+    if(b == 0) {
+        x = 1; y = 0;
+        return a;
+    }
+    LL r = exgcd(b, a % b, x, y);
+    LL t = y;
+    y = x - a / b * y;
+    x = t;
+    return r;
+}
+
+/*可以得到x>=bound时的x和y，返回true表示有解
+否则无解，我只想问这个模板无脑调用有木有~
+但是不同的题目特判不同，有的地方记得还是特判，比如a和b的正负和是否为0~*/
+bool solve(LL a, LL b, LL c, LL bound, LL &x, LL &y) {
+    LL xx, yy, d = exgcd(a, b, xx, yy);
+    if(c % d) return false;
+
+    xx = xx * c / d; yy = yy * c / d;
+    LL t = (bound - xx) * d / b;
+
+    x = xx + b / d * t;
+    if(x < bound) {
+        t++;
+        x = xx + b / d * t;
+    }
+    y = yy - a / d * t;
+    return true;
+}
+
+int main() {
+    LL x, y, m, n, L;
+    LL A, B, C, X, Y;
+    while(~scanf("%I64d%I64d%I64d%I64d%I64d", &x, &y, &m, &n, &L)) {
+        A = n - m; B = L; C = x - y;
+        if(A == 0) { //使用solve唯一的特判放在外面
+            printf("Impossible\n");
+            continue;
+        }
+        if(A < 0) A = -A, C = -C; //保证A和B都是正数
+        if(solve(A, B, C, 0, X, Y)) { //得到的x会>=1,因为不可能是0，而且也必须要非负嘛，理论上0和1都一样
+            printf("%I64d\n", X); //对，，就是这样，，做完了！
+        } else {
+            printf("Impossible\n");
+        }
+    }
+    return 0;
+}

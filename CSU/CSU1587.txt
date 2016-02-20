@@ -1,0 +1,32 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1587                   *
+*      VjudgeProblemID:181185              *
+*      SubmitTime:2015/6/9 0:28:30         *
+*      SubmitType:C++                      *
+*      Memory:1484KB                       *
+*      CodeLen:326B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int main()
+{
+    int T,n,i;
+    long long F[50];
+    cin>>T;
+    memset(F,0,sizeof(F));
+    F[1]=1;F[2]=2;
+        for(i=3;i<=49;i++)
+            F[i]=F[i-1]+F[i-2];
+    while(T--)
+    {
+        cin>>n;
+        cout<<F[n]<<endl;
+    }
+    return 0;
+}

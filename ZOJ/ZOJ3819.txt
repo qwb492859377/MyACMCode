@@ -1,0 +1,66 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ZOJ3819                   *
+*      VjudgeProblemID:53724               *
+*      SubmitTime:2015/10/2 13:54:07       *
+*      SubmitType:C++ (g++ 4.7.2)          *
+*      Memory:272KB                        *
+*      CodeLen:1204B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 100 + 5;
+
+int main() {
+    int n, m, T; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d%d", &n, &m);
+
+        int s1 = 0, s2 = 0, t;
+        for(int i = 1; i <= n - 1; i++) {
+            scanf("%d", &t);
+            s1 += t;
+        }
+        for(int i = 1; i <= m; i++) {
+            scanf("%d", &t);
+            s2 += t;
+        }
+
+        int Min = 100, Max = 0;
+        for(int i = 0; i <= 100; i++) {
+            double pre1 = (s1 + i) * 1.0 / n;
+            double pre2 = s2 * 1.0 / m;
+
+            double now1 = s1 * 1.0 / (n - 1);
+            double now2 = (s2 + i) * 1.0 / (m + 1);
+
+            if(now1 > pre1 && now2 > pre2) {
+                Min = min(Min, i);
+                Max = max(Max, i);
+            }
+        }
+        printf("%d %d\n", Min, Max);
+    }
+    return 0;
+}

@@ -1,0 +1,48 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2063                   *
+*      VjudgeProblemID:26349               *
+*      SubmitTime:2014/12/4 17:13:26       *
+*      SubmitType:C++                      *
+*      Memory:548KB                        *
+*      CodeLen:784B                        *
+*      RunTime:79ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int dp[100000];
+int wei[120],val[120];
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        int tm,year,N,money;
+        scanf("%d%d%d",&money,&year,&N);
+
+        for(int i=1;i<=N;i++){
+            scanf("%d%d",&wei[i],&val[i]);
+            wei[i]/=1000;
+        }
+
+        for(int y=1;y<=year;y++){
+            tm=money/1000;
+            memset(dp,0,sizeof(dp));
+            for(int i=1;i<=N;i++){
+                for(int j=wei[i];j<=tm;j++){
+                    dp[j]=max(dp[j],dp[j-wei[i]]+val[i]);
+                }
+            }
+            money+=dp[tm];//printf("[%d,%d]\n",dp[tm],money);
+        }
+        printf("%d\n",money);
+    }
+    return 0;
+}

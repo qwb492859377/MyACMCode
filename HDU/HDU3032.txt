@@ -1,0 +1,80 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3032                   *
+*      VjudgeProblemID:22651               *
+*      SubmitTime:2015/12/9 23:05:39       *
+*      SubmitType:G++                      *
+*      Memory:1568KB                       *
+*      CodeLen:1357B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1e2 + 5;
+
+/*
+int SG[MX], vis[2 * MX];
+SG´ò±í
+int main() {
+    SG[0] = 0;
+    for(int n = 1; n < MX; n++) {
+        memset(vis,0,sizeof(vis));
+        for(int i = 0; i < n; i++) vis[SG[i]] = 1;
+        for(int j = 1; j < n; j++) {
+            int t = SG[j] ^ SG[n - j];
+            vis[t] = 1;
+        }
+        for(int i = 0; i < 2 * MX; i++) {
+            if(!vis[i]) {
+                SG[n] = i;
+                break;
+            }
+        }
+        printf("%d:%d\n", n, SG[n]);
+    }
+    return 0;
+}*/
+
+int f(int n) {
+    int t = n % 4;
+    if(t == 1 || t == 2) {
+        return n;
+    }
+    if(t == 3) return n + 1;
+    return n - 1;
+}
+
+int main() {
+    int T, n; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d", &n);
+        int sum = 0, t;
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &t);
+            sum ^= f(t);
+        }
+        printf("%s\n", sum ? "Alice" : "Bob");
+    }
+    return 0;
+}

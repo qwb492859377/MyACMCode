@@ -1,0 +1,29 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1229                   *
+*      VjudgeProblemID:22307               *
+*      SubmitTime:2015/11/18 11:13:40      *
+*      SubmitType:C++                      *
+*      Memory:1684KB                       *
+*      CodeLen:325B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+
+int main() {
+    int a, b, k, i;
+    while(~scanf("%d%d%d", &a, &b, &k)) {
+        if(a == 0 && b == 0) break;
+
+        int mod = 1;
+        for(i = 1; i <= k; i++) {
+            mod *= 10;
+        }
+
+        if(a % mod == b % mod) printf("-1\n");
+        else printf("%d\n", a + b);
+    }
+    return 0;
+}

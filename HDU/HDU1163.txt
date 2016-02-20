@@ -1,0 +1,64 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1163                   *
+*      VjudgeProblemID:17617               *
+*      SubmitTime:2015/7/22 22:39:44       *
+*      SubmitType:C++                      *
+*      Memory:1640KB                       *
+*      CodeLen:804B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<map>
+#include<set>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<stack>
+#include<cctype>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 10000 + 5;
+const int INF = 0x3f3f3f3f;
+
+int F[MX];
+
+int pre(int w) {
+    int ret = 0;
+    while(w) {
+        ret += w % 10;
+        w /= 10;
+    }
+    if(ret > 9) return pre(ret);
+    return ret;
+}
+
+int solve(int a, int b) {
+    if(b == 1) return pre(a);
+
+    int ret = solve(a, b / 2);
+    ret *= ret;
+    if(b & 1) ret *= a;
+    return pre(ret);
+}
+
+int main() {
+    int n;
+
+    for(int i = 1; i < MX; i++) {
+        F[i] = solve(i, i);
+    }
+
+    while(~scanf("%d", &n), n) {
+        printf("%d\n", F[n]);
+    }
+    return 0;
+}

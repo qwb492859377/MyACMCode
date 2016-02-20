@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2563                   *
+*      VjudgeProblemID:27335               *
+*      SubmitTime:2015/8/14 13:10:40       *
+*      SubmitType:C++                      *
+*      Memory:1620KB                       *
+*      CodeLen:669B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e2 + 5;
+
+LL F[MX];
+
+int main() {
+    F[0] = 1;
+    for(int i = 1; i < MX; i++) {
+        for(int j = 1; j <= i; j++) {
+            if(i - j >= 1) F[i] += 2 * F[i - j - 1];
+            else F[i] += 2;
+        }
+        F[i] += F[i - 1];
+    }
+
+    int T, n;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d", &n);
+        printf("%I64d\n", F[n]);
+    }
+    return 0;
+}

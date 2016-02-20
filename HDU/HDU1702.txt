@@ -1,0 +1,71 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1702                   *
+*      VjudgeProblemID:19369               *
+*      SubmitTime:2015/7/21 12:16:13       *
+*      SubmitType:C++                      *
+*      Memory:1628KB                       *
+*      CodeLen:1432B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<stack>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 100 + 5;
+const int INF = 0x3f3f3f3f;
+
+
+int main() {
+    int T, n, t;
+    char op[10];
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d%s", &n, op);
+        if(op[2] == 'F') {
+            queue<int>work;
+            for(int i = 1; i <= n; i++) {
+                scanf("%s", op);
+                if(op[0] == 'I') {
+                    scanf("%d", &t);
+                    work.push(t);
+                } else {
+                    if(work.size()) {
+                        printf("%d\n", work.front());
+                        work.pop();
+                    } else {
+                        printf("None\n");
+                    }
+                }
+            }
+        } else {
+            stack<int>work;
+            for(int i = 1; i <= n; i++) {
+                scanf("%s", op);
+                if(op[0] == 'I') {
+                    scanf("%d", &t);
+                    work.push(t);
+                } else {
+                    if(work.size()) {
+                        printf("%d\n", work.top());
+                        work.pop();
+                    } else {
+                        printf("None\n");
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,90 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2002                   *
+*      VjudgeProblemID:15030               *
+*      SubmitTime:2015/7/23 15:16:46       *
+*      SubmitType:G++                      *
+*      Memory:360KB                        *
+*      CodeLen:1742B                       *
+*      RunTime:1594ms                      *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1000 + 10;
+const int INF = 0x3f3f3f3f;
+const double exps = 1e-6;
+const double pi = acos(-1.0);
+
+struct Point {
+    int x, y;
+    Point() {}
+    Point(int a, int b) {
+        x = a;
+        y = b;
+    }
+    bool operator<(const Point&b)const {
+        if(x == b.x) return y < b.y;
+        return x < b.x;
+    }
+} P[MX];
+
+bool BS(Point p, int l, int r) {
+    int L = l, R = r, m;
+    while(L <= R) {
+        m = (L + R) >> 1;
+        if(P[m].x == p.x && P[m].y == p.y) return true;
+        if(P[m] < p) L = m + 1;
+        else       R = m - 1;
+    }
+    return false;
+}
+
+bool transXY(Point A, Point B, Point &C, int f) {
+    int tx = B.x - A.x, ty = B.y - A.y;
+    C.x = A.x - ty * f;
+    C.y = A.y + tx * f;
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int n;
+    while(~scanf("%d", &n), n) {
+        for(int i = 1; i <= n; i++) {
+            scanf("%d%d", &P[i].x, &P[i].y);
+        }
+        sort(P + 1, P + 1 + n);
+
+        int ans = 0;
+        for(int i = 1; i <= n - 3; i++) {
+            for(int j = i + 1; j <= n - 2; j++) {
+                Point C, D;
+
+                transXY(P[i], P[j], C, 1);
+                transXY(P[j], P[i], D, -1);
+                if(BS(C, j + 1, n) && BS(D, j + 1, n)) {
+                    ans++;
+                }
+
+                transXY(P[i], P[j], C, -1);
+                transXY(P[j], P[i], D, 1);
+                if(BS(C, j + 1, n) && BS(D, j + 1, n)) {
+                    ans++;
+                }
+            }
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

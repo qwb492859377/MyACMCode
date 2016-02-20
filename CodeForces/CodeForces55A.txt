@@ -1,0 +1,34 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces55A             *
+*      VjudgeProblemID:20354               *
+*      SubmitTime:2014/12/29 13:53:32      *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:0KB                          *
+*      CodeLen:353B                        *
+*      RunTime:60ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int vis[1005]={0};
+int main(){
+    for(int i=0;i<=11;i++){
+        int t=1<<i;
+        if(t<=1000){
+            vis[t]=1;
+        }
+    }
+
+    int n;
+    while(~scanf("%d",&n)){
+        printf("%s\n",vis[n]?"YES":"NO");
+    }
+    return 0;
+}

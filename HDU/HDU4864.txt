@@ -1,0 +1,67 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4864                   *
+*      VjudgeProblemID:51990               *
+*      SubmitTime:2015/7/17 21:33:48       *
+*      SubmitType:C++                      *
+*      Memory:3572KB                       *
+*      CodeLen:1281B                       *
+*      RunTime:280ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 100000 + 5;
+#define X first
+#define Y second
+
+int cnt[MX];
+PII mach[MX], work[MX];
+
+int main() {
+    //freopen("input.txt","r",stdin);
+    int n, m;
+    while(~scanf("%d%d", &n, &m)) {
+        memset(cnt, 0, sizeof(cnt));
+        for(int i = 1; i <= n; i++) {
+            scanf("%d%d", &mach[i].X, &mach[i].Y);
+        }
+        sort(mach + 1, mach + 1 + n, greater<PII>());
+        for(int i = 1; i <= m; i++) {
+            scanf("%d%d", &work[i].X, &work[i].Y);
+        }
+        sort(work + 1, work + 1 + m, greater<PII>());
+
+        LL ans = 0;
+        int sum = 0;
+        for(int i = 1, j = 1; i <= m; i++) {
+            while(j <= n && mach[j].X >= work[i].X) {
+                cnt[mach[j].Y]++;
+                j++;
+            }
+
+            for(int y = work[i].Y; y <= 100; y++) {
+                if(cnt[y]) {
+                    sum++;
+                    cnt[y]--;
+                    ans += 500 * work[i].X + 2 * work[i].Y;
+                    break;
+                }
+            }
+        }
+
+        printf("%d %I64d\n", sum, ans);
+    }
+    return 0;
+}

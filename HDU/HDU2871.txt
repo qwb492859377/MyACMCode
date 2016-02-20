@@ -1,0 +1,173 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2871                   *
+*      VjudgeProblemID:15767               *
+*      SubmitTime:2016/1/7 14:14:36        *
+*      SubmitType:G++                      *
+*      Memory:4572KB                       *
+*      CodeLen:4485B                       *
+*      RunTime:592ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iomanip>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 5e4 + 5;
+const int mod = 1e9 + 7;
+const int INF = 0x3f3f3f3f;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define ls rt<<1
+#define rs rt<<1|1
+
+/*
+要维护的东西
+1.sum,lsum,rsum最大连续个数
+2.cnt个数，放在左端点
+3.col懒惰标记，默认-1，为0表示要清空，为其他数字表示这一段被占领
+*/
+
+int sum[MX << 2], lsum[MX << 2], rsum[MX << 2], cnt[MX << 2], col[MX << 2];
+void push_up(int rt, int len) {
+    int wr = len >> 1, wl = len - wr;
+    cnt[rt] = cnt[ls] + cnt[rs];
+
+    lsum[rt] = lsum[ls];
+    if(lsum[rt] == wl) lsum[rt] += lsum[rs];
+    rsum[rt] = rsum[rs];
+    if(rsum[rt] == wr) rsum[rt] += rsum[ls];
+    sum[rt] = max(sum[ls], sum[rs]);
+    sum[rt] = max(sum[rt], max(lsum[rt], rsum[rt]));
+    sum[rt] = max(sum[rt], rsum[ls] + lsum[rs]);
+}
+void push_down(int rt, int len) {
+    int wr = len >> 1, wl = len - wr;
+    if(col[rt] == -1) return;
+    if(col[rt] == 0) {
+        sum[ls] = lsum[ls] = rsum[ls] = wl;
+        col[ls] = cnt[ls] = 0;
+        sum[rs] = lsum[rs] = rsum[rs] = wr;
+        col[rs] = cnt[rs] = 0;
+        col[rt] = -1;
+        return;
+    }
+    sum[ls] = lsum[ls] = rsum[ls] = 0; col[ls] = col[rt];
+    sum[rs] = lsum[rs] = rsum[rs] = 0; col[rs] = col[rt];
+    col[rt] = -1;
+}
+int New(int k, int l, int r, int rt) {
+    if(l == r) return l;
+    int m = (l + r) >> 1;
+    push_down(rt, r - l + 1);
+    if(k <= sum[ls]) return New(k, lson);
+    else if(k <= rsum[ls] + lsum[rs]) return m - rsum[ls] + 1;
+    else return New(k, rson);
+}
+void Point(int p, int d, int l, int r, int rt) {
+    if(l == r) {
+        cnt[rt] += d;
+        return;
+    }
+    int m = (l + r) >> 1;
+    push_down(rt, r - l + 1);
+    if(p <= m) Point(p, d, lson);
+    else Point(p, d, rson);
+    push_up(rt, r - l + 1);
+}
+void Update(int L, int R, int x, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        col[rt] = x;
+        if(x) sum[rt] = lsum[rt] = rsum[rt] = 0;
+        else sum[rt] = lsum[rt] = rsum[rt] = r - l + 1;
+        return;
+    }
+    int m = (l + r) >> 1;
+    push_down(rt, r - l + 1);
+    if(L <= m) Update(L, R, x, lson);
+    if(R > m) Update(L, R, x, rson);
+    push_up(rt, r - l + 1);
+}
+void Reset(int len) {
+    col[1] = cnt[1] = 0;
+    sum[1] = lsum[1] = rsum[1] = len;
+}
+int Free(int p, int l, int r, int rt) {
+    if(l == r) return col[rt];
+    int m = (l + r) >> 1;
+    push_down(rt, r - l + 1);
+    if(p <= m) return Free(p, lson);
+    else return Free(p, rson);
+}
+int Get(int x, int l, int r, int rt) {
+    if(l == r) return l;
+    int m = (l + r) >> 1;
+    push_down(rt, r - l + 1);
+    if(x <= cnt[ls]) return Get(x, lson);
+    else return Get(x - cnt[ls], rson);
+}
+
+int A[MX], B[MX];
+int main() {
+    int n, m; //FIN;
+    while(~scanf("%d%d", &n, &m)) {
+        Reset(n);
+        for(int i = 1; i <= m; i++) {
+            char op[10]; int x;
+            scanf("%s", op);
+            if(op[0] == 'R') {
+                Reset(n);
+                printf("Reset Now\n");
+                continue;
+            }
+            scanf("%d", &x);
+            if(op[0] == 'N') {
+                if(sum[1] < x) printf("Reject New\n");
+                else {
+                    int p = New(x, 1, n, 1);
+                    Point(p, 1, 1, n, 1);
+                    Update(p, p + x - 1, i, 1, n, 1);
+                    A[i] = p; B[i] = p + x - 1;
+                    printf("New at %d\n", p);
+                }
+            }
+            if(op[0] == 'F') {
+                int p = Free(x, 1, n, 1);
+                if(p <= 0) printf("Reject Free\n");
+                else {
+                    Point(A[p], -1, 1, n, 1);
+                    Update(A[p], B[p], 0, 1, n, 1);
+                    printf("Free from %d to %d\n", A[p], B[p]);
+                }
+            }
+            if(op[0] == 'G') {
+                if(cnt[1] < x) printf("Reject Get\n");
+                else {
+                    int p = Get(x, 1, n, 1);
+                    printf("Get at %d\n", p);
+                }
+            }
+        }
+        printf("\n");
+    }
+    return 0;
+}

@@ -1,0 +1,37 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces200B            *
+*      VjudgeProblemID:28922               *
+*      SubmitTime:2015/8/3 21:38:28        *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:0KB                          *
+*      CodeLen:406B                        *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 2000 + 5;
+
+int main() {
+    int n,s=0,t;
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++){
+        scanf("%d",&t);
+        s+=t;
+    }
+    printf("%.8lf\n",1.0*s/n);
+    return 0;
+}

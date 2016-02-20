@@ -1,0 +1,58 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2068                   *
+*      VjudgeProblemID:23608               *
+*      SubmitTime:2015/8/14 15:04:04       *
+*      SubmitType:C++                      *
+*      Memory:1620KB                       *
+*      CodeLen:854B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 28 + 5;
+
+LL F[MX];
+LL C[MX][MX];
+
+int main() {
+    F[0] = 1; F[1] = 0; F[2] = 1;
+    for(int i = 3; i < MX; i++) {
+        F[i] = (F[i - 1] + F[i - 2]) * (i - 1);
+    }
+
+    C[0][0] = 1;
+    for(int i = 1; i < MX; i++) {
+        C[i][0] = C[i][i] = 1;
+        for(int j = 1; j < i; j++) {
+            C[i][j] = C[i - 1][j - 1] + C[i - 1][j];
+        }
+    }
+
+    int n;
+    while(~scanf("%d", &n), n) {
+        LL ans = 0;
+        for(int i = (n + 1) / 2; i <= n; i++) {
+            ans += C[n][i] * F[n - i];
+        }
+        printf("%I64d\n", ans);
+    }
+}
+

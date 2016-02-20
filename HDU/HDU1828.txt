@@ -1,0 +1,109 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1828                   *
+*      VjudgeProblemID:14800               *
+*      SubmitTime:2015/8/11 14:29:56       *
+*      SubmitType:C++                      *
+*      Memory:2572KB                       *
+*      CodeLen:2219B                       *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 0,20004,1
+
+int const MP = 10000 + 5;
+int const MX = 2e4 + 5;
+
+int cnt[MX << 2];
+int S[MX << 2];
+
+struct Que {
+    int d;
+    int top, L, R;
+    Que() {}
+    Que(int _top, int _L, int _R, int _d) {
+        top = _top; L = _L; R = _R; d = _d;
+    }
+    bool operator<(const Que &b)const {
+        return top < b.top;
+    }
+} A[MX], B[MX];
+
+void push_up(int l, int r, int rt) {
+    if(cnt[rt]) S[rt] = r + 1 - l;
+    else if(l == r) S[rt] = 0;
+    else S[rt] = S[rt << 1] + S[rt << 1 | 1];
+}
+
+void update(int L, int R, int d, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        cnt[rt] += d;
+        push_up(l, r, rt);
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    if(L <= m) update(L, R, d, lson);
+    if(R > m) update(L, R, d, rson);
+    push_up(l, r, rt);
+}
+
+int main() {
+    int n, ansk = 0;
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%d", &n)) {
+        memset(cnt, 0, sizeof(cnt));
+        memset(S, 0, sizeof(S));
+
+        for(int i = 1; i <= n; i++) {
+            int x1, y1, x2, y2;
+            scanf("%d%d%d%d", &x1, &y1, &x2, &y2);
+            x1 += MP; y1 += MP; x2 += MP; y2 += MP;
+            A[i] = Que(y1, x1, x2, 1);
+            A[i + n] = Que(y2, x1, x2, -1);
+            B[i] = Que(x1, y1, y2, 1);
+            B[i + n] = Que(x2, y1, y2, -1);
+        }
+        sort(A + 1, A + 1 + 2 * n);
+        sort(B + 1, B + 1 + 2 * n);
+
+        int ans = 0, last = 0;
+        for(int i = 1; i <= 2 * n; i++) {
+            update(A[i].L, A[i].R - 1, A[i].d, root);
+            ans += abs(last - S[1]);
+            last = S[1];
+        }
+
+        last = 0;
+        memset(cnt, 0, sizeof(cnt));
+        memset(S, 0, sizeof(S));
+
+        for(int i = 1; i <= 2 * n; i++) {
+            update(B[i].L, B[i].R - 1, B[i].d, root);
+            ans += abs(last - S[1]);
+            last = S[1];
+        }
+
+        printf("%d\n", ans);
+    }
+    return 0;
+}

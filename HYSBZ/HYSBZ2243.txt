@@ -1,0 +1,219 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HYSBZ2243                 *
+*      VjudgeProblemID:38096               *
+*      SubmitTime:2015/12/3 14:28:19       *
+*      SubmitType:C++                      *
+*      Memory:18952KB                      *
+*      CodeLen:5470B                       *
+*      RunTime:5476ms                      *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+
+const int MX = 1e5 + 5;
+const int INF = 0x3f3f3f3f;
+
+struct Edge {
+    int v, nxt;
+} E[MX << 2];
+int Head[MX], h_r;
+void edge_init() {
+    h_r = 0;
+    memset(Head, -1, sizeof(Head));
+}
+void edge_add(int u, int v) {
+    E[h_r].v = v;
+    E[h_r].nxt = Head[u];
+    Head[u] = h_r++;
+}
+
+
+int S[MX << 2], col[MX << 2], SL[MX << 2], SR[MX << 2], A[MX], B[MX];
+void push_up(int rt, int m) {
+    S[rt] = S[rt << 1] + S[rt << 1 | 1];
+    SL[rt] = SL[rt << 1]; SR[rt] = SR[rt << 1 | 1];
+    if(SR[rt << 1] == SL[rt << 1 | 1]) S[rt]--;
+}
+void push_down(int rt) {
+    if(col[rt] != -1) {
+        col[rt << 1] = col[rt << 1 | 1] = col[rt];
+        SL[rt << 1] = SR[rt << 1] = col[rt];
+        SL[rt << 1 | 1] = SR[rt << 1 | 1] = col[rt];
+        S[rt << 1] = S[rt << 1 | 1] = 1;
+        col[rt] = -1;
+    }
+}
+void build(int l, int r, int rt) {
+    col[rt] = -1;
+    if(l == r) {
+        S[rt] = 1;
+        SL[rt] = SR[rt] = A[l];
+        return;
+    }
+    int m = (l + r) >> 1;
+    build(lson);
+    build(rson);
+    push_up(rt, m);
+}
+void update(int L, int R, int x, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        S[rt] = 1;
+        SL[rt] = SR[rt] = col[rt] = x;
+        return;
+    }
+    push_down(rt);
+    int m = (l + r) >> 1;
+    if(L <= m) update(L, R, x, lson);
+    if(R > m) update(L, R, x, rson);
+    push_up(rt, m);
+}
+int query(int L, int R, int l, int r, int rt, int &la, int &ra) {
+    if(L <= l && r <= R) {
+        la = SL[rt]; ra = SR[rt];
+        return S[rt];
+    }
+    push_down(rt);
+    int m = (l + r) >> 1, ret = 0;
+    int lla = -1, lra = -1, rla = -1, rra = -1;
+    if(L <= m) ret += query(L, R, lson, lla, lra);
+    if(R > m) ret += query(L, R, rson, rla, rra);
+    if(L <= m && m < R && SR[rt << 1] == SL[rt << 1 | 1]) ret--;
+    la = lla != -1 ? lla : rla;
+    ra = rra != -1 ? rra : lra;
+    return ret;
+}
+
+
+int fa[MX], top[MX], siz[MX], son[MX], dep[MX], id[MX], rear;
+/*fa父节点，top重链开头起点，siz子树大小，son重儿子，dep深度，id新编号*/
+
+/*第一次DFS找到重边，并维护好siz,son,fa,dep*/
+void DFS1(int u, int f, int d) {
+    fa[u] = f; dep[u] = d;
+    son[u] = 0; siz[u] = 1;
+    for(int i = Head[u]; ~i; i = E[i].nxt) {
+        int v = E[i].v;
+        if(v == f) continue;
+        DFS1(v, u, d + 1);
+        siz[u] += siz[v];
+        if(siz[son[u]] < siz[v]) {
+            son[u] = v;
+        }
+    }
+}
+/*将重边编号好，维护id*/
+void DFS2(int u, int tp) {
+    top[u] = tp;
+    id[u] = ++rear;
+    if(son[u]) DFS2(son[u], tp);
+    for(int i = Head[u]; ~i; i = E[i].nxt) {
+        int v = E[i].v;
+        if(v == fa[u] || v == son[u]) continue;
+        DFS2(v, v);
+    }
+}
+/*用来给点编号，以及建立线段树，要用id编号建树*/
+void HLD_presolve() {
+    rear = 0;
+    DFS1(1, 0, 1);
+    DFS2(1, 1);
+    for(int i = 1; i <= rear; i++) {
+        A[id[i]] = B[i];
+    }
+    build(1, rear, 1);
+}
+/*修改，要注意使用id编号修改*/
+void HLD_update(int u, int v, int d) {
+    int tp1 = top[u], tp2 = top[v];
+    while(tp1 != tp2) {
+        if(dep[tp1] < dep[tp2]) {
+            swap(u, v);
+            swap(tp1, tp2);
+        }
+        update(id[tp1], id[u], d, 1, rear, 1);
+        u = fa[tp1]; tp1 = top[u];
+    }
+    if(dep[u] > dep[v]) swap(u, v);
+    update(id[u], id[v], d, 1, rear, 1);
+}
+
+int HLD_query(int u, int v) {
+    int tp1 = top[u], tp2 = top[v], ret = 0;
+    int lastla[2] = { -1, -1}, lastra[2] = { -1, -1}, la[2] = { -1, -1}, ra[2] = { -1, -1};
+    while(tp1 != tp2) {
+        if(dep[tp1] >= dep[tp2]) {
+            ret += query(id[tp1], id[u], 1, rear, 1, la[0], ra[0]);
+            if(ra[0] == lastla[0]) ret--;
+            lastla[0] = la[0]; lastra[0] = ra[0];
+            u = fa[tp1]; tp1 = top[u];
+        } else {
+            ret += query(id[tp2], id[v], 1, rear, 1, la[1], ra[1]);
+            if(ra[1] == lastla[1]) ret--;
+            lastla[1] = la[1]; lastra[1] = ra[1];
+            v = fa[tp2]; tp2 = top[v];
+        }
+    }
+    if(dep[u] <= dep[v]) {
+        ret += query(id[u], id[v], 1, rear, 1, la[1], ra[1]);
+        if(ra[1] == lastla[1]) ret--;
+        if(la[1] == lastla[0]) ret--;
+    } else {
+        ret += query(id[v], id[u], 1, rear, 1, la[0], ra[0]);
+        if(ra[0] == lastla[0]) ret--;
+        if(la[0] == lastla[1]) ret--;
+    }
+    return ret;
+}
+
+int main() {
+    int n, m; //FIN;
+    while(~scanf("%d%d", &n, &m)) {
+        edge_init();
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &B[i]);
+        }
+        for(int i = 1; i <= n - 1; i++) {
+            int u, v;
+            scanf("%d%d", &u, &v);
+            edge_add(u, v);
+            edge_add(v, u);
+        }
+        HLD_presolve();
+
+        while(m--) {
+            char op[10];
+            int a, b, c;
+            scanf("%s", op);
+            if(op[0] == 'Q') {
+                scanf("%d%d", &a, &b);
+                printf("%d\n", HLD_query(a, b));
+            } else {
+                scanf("%d%d%d", &a, &b, &c);
+                HLD_update(a, b, c);
+            }
+        }
+    }
+    return 0;
+}

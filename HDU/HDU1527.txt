@@ -1,0 +1,43 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1527                   *
+*      VjudgeProblemID:11244               *
+*      SubmitTime:2015/12/6 20:20:21       *
+*      SubmitType:G++                      *
+*      Memory:1564KB                       *
+*      CodeLen:676B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+int main() {
+    int a, b; //FIN;
+    while(~scanf("%d%d", &a, &b)) {
+        if(a >= b) swap(a, b);
+        int k = b - a;
+        int x = (sqrt(5.0) + 1) / 2 * k, y = x + k;
+        if(a == x && b == y) printf("0\n");
+        else printf("1\n");
+    }
+    return 0;
+}

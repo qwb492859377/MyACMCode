@@ -1,0 +1,133 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1077                   *
+*      VjudgeProblemID:16377               *
+*      SubmitTime:2014/12/16 16:58:01      *
+*      SubmitType:C++                      *
+*      Memory:26592KB                      *
+*      CodeLen:2501B                       *
+*      RunTime:938ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+const int hashsize=5000007;
+const int maxn=562890;
+int head[hashsize];
+int next[maxn],op[maxn],last[maxn],rear;
+LL sta[maxn];
+char dic[]={'d','r','u','l'};
+int di[]={-1,0,1,0};
+int dj[]={0,-1,0,1};
+
+bool hash_add(LL &w){
+    int h=w%hashsize;
+    for(int j=head[h];j!=0;j=next[j]){
+        if(sta[j]==w){
+            return false;
+        }
+    }
+    next[rear]=head[h];
+    head[h]=rear;
+    return true;
+}
+int hash_find(LL &w){
+    int h=w%hashsize;
+    for(int j=head[h];j!=0;j=next[j]){
+        if(sta[j]==w){
+            return j;
+        }
+    }
+    return -1;
+}
+LL qpow(int a,int b){
+    if(b==1){
+        return a;
+    }else if(b==0){
+        return 1;
+    }
+    LL ans=qpow(a,b/2);
+    if(b%2){
+        return ans*ans*a;
+    }
+    return ans*ans;
+}
+bool opera(int i,int k,LL &te){
+    int x,y,newx,newy,t,z,newz;
+    LL w=sta[i];
+    for(int j=8;j>=0;j--){
+        if(w%10==0){
+            z=j;
+            x=j/3;y=j%3;
+            newx=x+di[k];
+            newy=y+dj[k];
+            break;
+        }
+        w/=10;
+    }
+    if(newx<0||newx>2||newy<0||newy>2){
+        return false;
+    }
+    newz=3*newx+newy;
+    t=(sta[i]/qpow(10,8-newz))%10;//printf("%d",t);
+    te=sta[i]-t*qpow(10,8-newz)+t*qpow(10,8-z);
+    return true;
+}
+void print_ans(int i){
+    printf("%c",dic[op[i]]);
+    if(last[i]){
+        print_ans(last[i]);
+    }
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    rear=0;
+    LL temp=123456780;
+
+    memset(last,0,sizeof(last));
+    memset(head,0,sizeof(head));
+    memset(next,0,sizeof(next));
+
+    queue<int>work;
+    sta[rear]=temp;
+    hash_add(temp);
+    work.push(rear++);
+    while(!work.empty()){
+        int t=work.front();
+        work.pop();
+        for(int k=3;k>=0;k--){
+            LL tt;
+            if(opera(t,k,tt)&&hash_add(tt)){
+                last[rear]=t;op[rear]=k;
+                sta[rear]=tt;
+                work.push(rear++);
+            }
+        }
+    }
+
+    char s[100],w[9];
+    while(gets(s)){
+        temp=0;
+        sscanf(s,"%c %c %c %c %c %c %c %c %c",&w[0],&w[1],&w[2],&w[3],&w[4],&w[5],&w[6],&w[7],&w[8]);
+        for(int i=0;i<9;i++){
+            temp=temp*10+(w[i]=='x'?0:w[i]-'0');
+        }
+        int j=hash_find(temp);
+        if(j!=-1){
+            print_ans(j);
+            printf("\n");
+        }else{
+            printf("unsolvable\n");
+        }
+    }
+    return 0;
+}

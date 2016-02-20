@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces292A            *
+*      VjudgeProblemID:38275               *
+*      SubmitTime:2015/12/22 19:10:19      *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:8KB                          *
+*      CodeLen:849B                        *
+*      RunTime:30ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e3 + 5;
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        int now = 0, last = 0, ans = 0;
+        for(int i = 1; i <= n; i++) {
+            int t, c;
+            scanf("%d%d", &t, &c);
+            now = max(now - t + last, 0);
+            now += c;
+            ans = max(ans, now);
+            last = t;
+        }
+        printf("%d %d\n", last + now, ans);
+    }
+    return 0;
+}

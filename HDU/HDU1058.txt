@@ -1,0 +1,65 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1058                   *
+*      VjudgeProblemID:17350               *
+*      SubmitTime:2015/1/23 20:38:05       *
+*      SubmitType:C++                      *
+*      Memory:1132KB                       *
+*      CodeLen:909B                        *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+const LL INF=0x7FFFFFFF;
+
+char str[4][5]={"th","st","nd","rd"};
+
+int main(){
+    int w[]={2,3,5,7};
+    int s[10000]={1};
+
+    int lr=1,nr=1;
+    for(int k=0;k<4;k++){
+        for(int i=0;i<lr;i++){
+            LL temp=w[k];
+            while(temp*s[i]<INF){
+                s[nr++]=temp*s[i];
+                temp*=w[k];
+            }
+        }
+        lr=nr;
+    }
+    sort(s,s+lr);
+
+    int n;
+    while(~scanf("%d",&n)&&n){
+        int ans=s[n-1],p;
+
+        int mod=n%100;
+        if(10<=mod&&mod<=20){
+            p=0;
+        }else{
+            mod=mod%10;
+            if(mod==1||mod==2||mod==3){
+                p=mod;
+            }else{
+                p=0;
+            }
+        }
+
+        printf("The %d%s humble number is %d.\n",n,str[p],ans);
+    }
+
+    return 0;
+}
+d%s humble number is %d.\n",n,tip[t],s[n]);
+    }
+    return 0;
+}

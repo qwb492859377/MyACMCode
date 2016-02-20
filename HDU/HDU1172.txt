@@ -1,0 +1,108 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1172                   *
+*      VjudgeProblemID:17473               *
+*      SubmitTime:2015/7/24 23:53:03       *
+*      SubmitType:C++                      *
+*      Memory:1612KB                       *
+*      CodeLen:1595B                       *
+*      RunTime:46ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1000 + 5;
+const int INF = 0x3f3f3f3f;
+#define For(i,x,y) for(int i=x;i<=y;i++)
+#define mem(x,y) memset(x,y,sizeof(x))
+/***************************************/
+
+int A[MX], B[MX], C[MX];
+int vis1[100], vis2[100];
+
+void get(int x, int w[]) {
+    For(i, 0, 3) {
+        w[i] = x % 10;
+        x /= 10;
+    }
+}
+
+bool check(int x, int n) {
+    int a[4], s[4];
+    get(x, a);
+
+    For(i, 0, 3) vis1[a[i]]++;
+
+    For(id, 1, n) {
+        get(A[id], s);
+
+        For(i, 0, 3) vis2[s[i]]++;
+
+        int c1 = 0, c2 = 0;
+        For(i, 0, 9) {
+            if(vis1[i] && vis2[i]) {
+                c1 += min(vis1[i], vis2[i]);
+            }
+        }
+
+        For(i, 0, 3) c2 += (a[i] == s[i]);
+        For(i, 0, 3) vis2[s[i]] = 0;
+
+        if(B[id] != c1 || C[id] != c2) {
+            For(i, 0, 3) vis1[a[i]] = 0;
+            return false;
+        }
+    }
+    For(i, 0, 3) vis1[a[i]] = 0;
+    return true;
+}
+
+int main() {
+    int n;
+    while(~scanf("%d", &n), n) {
+        mem(vis1, 0);
+        mem(vis2, 0);
+
+        For(i, 1, n) {
+            scanf("%d%d%d", &A[i], &B[i], &C[i]);
+        }
+
+        int cnt = 0, ans;
+        For(i, 1000, 9999) {
+            if(check(i, n)) {
+                cnt++;
+                ans = i;
+            }
+        }
+
+        if(cnt == 1) {
+            printf("%d\n", ans);
+        } else {
+            printf("Not sure\n");
+        }
+    }
+    return 0;
+}
+
+            }
+        }
+
+        if(cnt == 1) {
+            printf("%d\n", ans);
+        } else {
+            printf("Not sure\n");
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,126 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:UESTC1221                 *
+*      VjudgeProblemID:266695              *
+*      SubmitTime:2015/11/11 2:00:29       *
+*      SubmitType:C++                      *
+*      Memory:968KB                        *
+*      CodeLen:2308B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 10 + 5;
+
+int S[MX][MX], vis[MX][MX];
+int dist[][2] = {{0, 1}, {0, -1}, {1, 0}, { -1, 0}};
+
+bool to_dot(int x, int y, int p, bool del, bool first) {
+    if(first) memset(vis, 0, sizeof(vis));
+
+    vis[x][y] = 1;
+    if(del) S[x][y] = 0;
+    for(int k = 0; k < 4; k++) {
+        int nx = x + dist[k][0], ny = y + dist[k][1];
+        if(nx < 1 || nx > 9 || ny < 1 || ny > 9 || vis[nx][ny]) continue;
+
+        if(S[nx][ny] == 0) return true;
+        if(S[nx][ny] == p && to_dot(nx, ny, p, del, false)) return true;
+    }
+    return false;
+}
+
+bool solve() {
+    for(int i = 1; i <= 9; i++) {
+        for(int j = 1; j <= 9; j++) {
+            if(S[i][j] == 0) {
+                S[i][j] = 1;
+                for(int k = 0; k < 4; k++) {
+                    int nx = i + dist[k][0], ny = j + dist[k][1];
+                    if(nx < 1 || nx > 9 || ny < 1 || ny > 9) continue;
+                    if(S[nx][ny] == 2 && !to_dot(nx, ny, 2, false, true)) return true;
+                }
+                S[i][j] = 0;
+            }
+        }
+    }
+    return false;
+}
+
+void init() {
+    for(int i = 1; i <= 9; i++) {
+        for(int j = 1; j <= 9; j++) {
+            if(S[i][j] == 1) {
+                if(!to_dot(i, j, 1, false, true)) to_dot(i, j, 1, true, true);
+            }
+        }
+    }
+}
+
+int main() {
+    int T, ansk = 0; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        for(int i = 1; i <= 9; i++) {
+            char L[100];
+            scanf("%s", L + 1);
+            for(int j = 1; j <= 9; j++) {
+                if(L[j] == '.') S[i][j] = 0;
+                else if(L[j] == 'x') S[i][j] = 1;
+                else S[i][j] = 2;
+            }
+        }
+
+        init();
+        bool ret = solve();
+        if(ret) printf("Case #%d: Can kill in one move!!!\n", ++ansk);
+        else printf("Case #%d: Can not kill in one move!!!\n", ++ansk);
+    }
+    return 0;
+}
+ = 0; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        for(int i = 1; i <= 9; i++) {
+            char L[100];
+            scanf("%s", L + 1);
+            for(int j = 1; j <= 9; j++) {
+                if(L[j] == '.') S[i][j] = 0;
+                else if(L[j] == 'x') S[i][j] = 1;
+                else S[i][j] = 2;
+            }
+        }
+
+        init();
+        /*for(int i = 1; i <= 9; i++) {
+            for(int j = 1; j <= 9; j++) fuck(S[i][j]);
+            printf("\n");
+        }*/
+
+        bool ret = solve();
+        if(ret) printf("Case #%d: Can kill in one move!!!\n", ++ansk);
+        else printf("Case #%d: Can not kill in one move!!!\n", ++ansk);
+    }
+    return 0;
+}

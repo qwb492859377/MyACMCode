@@ -1,0 +1,65 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2955                   *
+*      VjudgeProblemID:17681               *
+*      SubmitTime:2015/1/25 19:00:58       *
+*      SubmitType:C++                      *
+*      Memory:1280KB                       *
+*      CodeLen:1013B                       *
+*      RunTime:156ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int maxn=300+5;
+const double exps=1e-8;
+
+int M[maxn],n;
+double dp[20000],P[maxn],SP;
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        memset(dp,0,sizeof(dp));
+
+        int sum=0;
+        scanf("%lf%d",&SP,&n);
+
+        for(int i=1;i<=n;i++){
+            scanf("%d%lf",&M[i],&P[i]);
+            sum+=M[i];
+        }
+
+        for(int i=1;i<=sum;i++){
+            dp[i]=2.0;
+        }
+
+        dp[0]=0.0;
+        for(int i=1;i<=n;i++){
+            for(int j=sum;j>=0;j--){
+                if(dp[j]<=1){
+                    dp[j+M[i]]=min(dp[j+M[i]],dp[j]+(1.0-dp[j])*P[i]);
+                }
+            }
+        }
+
+        int ans=0;
+        for(int i=sum;i>=0;i--){
+            if(dp[i]>=0&&dp[i]<=SP){
+                ans=i;
+                break;
+            }
+        }
+        printf("%d\n",ans);
+    }
+    return 0;
+}

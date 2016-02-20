@@ -1,0 +1,78 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1453                  *
+*      VjudgeProblemID:46171               *
+*      SubmitTime:2015/8/21 14:21:13       *
+*      SubmitType:G++                      *
+*      Memory:224KB                        *
+*      CodeLen:1547B                       *
+*      RunTime:953ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<sstream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<LL, LL> PII;
+
+const int MX = 100 + 5;
+const double exps = 1e-8;
+#define X first
+#define Y second
+
+int n;
+PII P[MX];
+
+double dist(PII a, PII b) {
+    return sqrt((double)(a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y));
+}
+
+int BS(PII x) {
+    int l = 1, r = n, m;
+    while(l <= r) {
+        m = (l + r) >> 1;
+        if(P[m] == x) return m;
+        if(P[m] < x)  l = m + 1;
+        else        r = m - 1;
+    }
+    return -1;
+}
+
+int main() {//FIN;
+    while(~scanf("%d", &n)) {
+        for(int i = 1; i <= n; i++) {
+            scanf("%I64d%I64d", &P[i].X, &P[i].Y);
+        }
+        sort(P + 1, P + 1 + n);
+
+        double ans = 0;
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= n; j++) {
+                for(int k = 1; k <= n; k++) {
+                    if((P[i].X - P[j].X) * (P[k].X - P[j].X) + (P[i].Y - P[j].Y) * (P[k].Y - P[j].Y) == 0) {
+                        PII Q(P[i].X + P[k].X - P[j].X, P[i].Y + P[k].Y - P[j].Y);
+                        if(BS(Q) != -1) ans = max(ans, dist(P[i], P[j]) * dist(P[j], P[k]));
+                    }
+                }
+            }
+        }
+
+        if(fabs(ans) < exps) printf("No Eyes\n");
+        else printf("%.4f\n", ans);
+    }
+    return 0;
+}

@@ -1,0 +1,82 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1202                   *
+*      VjudgeProblemID:44770               *
+*      SubmitTime:2015/11/2 15:57:08       *
+*      SubmitType:C                        *
+*      Memory:964KB                        *
+*      CodeLen:785B                        *
+*      RunTime:156ms                       *
+********************************************
+*/
+#include<stdio.h>
+
+int main() {
+    int T, n;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d", &n);
+
+        int a = 0, b = 0, c = 0, t, i;
+        int lasta, lastb, lastc;
+
+        for(i = 1; i <= n; i++) {
+            scanf("%d", &t);
+            if(t == 0) a++, lasta = i;
+            if(t == 2) b++, lastb = i;
+            if(t == 5) c++, lastc = i;
+        }//石头 剪刀 布
+
+        if(a == 0 && b == 1 && c == n - 1) {
+            printf("%d\n", lastb);
+            continue;
+        }
+
+        if(b == 0 && a == n - 1 && c == 1) {
+            printf("%d\n", lastc);
+            continue;
+        }
+
+        if(c == 0 && a == 1 && b == n - 1) {
+            printf("%d\n", lasta);
+            continue;
+        }
+
+        printf("No winner\n");
+    }
+    return 0;
+}
+i;
+        }//石头 剪刀 布
+
+        if(a != 0 && b != 0 && c != 0) {
+            printf("No winner\n");
+            continue;
+        }
+
+        if(a == 0) {
+            if(b == 1 && c == n - 1) {
+                printf("%d\n", lastb);
+                continue;
+            }
+        }
+
+        if(b == 0) {
+            if(a == n - 1 && c == 1) {
+                printf("%d\n", lastc);
+                continue;
+            }
+        }
+
+        if(c == 0) {
+            if(a == 1 && b == n - 1) {
+                printf("%d\n", lasta);
+                continue;
+            }
+        }
+
+        printf("No winner\n");
+    }
+    return 0;
+}

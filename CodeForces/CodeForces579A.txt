@@ -1,0 +1,25 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces579A            *
+*      VjudgeProblemID:111967              *
+*      SubmitTime:2015/11/8 11:17:57       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:0KB                          *
+*      CodeLen:225B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<stdio.h>
+
+int main() {
+    int n;
+    while(~scanf("%d", &n)) {
+        int ans = 0, i;
+        for(i = 0; i < 32; i++) {
+            ans += (n >> i & 1);
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

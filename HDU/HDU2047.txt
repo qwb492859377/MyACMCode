@@ -1,0 +1,113 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2047                   *
+*      VjudgeProblemID:17492               *
+*      SubmitTime:2015/7/23 10:18:34       *
+*      SubmitType:C++                      *
+*      Memory:1604KB                       *
+*      CodeLen:2059B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int matMX = 6;
+const int MX = 200000 + 5;
+const int INF = 0x3f3f3f3f;
+const LL MOD = 1e18 + 7;
+
+LL multi(LL a, LL b, LL mod) {
+    LL ret = 0;
+    while(b) {
+        if(b & 1) ret = (ret + a) % mod;
+        a = (a + a) % mod;
+        b >>= 1;
+    }
+    return ret;
+}
+
+LL power(LL a, LL b, LL mod) {
+    LL ret = 1;
+    while(b) {
+        if(b & 1) ret = multi(ret, a, mod);
+        a = multi(a, a, mod);
+        b >>= 1;
+    }
+    return ret;
+}
+
+struct Mat {
+    int m, n;
+    LL S[matMX][matMX];
+    Mat(int a, int b) {
+        m = a;
+        n = b;
+        memset(S, 0, sizeof(S));
+    }
+    Mat(int a, int b, LL w[][matMX]) {
+        m = a;
+        n = b;
+        for(int i = 1; i <= m; i++) {
+            for(int j = 1; j <= n; j++) {
+                S[i][j] = w[i - 1][j - 1];
+            }
+        }
+    }
+};
+
+Mat mat_mul(Mat A, Mat B , LL mod) {
+    Mat C(A.m, B.n);
+    for(int i = 1; i <= A.m; i++) {
+        for(int j = 1; j <= B.n; j++) {
+            for(int k = 1; k <= A.n; k++) {
+                C.S[i][j] = (C.S[i][j] + multi(A.S[i][k] , B.S[k][j], mod)) % mod;
+            }
+        }
+    }
+    return C;
+}
+
+Mat Blank(int m, int n) {
+    Mat ret(m, n);
+    for(int i = 1; i <= m; i++) {
+        ret.S[i][i] = 1;
+    }
+    return ret;
+}
+
+Mat mat_pow(Mat A, LL b , LL mod) {
+    Mat ret = Blank(A.m, A.n);
+    while(b) {
+        if(b & 1) ret = mat_mul(ret, A, mod);
+        A = mat_mul(A, A, mod);
+        b >>= 1;
+    }
+    return ret;
+}
+
+int main() {
+    int n;
+    while(~scanf("%d", &n)) {
+        LL table1[][matMX] = {{0, 0, 1, 0}, {0, 0, 0, 1}, {0, 0, 0, 1}, {0, 0, 2, 2}};
+        LL table2[][matMX] = {{1}, {2}, {2}, {6}};
+
+        Mat s(4, 4, table1);
+        Mat ans(4, 1, table2);
+
+        Mat res = mat_mul(mat_pow(s, n - 1, MOD), ans, MOD);
+        printf("%I64d\n", (res.S[1][1] + res.S[2][1]) % MOD);
+    }
+
+    return 0;
+}

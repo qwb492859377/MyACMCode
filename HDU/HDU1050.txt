@@ -1,0 +1,65 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1050                   *
+*      VjudgeProblemID:19566               *
+*      SubmitTime:2015/7/27 23:33:36       *
+*      SubmitType:C++                      *
+*      Memory:1620KB                       *
+*      CodeLen:1149B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e3 + 5;
+const int INF = 0x3f3f3f3f;
+
+int IN[MX], OUT[MX];
+
+//，，这数据吓哭我了
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int T;
+    scanf("%d", &T);
+    while(T--) {
+        int n;
+        scanf("%d", &n);
+
+        for(int i = 1; i <= n; i++) {
+            int L, R;
+            scanf("%d%d", &L, &R);
+            IN[i] = (L + 1) / 2;
+            OUT[i] = (R + 1) / 2;
+            if(IN[i] > OUT[i]) swap(IN[i], OUT[i]);
+        }
+        sort(IN + 1, IN + 1 + n);
+        sort(OUT + 1, OUT + 1 + n);
+
+        int c1 = 1, c2 = 1, ans = 0, cnt = 0;
+        for(int i = 1; i <= 200; i++) {
+            while(c1 <= n && IN[c1] == i) {
+                c1++;
+                cnt++;
+            }
+            ans = max(ans, cnt);
+            while(c2 <= n && OUT[c2] == i) {
+                c2++;
+                cnt--;
+            }
+        }
+        printf("%d\n", ans * 10);
+    }
+    return 0;
+}

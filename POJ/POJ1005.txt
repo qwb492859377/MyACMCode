@@ -1,0 +1,31 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1005                   *
+*      VjudgeProblemID:10778               *
+*      SubmitTime:2015/1/14 19:55:50       *
+*      SubmitType:C++                      *
+*      Memory:192KB                        *
+*      CodeLen:423B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const double exps=1e-8;
+
+int main(){
+    int T,ansk=0;
+    scanf("%d",&T);
+    while(T--){
+        double x,y,d;
+        scanf("%lf%lf",&x,&y);
+        printf("Property %d: This property will begin eroding in year %d.\n",++ansk,int((x*x+y*y)*3.1415926/100+1));
+    }
+    printf("END OF OUTPUT.");
+    return 0;
+}

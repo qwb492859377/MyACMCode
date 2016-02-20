@@ -1,0 +1,70 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1241                   *
+*      VjudgeProblemID:15719               *
+*      SubmitTime:2015/12/4 20:52:42       *
+*      SubmitType:G++                      *
+*      Memory:1712KB                       *
+*      CodeLen:1343B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<algorithm>
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 100 + 5;
+
+int n, m, vis[MX][MX];
+char S[MX][MX];
+
+bool DFS(int x, int y) {
+    /*(x,y)这个点是否是@，且没有被访问过
+    如果是，就把它以及他周围的标记为访问过
+    */
+    if(S[x][y] != '@' || vis[x][y]) return false;
+    vis[x][y] = 1;
+    for(int i = -1; i <= 1; i++) {
+        for(int j = -1; j <= 1; j++) {
+            int nx = x + i, ny = j + y;
+            if(nx == x && ny == y) continue;
+            if(nx < 1 || nx > n || ny < 1 || ny > m) continue;
+            DFS(nx, ny);
+        }
+    }
+    return true;
+}
+
+int main() {
+    //freopen("input.txt","r",stdin);
+    while(~scanf("%d%d", &n, &m), n + m) {
+        memset(vis, 0, sizeof(vis));
+        for(int i = 1; i <= n; i++) {
+            scanf("%s", S[i] + 1);
+        }
+
+        int ans = 0;
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= m; j++) {
+                if(DFS(i, j)) ans++;
+            }
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

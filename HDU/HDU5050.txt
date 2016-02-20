@@ -1,0 +1,41 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU5050                   *
+*      VjudgeProblemID:53585               *
+*      SubmitTime:2015/9/9 12:53:08        *
+*      SubmitType:Java                     *
+*      Memory:14016KB                      *
+*      CodeLen:729B                        *
+*      RunTime:405ms                       *
+********************************************
+*/
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] argv) {
+		Scanner cin = new Scanner(System.in);
+		int T = cin.nextInt();
+
+		BigInteger w, h;
+		for (int ansk = 1; ansk <= T; ansk++) {
+			w = BigInteger.ZERO;
+			h = BigInteger.ZERO;
+
+			String s = cin.next();
+			char[] sb = s.toCharArray();
+			for (int i = 0; i < sb.length; i++) {
+				w = w.multiply(BigInteger.valueOf(2)).add(BigInteger.valueOf(sb[i] - '0'));
+			}
+
+			s = cin.next();
+			sb = s.toCharArray();
+			for (int i = 0; i < sb.length; i++) {
+				h = h.multiply(BigInteger.valueOf(2)).add(BigInteger.valueOf(sb[i] - '0'));
+			}
+
+			System.out.println("Case #" + ansk + ": " + w.gcd(h).toString(2));
+		}
+	}
+}

@@ -1,0 +1,71 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces300A            *
+*      VjudgeProblemID:38836               *
+*      SubmitTime:2015/8/12 21:52:16       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:4KB                          *
+*      CodeLen:1286B                       *
+*      RunTime:30ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e5 + 5;
+
+int cur[3];
+vector<int>S[3];
+vector<int>ans[3];
+
+int main() {
+    int n, t;
+    scanf("%d", &n);
+    for(int i = 1; i <= n; i++) {
+        scanf("%d", &t);
+        if(t < 0) S[0].push_back(t);
+        else if(t == 0) S[1].push_back(t);
+        else S[2].push_back(t);
+    }
+
+    ans[0].push_back(S[0][cur[0]++]);
+    if(S[0].size() >= 3) {
+        ans[1].push_back(S[0][cur[0]++]);
+        ans[1].push_back(S[0][cur[0]++]);
+    } else {
+        ans[1].push_back(S[2][cur[2]++]);
+    }
+
+    for(int i = cur[0]; i < S[0].size(); i++) {
+        ans[2].push_back(S[0][i]);
+    }
+    for(int i = cur[1]; i < S[1].size(); i++) {
+        ans[2].push_back(S[1][i]);
+    }
+    for(int i = cur[2]; i < S[2].size(); i++) {
+        ans[2].push_back(S[2][i]);
+    }
+
+    for(int j = 0; j <= 2; j++) {
+        printf("%d ", ans[j].size());
+        for(int i = 0; i < ans[j].size(); i++) {
+            printf("%d%c", ans[j][i], i == ans[j].size() - 1 ? '\n' : ' ');
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,72 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2348                   *
+*      VjudgeProblemID:17245               *
+*      SubmitTime:2015/12/6 23:24:51       *
+*      SubmitType:G++                      *
+*      Memory:684KB                        *
+*      CodeLen:1302B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e2 + 5;
+/*
+µÝÍÆ´ò±í
+int f[MX][MX];
+
+int main() {
+    FOUT;
+    for(int a = 0; a < MX; a++) {
+        for(int b = 0; b < MX; b++) {
+            if(!a || !b) {
+                f[a][b] = 0;
+                continue;
+            }
+            if(a > b) continue;
+
+            f[a][b] = 0;
+            for(int k = 1; k * a <= b; k++) {
+                int nx = a, ny = b - k * a;
+                if(nx > ny) swap(nx, ny);
+                if(!f[nx][ny]) f[a][b] = 1;
+            }
+            if(!f[a][b]) printf("[%d,%d]\n", a, b);
+        }
+    }
+    return 0;
+}
+*/
+const double p = (sqrt(5.0) - 1) / 2;
+
+int main() {
+    LL a, b; //FIN;
+    while(~scanf("%I64d%I64d", &a, &b), a + b) {
+        if(a > b) swap(a, b);
+        LL k = p * a;
+        if(a < b && b <= a + k) printf("Ollie wins\n");
+        else printf("Stan wins\n");
+    }
+    return 0;
+}

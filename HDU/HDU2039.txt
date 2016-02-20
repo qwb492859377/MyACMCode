@@ -1,0 +1,27 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2039                   *
+*      VjudgeProblemID:32836               *
+*      SubmitTime:2015/11/2 12:57:49       *
+*      SubmitType:G++                      *
+*      Memory:1428KB                       *
+*      CodeLen:333B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+#define FIN freopen("input.txt","r",stdin)
+typedef long long LL;
+
+int main() {
+    int T; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        double a, b, c;
+        scanf("%lf%lf%lf", &a, &b, &c);
+        if(a + b > c && a + c > b && b + c > a) printf("YES\n");
+        else printf("NO\n");
+    }
+    return 0;
+}

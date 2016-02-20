@@ -1,0 +1,86 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4869                   *
+*      VjudgeProblemID:51995               *
+*      SubmitTime:2015/7/18 11:23:11       *
+*      SubmitType:C++                      *
+*      Memory:3172KB                       *
+*      CodeLen:1492B                       *
+*      RunTime:156ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+
+const int MX = 100000 + 5;
+const int INF = 0x3f3f3f3f;
+const LL mod = 1000000009;
+
+LL A[MX], invA[MX];
+
+LL power(LL a, LL b) {
+    LL ret = 1;
+    while(b) {
+        if(b & 1) ret = ret * a % mod;
+        a = a * a % mod;
+        b >>= 1;
+    }
+    return ret;
+}
+
+void init() {
+    A[0] = 1;
+    for(int i = 1; i < MX; i++) {
+        A[i] = (A[i - 1] * i) % mod;
+    }
+    invA[MX - 1] = power(A[MX - 1], mod - 2);
+    for(int i = MX - 2; i >= 0; i--) {
+        invA[i] = invA[i + 1] * (i + 1) % mod;
+    }
+}
+
+LL C(int n, int m) {
+    if(n < 0 || m < 0 || m > n) return 0;
+    if(m == 0 || m == n)    return 1;
+    return A[n] * invA[n - m] % mod * invA[m] % mod;
+}
+
+int main() {
+    int n, m;
+
+    init();
+    while(~scanf("%d%d", &m, &n)) {
+        int L = 0, R = 0, Lt, Rt, t;
+        for(int i = 1; i <= m; i++) {
+            scanf("%d", &t);
+
+            if(L >= t) Lt = L - t;
+            else if(t <= R) Lt = (R - t) % 2;
+            else Lt = t - R;
+
+            if(n - R >= t) Rt = R + t;
+            else if(t <= n - L) Rt = n - (n - L - t) % 2;
+            else Rt = 2 * n - t - L;
+
+            L = Lt;
+            R = Rt;
+        }
+
+        LL ans = 0;
+        for(int i = L; i <= R; i += 2) {
+            ans += C(n, i);
+            ans %= mod;
+        }
+        printf("%I64d\n", ans);
+    }
+    return 0;
+}

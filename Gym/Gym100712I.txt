@@ -1,0 +1,89 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:Gym100712I                *
+*      VjudgeProblemID:195716              *
+*      SubmitTime:2015/7/19 14:20:42       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:0KB                          *
+*      CodeLen:1292B                       *
+*      RunTime:78ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1000 + 5;
+const int INF = 0x3f3f3f3f;
+
+int N;
+int dir[MX];
+int f[MX];
+
+bool calc(int K,int p){
+    memset(f,0,sizeof(f));
+    int sum=0;
+    for(int i=0;i+K<=N;i++){
+        if((dir[i]+sum)%10!=p){
+            f[i]=((p-(dir[i]+sum))%10+10)%10;
+        }
+        sum+=f[i];
+        if(i-K+1>=0){
+            sum-=f[i-K+1];
+        }
+    }
+
+    for(int i=N-K+1;i<N;i++){
+        if((dir[i]+sum)%10!=p){
+            return false;
+        }
+        if(i-K+1>=0){
+            sum-=f[i-K+1];
+        }
+    }
+    return true;
+}
+
+void solve(){
+    int ans=1;
+    for(int k=N;k>=1;k--){
+        bool sign=false;
+        for(int p=0;p<=9;p++){
+            if(calc(k,p)){
+                ans=k;
+                sign=true;
+                break;
+            }
+        }
+        if(sign) break;
+    }
+    printf("%d\n",ans);
+}
+
+
+char S[MX];
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        scanf("%s",S);
+        N=strlen(S);
+        for(int i=0;i<N;i++){
+            dir[i]=S[i]-'0';
+        }
+
+        solve();
+    }
+    return 0;
+}

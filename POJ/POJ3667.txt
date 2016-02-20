@@ -1,0 +1,136 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3667                   *
+*      VjudgeProblemID:10354               *
+*      SubmitTime:2015/8/9 0:22:55         *
+*      SubmitType:C++                      *
+*      Memory:2496KB                       *
+*      CodeLen:2878B                       *
+*      RunTime:657ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<LL, int> PLI;
+
+const int MX = 5e4 + 5;
+const int INF = 0x3f3f3f3f;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,n,1
+#define RR rt<<1|1
+#define LL rt<<1
+
+int lsum[MX << 2], rsum[MX << 2], msum[MX << 2], col[MX << 2];
+
+void push_down(int rt, int len) {
+    if(col[rt] != -1) {
+        int wei = len >> 1;
+        col[LL] = col[RR] = col[rt];
+        lsum[LL] = rsum[LL] = msum[LL] = col[rt] ? len - wei : 0;
+        lsum[RR] = rsum[RR] = msum[RR] = col[rt] ? wei : 0;
+        col[rt] = -1;
+    }
+}
+
+void push_up(int rt, int len) {
+    lsum[rt] = lsum[LL];
+    rsum[rt] = rsum[RR];
+    msum[rt] = max(msum[LL], msum[RR]);
+    msum[rt] = max(msum[rt], rsum[LL] + lsum[RR]);
+
+    int wei = len >> 1;
+    if(lsum[rt] == len - wei) {
+        lsum[rt] += lsum[RR];
+        msum[rt] = max(msum[rt], lsum[rt]);
+    }
+    if(rsum[rt] == wei) {
+        rsum[rt] += rsum[LL];
+        msum[rt] = max(msum[rt], rsum[rt]);
+    }
+}
+
+void build(int l, int r, int rt) {
+    memset(col, -1, sizeof(col));
+    lsum[1] = rsum[1] = msum[1] = r - l + 1;
+    col[1] = 1;
+}
+
+void update(int L, int R, int d, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        col[rt] = d;
+        if(d) lsum[rt] = msum[rt] = rsum[rt] = r - l + 1;
+        else lsum[rt] = msum[rt] = rsum[rt] = 0;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    push_down(rt, r - l + 1);
+    if(L <= m) update(L, R, d, lson);
+    if(R > m)  update(L, R, d, rson);
+    push_up(rt, r - l + 1);
+}
+
+int query(int d, int l, int r, int rt) {
+    if(l == r) {
+        return l;
+    }
+
+    int m = (l + r) >> 1;
+    push_down(rt, r - l + 1);
+    if(d <= msum[LL]) return query(d, lson);
+    else if(rsum[LL] + lsum[RR] >= d) return m - rsum[LL] + 1;
+    else return query(d, rson);
+}
+
+void debug(int l, int r, int rt, int fuck = 0) {
+    if(l == r) {
+        printf("[%d]", msum[rt]);
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    push_down(rt, r - l + 1);
+    debug(lson, 1);
+    debug(rson, 1);
+    if(!fuck) printf("\n");
+}
+
+int main() {
+    int n, Q;
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%d%d", &n, &Q)) {
+        build(root);
+
+        while(Q--) {
+            int a, b, c;
+            scanf("%d", &a);
+            if(a == 1) {
+                scanf("%d", &b);
+                if(msum[1] < b) printf("0\n");
+                else {
+                    int t = query(b, root);
+                    update(t, t + b - 1, 0, root);
+                    printf("%d\n", t);
+                }
+            } else {
+                scanf("%d%d", &b, &c);
+                update(b, b + c - 1, 1, root);
+            }
+        }
+    }
+    return 0;
+}

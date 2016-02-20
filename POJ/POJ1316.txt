@@ -1,0 +1,41 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1316                   *
+*      VjudgeProblemID:16363               *
+*      SubmitTime:2015/1/14 19:37:33       *
+*      SubmitType:C++                      *
+*      Memory:208KB                        *
+*      CodeLen:466B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+int vis[10005];
+
+int main(){
+    memset(vis,0,sizeof(vis));
+    for(int i=1;i<=10000;i++){
+        int s=i,w=i;
+        while(w){
+            s+=w%10;
+            w/=10;
+        }
+
+        if(s<=10000){
+            vis[s]=1;
+        }
+    }
+
+    for(int i=1;i<=10000;i++){
+        if(!vis[i]){
+            printf("%d\n",i);
+        }
+    }
+    return 0;
+}

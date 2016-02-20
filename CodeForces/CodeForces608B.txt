@@ -1,0 +1,65 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces608B            *
+*      VjudgeProblemID:299774              *
+*      SubmitTime:2015/12/25 21:27:23      *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:200KB                        *
+*      CodeLen:1557B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<string.h>
+#include<stdlib.h>
+const int MAXN = 200000 + 5;
+char a[MAXN],b[MAXN];
+int main(){
+    while(~scanf("%s%s",a,b)){
+        int len1=strlen(a);
+        int len2=strlen(b);
+        if(len1==len2) {
+            int cnt=0;
+            for(int i=0;i<len1;i++)
+                if(a[i]!=b[i]) cnt++;
+            printf("%d\n",cnt);
+            memset(a,0,sizeof(a));
+            memset(b,0,sizeof(b));
+            continue;
+        }
+        int cnt1=0;        //为a[0]时相同数
+        for(int i=0;i<=len2-len1;i++)
+            if(a[0]!=b[i]) cnt1++;
+        __int64 ans=cnt1;
+        int cnt2=0,flag1=0,flag2=-1;
+        for(int i=1;i<len1;i++){
+            if(a[i]==a[flag1]) {
+                for(int j=flag1;j<i;j++)
+                    if(a[flag1]!=b[j]) cnt1--;
+                for(int j=len2-len1+flag1+1;j<=len2-len1+i;j++)
+                    if(a[i]!=b[j]) cnt1++;
+                ans+=cnt1;
+                flag1=i;
+                continue;
+            }
+            if(flag2==-1) {
+                for(int j=i;j<=len2-len1+i;j++)
+                    if(a[i]!=b[j]) cnt2++;
+                ans+=cnt2;
+                flag2=i;
+                continue;
+            }
+            for(int j=flag2;j<i;j++)
+                if(a[flag2]!=b[j]) cnt2--;
+            for(int j=len2-len1+flag2+1;j<=len2-len1+i;j++)
+                if(a[i]!=b[j]) cnt2++;
+            ans+=cnt2;
+            flag2=i;
+        }
+        printf("%I64d\n",ans);
+        memset(a,0,sizeof(a));
+        memset(b,0,sizeof(b));
+    }
+    return 0;
+}

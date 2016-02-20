@@ -1,0 +1,124 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces300B            *
+*      VjudgeProblemID:38837               *
+*      SubmitTime:2015/8/12 22:25:41       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:56KB                         *
+*      CodeLen:2431B                       *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e2 + 5;
+
+int P[MX], num[MX], vis[MX];
+int dp[MX][MX], A[MX], rear = 0;
+
+struct Node {
+    int a, b, c;
+    Node(int _a, int _b, int _c) {
+        a = _a; b = _b; c = _c;
+    }
+};
+
+vector<int>S1;
+vector<PII>S2;
+vector<Node>S3;
+
+int find(int x) {
+    return P[x] == x ? x : (P[x] = find(P[x]));
+}
+
+int main() {
+    int n, m;
+    //freopen("input.txt", "r", stdin);
+    scanf("%d%d", &n, &m);
+    for(int i = 1; i <= n; i++) {
+        P[i] = i;
+        num[i] = 1;
+    }
+
+    for(int i = 1; i <= m; i++) {
+        int u, v;
+        scanf("%d%d", &u, &v);
+        int p1 = find(u), p2 = find(v);
+        if(p1 != p2) {
+            P[p1] = p2;
+            num[p2] += num[p1];
+        }
+    }
+
+    int Max = 0;
+    for(int i = 1; i <= n; i++) {
+        if(i == find(i)) A[++rear] = i;
+        Max = max(Max, num[A[rear]]);
+    }
+
+    if(Max > 3) {
+        printf("-1\n");
+        return 0;
+    }
+
+    for(int i = 1; i <= rear; i++) {
+        int w = num[A[i]];
+        if(w == 1) S1.push_back(A[i]);
+        else if(w == 2) {
+            int a = -1, b = -1;
+            for(int j = 1; j <= n; j++) {
+                if(find(j) == A[i]) {
+                    if(a == -1) a = j;
+                    else b = j;
+                }
+            }
+            S2.push_back(PII(a, b));
+        } else {
+            int a = -1, b = -1, c = -1;
+            for(int j = 1; j <= n; j++) {
+                if(find(j) == A[i]) {
+                    if(a == -1) a = j;
+                    else if(b == -1) b = j;
+                    else c = j;
+                }
+            }
+            S3.push_back(Node(a, b, c));
+        }
+    }
+
+    int sign = true, cur = 0;
+    for(int i = 0; i < S1.size(); i++) {
+        if(cur < S2.size()) {
+            S3.push_back(Node(S1[i], S2[cur].first, S2[cur].second));
+            cur++;
+        } else {
+            S3.push_back(Node(S1[i], S1[i + 1], S1[i + 2]));
+            i += 2;
+        }
+    }
+
+    if(sign == true && cur == S2.size()) {
+        for(int i = 0; i < S3.size(); i++) {
+            printf("%d %d %d\n", S3[i].a, S3[i].b, S3[i].c);
+        }
+    } else {
+        printf("-1\n");
+    }
+    return 0;
+}

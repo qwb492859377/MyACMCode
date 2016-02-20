@@ -1,0 +1,74 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1837                   *
+*      VjudgeProblemID:10044               *
+*      SubmitTime:2015/7/24 23:43:55       *
+*      SubmitType:C++                      *
+*      Memory:596KB                        *
+*      CodeLen:1109B                       *
+*      RunTime:16ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 3e4 + 5;
+const int INF = 0x3f3f3f3f;
+const int P = 15000;
+
+LL dp[2][MX];
+int A[100], B[100];
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int n, m;
+    while(~scanf("%d%d", &n, &m)) {
+        memset(dp, 0, sizeof(dp));
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+        for(int i = 1; i <= m; i++) {
+            scanf("%d", &B[i]);
+        }
+
+        int cur = 0, nxt = 1, V = 10000;
+
+        dp[cur][P] = 1;
+        for(int i = 1; i <= m; i++) {
+            memset(dp[nxt], 0, sizeof(dp[nxt]));
+
+            for(int j = P - V; j <= P + V; j++) {
+                if(dp[cur][j]) {
+                    for(int k = 1; k <= n; k++) {
+                        dp[nxt][j + A[k]*B[i]] += dp[cur][j];
+                    }
+                }
+            }
+            swap(cur, nxt);
+        }
+        printf("%I64d\n", dp[cur][P]);
+    }
+    return 0;
+}
+
+            }
+            /*printf("[%d]", i);
+            for(int j = P - V; j <= P + V; j++) if(dp[nxt][j]) printf("[%d  %I64d]", j - P, dp[nxt][j]);
+            printf("\n");*/
+            swap(cur, nxt);
+        }
+        printf("%I64d\n", dp[cur][P]);
+    }
+    return 0;
+}

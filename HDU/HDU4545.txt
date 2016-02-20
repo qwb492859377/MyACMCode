@@ -1,0 +1,65 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4545                   *
+*      VjudgeProblemID:38781               *
+*      SubmitTime:2015/7/28 21:51:36       *
+*      SubmitType:C++                      *
+*      Memory:1624KB                       *
+*      CodeLen:1301B                       *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e3 + 5;
+const int INF = 0x3f3f3f3f;
+const int mod = 1e9 + 7;
+
+int dp[2][MX], G[30][30];
+char S1[MX], S2[MX];
+
+int main() {
+    //freopen("input.txt","r",stdin);
+    int T, ansk = 0, Q;
+    scanf("%d", &T);
+    while(T--) {
+        memset(dp, 0, sizeof(dp));
+        memset(G, 0, sizeof(G));
+
+        scanf("%s%s%d", S1 + 1, S2 + 1, &Q);
+
+        while(Q--) {
+            char a[3], b[3];
+            scanf("%s%s", a, b);
+            G[a[0] - 'a'][b[0] - 'a'] = 1;
+        }
+
+        int cur = 0, nxt = 1;
+        int m = strlen(S1 + 1), n = strlen(S2 + 1);
+        for(int i = 1; i <= m; i++) {
+            memset(dp[nxt], 0, sizeof(dp[nxt]));
+            for(int j = 1; j <= n; j++) {
+                if(S1[i] == S2[j] || G[S2[j] - 'a'][S1[i] - 'a']) {
+                    dp[nxt][j] = dp[cur][j - 1] + 1;
+                } else {
+                    dp[nxt][j] = max(dp[nxt][j - 1], dp[cur][j]);
+                }
+            }
+            swap(cur, nxt);
+        }
+        printf("Case #%d: %s\n", ++ansk, dp[cur][n] == m ? "happy" : "unhappy");
+    }
+    return 0;
+}

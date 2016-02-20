@@ -1,0 +1,58 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1247                   *
+*      VjudgeProblemID:18360               *
+*      SubmitTime:2015/8/7 12:10:52        *
+*      SubmitType:C++                      *
+*      Memory:5160KB                       *
+*      CodeLen:851B                        *
+*      RunTime:171ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<set>
+#include<string>
+#include<iostream>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<LL, int> PLI;
+
+const int MX = 3e5 + 5;
+const int INF = 0x3f3f3f3f;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,n,1
+
+map<string, int>S;
+vector<string>A;
+
+int main() {
+    string s1, s2;
+    while(cin >> s1) {
+        A.push_back(s1);
+        S[s1]++;
+    }
+
+    for(int i = 0; i < A.size(); i++) {
+        string s = A[i];
+        s1 = "";
+        for(int j = 0; j < s.length() - 1; j++) {
+            s1 += s[j];
+            s2 = s.substr(j + 1);
+            if(S[s1] && S[s2]) {
+                cout << s << endl;
+                break;
+            }
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,76 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1014                   *
+*      VjudgeProblemID:11564               *
+*      SubmitTime:2015/7/28 14:05:15       *
+*      SubmitType:C++                      *
+*      Memory:640KB                        *
+*      CodeLen:1318B                       *
+*      RunTime:16ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 5e5 + 5;
+const int INF = 0x3f3f3f3f;
+
+int A[10];
+bool dp[MX];
+
+void solve(int t, int V) {
+    for(int i = V; i >= t; i--) {
+        dp[i] |= dp[i - t];
+    }
+}
+
+int main() {
+    int ansk = 0;
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%d", &A[1])) {
+        memset(dp, 0, sizeof(dp));
+
+        int V = A[1];
+        for(int i = 2; i <= 6; i++) {
+            scanf("%d", &A[i]);
+            V += A[i] * i;
+        }
+        if(!V) break;
+
+        printf("Collection #%d:\n", ++ansk);
+        if(V % 2 != 0) {
+            printf("Can't be divided.\n\n");
+            continue;
+        }
+
+        V /= 2;
+        dp[0] = true;
+        for(int i = 1; i <= 6; i++) {
+            if(!A[i]) continue;
+
+            int t = 1;
+            while(t < A[i]) {
+                solve(t * i, V);
+                A[i] -= t;
+                t <<= 1;
+            }
+            solve(A[i] * i, V);
+        }
+
+        //for(int i = 0; i <= V; i++) if(dp[i]) printf("[%d]", i);
+        if(dp[V]) printf("Can be divided.\n\n");
+        else printf("Can't be divided.\n\n");
+    }
+    return 0;
+}

@@ -1,0 +1,74 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1513                   *
+*      VjudgeProblemID:70426               *
+*      SubmitTime:2015/8/17 10:04:30       *
+*      SubmitType:C++                      *
+*      Memory:1484KB                       *
+*      CodeLen:1432B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 100 + 5;
+
+int Ga, Gb;
+double P[MX][2], ans;
+
+void DFS(double p, int a, int b, int A, int B, int turn) {
+    if(A > 5 || B > 5 || a > Ga || b > Gb) return;
+
+    bool sign = false;
+    if(5 - A + a < b) sign = true;
+    if(5 - B + b < a) sign = true;
+
+    if(a == Ga && b == Gb && (sign || (A == 5 && B == 5))) {
+        ans += p;
+        return;
+    }
+    if(sign) return;
+
+    if(!turn) {
+        DFS(p * P[A + 1][0], a + 1, b, A + 1, B, 1); //a射门成功
+        DFS(p * (1 - P[A + 1][0]), a, b, A + 1, B, 1); //a射门失败
+    } else {
+        DFS(p * P[B + 1][1], a, b + 1, A, B + 1, 0); //b射门成功
+        DFS(p * (1 - P[B + 1][1]), a, b, A, B + 1, 0); //b射门失败
+    }
+}
+
+int main() {
+    int ansk = 0; //FIN;
+    while(~scanf("%lf", &P[1][0])) {
+        ans = 0;
+        for(int i = 2; i <= 5; i++) {
+            scanf("%lf", &P[i][0]);
+        }
+        for(int i = 1; i <= 5; i++) {
+            scanf("%lf", &P[i][1]);
+        }
+
+        scanf("%d-%d", &Ga, &Gb);
+        DFS(1, 0, 0, 0, 0, 0);
+        printf("Case %d: %.2lf%%\n", ++ansk, ans * 100);
+    }
+    return 0;
+}

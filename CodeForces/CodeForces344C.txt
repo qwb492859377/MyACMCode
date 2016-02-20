@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces344C            *
+*      VjudgeProblemID:46666               *
+*      SubmitTime:2015/8/10 23:04:43       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:4KB                          *
+*      CodeLen:698B                        *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+int const MX = 1e5 + 5;
+
+LL solve(LL a, LL b) {
+    if(a == 0 || b == 0) return 0;
+    if(a == b) return 1;
+
+    if(a > b) {
+        LL t = a / b;
+        return solve(a - t * b, b) + t;
+    }
+    LL t = b / a;
+    return solve(a, b - a * t) + t;
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    LL a, b;
+    while(~scanf("%I64d%I64d", &a, &b)) {
+        printf("%I64d\n", solve(a, b));
+    }
+    return 0;
+}

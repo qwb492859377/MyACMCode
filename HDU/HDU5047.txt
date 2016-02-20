@@ -1,0 +1,30 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU5047                   *
+*      VjudgeProblemID:53611               *
+*      SubmitTime:2015/9/9 13:03:47        *
+*      SubmitType:Java                     *
+*      Memory:14152KB                      *
+*      CodeLen:473B                        *
+*      RunTime:1981ms                      *
+********************************************
+*/
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] argv) {
+		Scanner cin = new Scanner(System.in);
+		int T = cin.nextInt();
+
+		BigInteger ans, n;
+		for (int ansk = 1; ansk <= T; ansk++) {
+			ans = BigInteger.ZERO;
+			n = cin.nextBigInteger();
+			ans = n.multiply(n.multiply(BigInteger.valueOf(8)).subtract(BigInteger.valueOf(7))).add(BigInteger.ONE);
+
+			System.out.println("Case #" + ansk + ": " + ans);
+		}
+	}
+}

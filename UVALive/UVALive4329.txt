@@ -1,0 +1,90 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:UVALive4329               *
+*      VjudgeProblemID:13895               *
+*      SubmitTime:2015/8/9 14:44:15        *
+*      SubmitType:C++ 4.8.2                *
+*      Memory:0KB                          *
+*      CodeLen:1584B                       *
+*      RunTime:129ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e5 + 5;
+const int INF = 0x3f3f3f3f;
+
+int S[MX], A[MX], Max, n;
+int LMIN[MX], LMAX[MX], RMIN[MX], RMAX[MX];
+
+int sum(int x) {
+    int ret = 0;
+    for(; x; x -= x & -x) {
+        ret += S[x];
+    }
+    return ret;
+}
+
+int query(int L, int R) {
+    return sum(R) - sum(L - 1);
+}
+
+void update(int x, int d) {
+    for(; x <= Max; x += x & -x) {
+        S[x] += d;
+    }
+}
+
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int T;
+    scanf("%d", &T);
+    while(T--) {
+        Max = 0;
+        scanf("%d", &n);
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+            Max = max(Max, A[i]);
+        }
+
+        memset(S, 0, sizeof(S));
+        update(A[1], 1);
+        for(int i = 2; i <= n - 1; i++) {
+            LMIN[i] = query(1, A[i]);
+            LMAX[i] = A[i] + 1 <= Max ? query(A[i] + 1, Max) : 0;
+            update(A[i], 1);
+        }
+
+        memset(S, 0, sizeof(S));
+        update(A[n], 1);
+        for(int i = n - 1; i >= 2; i--) {
+            RMIN[i] = 1 <= A[i] - 1 ? query(1, A[i] - 1) : 0;
+            RMAX[i] = query(A[i], Max);
+            update(A[i], 1);
+        }
+
+        LL ans = 0;
+        for(int i = 2; i <= n - 1; i++) {
+            ans += (LL)LMIN[i] * RMAX[i] + (LL)LMAX[i] * RMIN[i];
+        }
+        printf("%lld\n", ans);
+    }
+    return 0;
+}

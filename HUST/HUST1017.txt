@@ -1,0 +1,148 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HUST1017                  *
+*      VjudgeProblemID:10702               *
+*      SubmitTime:2015/9/15 10:40:50       *
+*      SubmitType:C++                      *
+*      Memory:1920KB                       *
+*      CodeLen:3097B                       *
+*      RunTime:248ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1000 + 5;
+const int MN = 1000000 + 5;
+const int INF = 0x3f3f3f3f;
+
+int ans[MX];
+
+struct DLX {
+    int m, n;
+    int H[MX], S[MX];
+    int Row[MN], Col[MN], rear;
+    int L[MN], R[MN], U[MN], D[MN];
+
+    void Init(int _m, int _n) {
+        m = _m; n = _n;
+        rear = n;
+        for(int i = 0; i <= n; i++) {
+            S[i] = 0;
+            L[i] = i - 1;
+            R[i] = i + 1;
+            U[i] = D[i] = i;
+        }
+        L[0] = n; R[n] = 0;
+        for(int i = 1; i <= m; i++) {
+            H[i] = -1;
+        }
+    }
+
+    void Link(int r, int c) {
+        int rt = ++rear;
+        Row[rt] = r; Col[rt] = c; S[c]++;
+
+        D[rt] = D[c]; U[D[c]] = rt;
+        U[rt] = c; D[c] = rt;
+        if(H[r] == -1) {
+            H[r] = L[rt] = R[rt] = rt;
+        } else {
+            int id = H[r];
+            R[rt] = R[id]; L[R[id]] = rt;
+            L[rt] = id; R[id] = rt;
+        }
+    }
+
+    void Remove(int c) {
+        R[L[c]] = R[c]; L[R[c]] = L[c];
+        for(int i = D[c]; i != c; i = D[i]) {
+            for(int j = R[i]; j != i; j = R[j]) {
+                D[U[j]] = D[j]; U[D[j]] = U[j];
+                S[Col[j]]--;
+            }
+        }
+    }
+
+    void Resume(int c) {
+        for(int i = U[c]; i != c; i = U[i]) {
+            for(int j = L[i]; j != i; j = L[j]) {
+                D[U[j]] = U[D[j]] = j;
+                S[Col[j]]++;
+            }
+        }
+        R[L[c]] = L[R[c]] = c;
+    }
+
+    bool Dance(int cnt) {
+        if(R[0] == 0) return true;
+
+        int c = R[0];
+        for(int i = R[0]; i != 0; i = R[i]) {
+            if(S[i] < S[c]) c = i;
+        }
+
+        Remove(c);
+        for(int i = D[c]; i != c; i = D[i]) {
+            for(int j = R[i]; j != i; j = R[j]) Remove(Col[j]);
+
+            int r = Row[i];
+            ans[r] = 1;
+            if(Dance(cnt + 1)) return true;
+            ans[r] = 0;
+
+            for(int j = L[i]; j != i; j = L[j]) Resume(Col[j]);
+        }
+        Resume(c);
+        return false;
+    }
+} G;
+
+int main() {
+    int m, n;//FIN;
+    while(~scanf("%d%d", &m, &n)) {
+        memset(ans, 0, sizeof(ans));
+
+        G.Init(m, n);
+        for(int i = 1; i <= m; i++) {
+            int c, t;
+            scanf("%d", &c);
+            for(int j = 1; j <= c; j++) {
+                scanf("%d", &t);
+                G.Link(i, t);
+            }
+        }
+
+        if(!G.Dance(0)) printf("NO\n");
+        else {
+            vector<int>A;
+            for(int i = 1; i <= m; i++) {
+                if(ans[i]) A.push_back(i);
+            }
+
+            printf("%d", (int)A.size());
+            for(int i = 0; i < A.size(); i++) {
+                printf(" %d", A[i]);
+            }
+            printf("\n");
+        }
+    }
+    return 0;
+}

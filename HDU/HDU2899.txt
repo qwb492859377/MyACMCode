@@ -1,0 +1,53 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2899                   *
+*      VjudgeProblemID:20577               *
+*      SubmitTime:2015/7/23 12:10:47       *
+*      SubmitType:C++                      *
+*      Memory:1604KB                       *
+*      CodeLen:845B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 17;
+const int INF = 0x3f3f3f3f;
+const double exps = 1e-8;
+
+double f(double x, LL y) {
+    double ret = 6 * x * x * x * x * x * x * x + 8 * x * x * x * x * x * x + 7 * x * x * x + 5 * x * x - y * x;
+    return ret;
+}
+
+int main() {
+    int T;
+    LL y;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%I64d", &y);
+        double L = 0, R = 100, m, mm;
+        while(R - L >= exps) {
+            m = (L + R) / 2;
+            mm = (L + m) / 2;
+            if(f(mm, y) < f(m, y)) {
+                R = m;
+            } else {
+                L = mm;
+            }
+        }
+        printf("%.4lf\n", f(L, y));
+    }
+    return 0;
+}

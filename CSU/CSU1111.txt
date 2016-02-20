@@ -1,0 +1,32 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1111                   *
+*      VjudgeProblemID:30376               *
+*      SubmitTime:2015/1/19 14:10:18       *
+*      SubmitType:C++                      *
+*      Memory:964KB                        *
+*      CodeLen:363B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const double exps=1e-8;
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        int x,y,z;
+        scanf("%d%d%d",&x,&y,&z);
+        double a=(x+y)/3.0;
+        double b=((x/a)-1)*z;
+        printf("%d\n",int(b+exps));
+    }
+    return 0;
+}

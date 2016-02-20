@@ -1,0 +1,50 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1384                   *
+*      VjudgeProblemID:17110               *
+*      SubmitTime:2014/12/14 9:25:53       *
+*      SubmitType:C++                      *
+*      Memory:172KB                        *
+*      CodeLen:758B                        *
+*      RunTime:79ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+const int INF=1<<30;
+int dp[10005];
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        int a,b,m,n;
+        scanf("%d%d%d",&a,&b,&n);m=b-a;
+
+        for(int i=1;i<=m;i++){
+            dp[i]=INF;
+        }
+        dp[0]=0;
+
+        for(int i=1;i<=n;i++){
+            int u,v;
+            scanf("%d%d",&u,&v);
+            for(int j=v;j<=m;j++){
+                dp[j]=min(dp[j-v]+u,dp[j]);
+            }
+        }
+
+        if(dp[m]<INF){
+            printf("The minimum amount of money in the piggy-bank is %d.\n",dp[m]);
+        }else{
+            printf("This is impossible.\n");
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,149 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2896                   *
+*      VjudgeProblemID:16404               *
+*      SubmitTime:2015/10/21 21:22:21      *
+*      SubmitType:G++                      *
+*      Memory:30372KB                      *
+*      CodeLen:3036B                       *
+*      RunTime:234ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+/*MX为总长度*/
+const int MX = 1e5 + 5;
+const int MS = 1000 + 5;
+const int P = 128;
+
+int vis[MS];
+vector<int>ans;
+char word[MS], line[MX];
+
+struct AC_machine {
+    int rear, root;
+    int Next[MX][P], Fail[MX], End[MX];
+
+    void Init() {
+        rear = 0;
+        root = New();
+    }
+
+    int New() {
+        rear++;
+        End[rear] = 0;
+        for(int i = 0; i < P; i++) {
+            Next[rear][i] = -1;
+        }
+        return rear;
+    }
+
+    void Add(char*A, int u) {
+        int n = strlen(A), now = root;
+        for(int i = 0; i < n; i++) {
+            int id = A[i];
+            if(Next[now][id] == -1) {
+                Next[now][id] = New();
+            }
+            now = Next[now][id];
+        }
+        End[now] = u;
+    }
+
+    void Build() {
+        queue<int>Q;
+        Fail[root] = root;
+        for(int i = 0; i < P; i++) {
+            if(Next[root][i] == -1) {
+                Next[root][i] = root;
+            } else {
+                Fail[Next[root][i]] = root;
+                Q.push(Next[root][i]);
+            }
+        }
+
+        while(!Q.empty()) {
+            int u = Q.front();
+            Q.pop();
+
+            for(int i = 0; i < P; i++) {
+                if(Next[u][i] == -1) {
+                    Next[u][i] = Next[Fail[u]][i];
+                } else {
+                    Fail[Next[u][i]] = Next[Fail[u]][i];
+                    Q.push(Next[u][i]);
+                }
+            }
+        }
+    }
+
+    void Query(char *S) {
+        int n = strlen(S), now = rear, ret = 0;
+
+        ans.clear();
+        memset(vis, 0, sizeof(vis));
+
+        for(int i = 0; i < n; i++) {
+            now = Next[now][S[i]];
+            int temp = now;
+
+            while(temp != root) {
+                if(End[temp] && !vis[End[temp]]) {
+                    ans.push_back(End[temp]);
+                    vis[End[temp]] = 1;
+                }
+                temp = Fail[temp];
+            }
+        }
+        sort(ans.begin(), ans.end());
+    }
+} AC;
+
+int main() {
+    int n, m; //FIN;
+    while(~scanf("%d\n", &n)) {
+        AC.Init();
+
+        for(int i = 1; i <= n; i++) {
+            gets(word);
+            AC.Add(word, i);
+        }
+        AC.Build();
+
+        scanf("%d\n", &m);
+        int sum = 0;
+        for(int i = 1; i <= m; i++) {
+            gets(line);
+            AC.Query(line);
+            if(ans.size()) {
+                printf("web %d:", i);
+                for(int j = 0; j < ans.size(); j++) {
+                    printf(" %d", ans[j]);
+                }
+                printf("\n");
+                sum++;
+            }
+        }
+        printf("total: %d\n", sum);
+    }
+    return 0;
+}

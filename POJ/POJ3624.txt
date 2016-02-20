@@ -1,0 +1,39 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3624                   *
+*      VjudgeProblemID:17547               *
+*      SubmitTime:2015/1/27 16:29:16       *
+*      SubmitType:C++                      *
+*      Memory:228KB                        *
+*      CodeLen:530B                        *
+*      RunTime:282ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+
+int dp[12885],W[3405],D[3405];
+
+int main(){
+    int n,m;
+    while(~scanf("%d%d",&n,&m)){
+        memset(dp,0,sizeof(dp));
+        for(int i=1;i<=n;i++){
+            scanf("%d%d",&W[i],&D[i]);
+        }
+
+        for(int i=1;i<=n;i++){
+            for(int j=m;j>=W[i];j--){
+                dp[j]=max(dp[j],dp[j-W[i]]+D[i]);
+            }
+        }
+        printf("%d\n",dp[m]);
+    }
+    return 0;
+}

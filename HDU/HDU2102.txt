@@ -1,0 +1,94 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2102                   *
+*      VjudgeProblemID:16213               *
+*      SubmitTime:2015/2/22 18:14:53       *
+*      SubmitType:C++                      *
+*      Memory:1104KB                       *
+*      CodeLen:1597B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int maxn=10+5;
+char s[2][maxn][maxn];
+int vis[2][maxn][maxn];
+int dist[][2]={{-1,0},{0,-1},{1,0},{0,1}};//иовСобср
+
+struct Point{
+    int f,x,y,len;
+}begin,f,t;
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        memset(vis,0,sizeof(vis));
+
+        int m,n,time;
+        scanf("%d%d%d",&m,&n,&time);
+        for(int k=0;k<2;k++){
+            for(int i=1;i<=m;i++){
+                scanf("%s",s[k][i]+1);
+                for(int j=1;j<n;j++){
+                    if(s[k][i][j]=='S'){
+                        begin.f=k;begin.x=i;
+                        begin.y=j;begin.len=0;
+                    }
+                }
+            }
+        }
+
+        queue<Point>work;
+        work.push(begin);
+
+        int ans=-1;
+        while(!work.empty()){
+            f=work.front();
+            work.pop();
+
+            vis[f.f][f.x][f.y]=1;
+            if(s[f.f][f.x][f.y]=='P'){
+                ans=f.len;
+                break;
+            }
+
+            for(int k=0;k<4;k++){
+                int nx=f.x+dist[k][0];
+                int ny=f.y+dist[k][1];
+                if(nx<1||nx>m||ny<1||ny>n) continue;
+                int nf=(s[f.f][nx][ny]=='#')?(!f.f):f.f;
+                if(vis[nf][nx][ny]||s[nf][nx][ny]=='#'||s[nf][nx][ny]=='*') continue;
+
+                t.f=nf,t.x=nx,t.y=ny,t.len=f.len+1;
+                work.push(t);
+            }
+        }
+        if(ans<0||ans>time) printf("NO\n");
+        else printf("YES\n");
+    }
+    return 0;
+}
+       continue;
+                    }
+                    newid=!newid;
+                }
+
+                temp.id=newid;
+                temp.x=newx;
+                temp.y=newy;
+                temp.len=f.len+1;
+                work.push(temp);
+            }
+        }
+        printf("%s\n",sign?"YES":"NO");
+    }
+    return 0;
+}

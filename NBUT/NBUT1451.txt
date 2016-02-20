@@ -1,0 +1,105 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1451                  *
+*      VjudgeProblemID:46169               *
+*      SubmitTime:2015/8/21 13:57:34       *
+*      SubmitType:G++                      *
+*      Memory:4180KB                       *
+*      CodeLen:1920B                       *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<sstream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e3 + 5;
+const int HS = 1000007;
+
+char word[MX][35];
+int H_head[HS], H_next[MX], H_rear;
+
+int Hash(char*S) {
+    int len = strlen(S), ret = 0;
+    for(int i = 0; i < len; i++) {
+        ret = ret * 131 + S[i];
+    }
+    return (ret & 0x7fffffff) % HS;
+}
+
+void Hash_init() {
+    H_rear = 0;
+    memset(H_head, -1, sizeof(H_head));
+    memset(H_next, -1, sizeof(H_next));
+}
+
+int Hash_query(char*S) {
+    int h = Hash(S);
+
+    for(int i = H_head[h]; ~i; i = H_next[i]) {
+        if(strcmp(word[i], S) == 0) return i;
+    }
+
+    strcpy(word[H_rear], S);
+    H_next[H_rear] = H_head[h];
+    H_head[h] = H_rear;
+    return H_rear++;
+}
+
+int P[MX], last[MX];
+
+int find(int x) {
+    return P[x] == x ? x : (P[x] = find(P[x]));
+}
+
+int main() {
+    int n;//FIN;
+    while(~scanf("%d", &n)) {
+        Hash_init();
+        memset(last, -1, sizeof(last));
+        for(int i = 1; i <= n; i++) {
+            P[i] = i;
+        }
+
+        bool sign = true;
+        for(int i = 1; i <= n; i++) {
+            int m; char name[MX];
+
+            scanf("%d", &m);
+            for(int j = 1; j <= m; j++) {
+                scanf("%s", name);
+                int id = Hash_query(name);
+
+                sign  = false;
+                if(last[id] == -1) last[id] = i;
+                else {
+                    int p1 = find(last[id]), p2 = find(i);
+                    P[p1] = p2;
+                }
+            }
+        }
+
+        int ans = 0;
+        for(int i = 1; i <= n; i++) {
+            if(find(i) == i) ans++;
+        }
+        printf("%d\n", ans - 1 + sign);
+    }
+    return 0;
+}

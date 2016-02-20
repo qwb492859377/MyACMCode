@@ -1,0 +1,33 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2014                   *
+*      VjudgeProblemID:28857               *
+*      SubmitTime:2015/11/8 11:00:06       *
+*      SubmitType:G++                      *
+*      Memory:1428KB                       *
+*      CodeLen:426B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+
+int main() {
+    int n, i;
+    while(~scanf("%d", &n)) {
+        double s = 0, t;
+        scanf("%lf", &t);
+        double Min = t, Max = t;
+        s += t;
+
+        for(i = 1; i <= n - 1; i++) {
+            scanf("%lf", &t);
+            Min = t < Min ? t : Min;
+            Max = t > Max ? t : Max;
+            s += t;
+        }
+
+        printf("%.2lf\n", (s - Min - Max) / (n - 2));
+    }
+    return 0;
+}

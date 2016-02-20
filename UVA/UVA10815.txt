@@ -1,0 +1,55 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:UVA10815                  *
+*      VjudgeProblemID:18649               *
+*      SubmitTime:2015/12/12 12:28:21      *
+*      SubmitType:C++ 4.8.2                *
+*      Memory:0KB                          *
+*      CodeLen:971B                        *
+*      RunTime:9ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1e3 + 5;
+char S[MX];
+
+int main() {
+    set<string>ans; //FIN;
+    while(gets(S)) {
+        int len = strlen(S);
+        for(int c = 0; c < len; c++) {
+            if(isalpha(S[c])) {
+                string w; w += (char)tolower(S[c]);
+                for(; c + 1 < len && isalpha(S[c + 1]); c++) {
+                    w += tolower(S[c + 1]);
+                }
+                ans.insert(w);
+            }
+        }
+    }
+
+    for(set<string>::iterator i = ans.begin(); i != ans.end(); i++) {
+        printf("%s\n", i->c_str());
+    }
+    return 0;
+}

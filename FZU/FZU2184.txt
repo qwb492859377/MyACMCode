@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU2184                   *
+*      VjudgeProblemID:138229              *
+*      SubmitTime:2015/5/3 8:05:15         *
+*      SubmitType:Visual C++               *
+*      Memory:200KB                        *
+*      CodeLen:669B                        *
+*      RunTime:46ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=1005;
+
+int vis[MX],A[MX],n;
+
+int find(int x){
+    int cnt=0;
+    for(int i=1;i<=n;i++){
+        if(!vis[i]) cnt++;
+        if(cnt==x) return i;
+    }
+}
+
+int main(){
+    int t;
+    while(~scanf("%d",&n)){
+        memset(vis,0,sizeof(vis));
+
+        for(int i=1;i<=n;i++){
+            scanf("%d",&t);
+            int p=find(t+1);
+            A[i]=p;
+            vis[p]=1;
+        }
+
+        for(int i=1;i<=n;i++){
+            printf("%d%c",A[i],i==n?'\n':' ');
+        }
+    }
+    return 0;
+}

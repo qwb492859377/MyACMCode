@@ -1,0 +1,95 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ZOJ1610                   *
+*      VjudgeProblemID:11553               *
+*      SubmitTime:2015/7/6 1:29:31         *
+*      SubmitType:C++ (g++ 4.7.2)          *
+*      Memory:356KB                        *
+*      CodeLen:1415B                       *
+*      RunTime:20ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<queue>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 0,n,1
+
+const int MX=8000+5;
+
+int col[MX<<2],ans[MX],A[MX];
+
+void build(){
+    memset(col,-1,sizeof(col));
+    memset(ans,0,sizeof(ans));
+}
+
+void push_down(int rt){
+    if(col[rt]!=-1){
+        col[rt<<1]=col[rt<<1|1]=col[rt];
+        col[rt]=-1;
+    }
+}
+
+void update(int L,int R,int x,int l,int r,int rt){
+    if(L<=l && r<=R){
+        col[rt]=x;
+        return;
+    }
+
+    int m=(l+r)>>1;
+
+    push_down(rt);
+    if(L<=m) update(L,R,x,lson);
+    if(R>m)  update(L,R,x,rson);
+}
+
+void query(int l,int r,int rt){
+    if(l==r){
+        A[l]=col[rt];
+        return;
+    }
+
+    int m=(l+r)>>1;
+
+    push_down(rt);
+    query(lson);
+    query(rson);
+}
+
+int main(){
+    int n=8000,m;
+    while(~scanf("%d",&m)){
+        build();
+
+        while(m--){
+            int L,R,c;
+            scanf("%d%d%d",&L,&R,&c);
+            update(L,R-1,c,root);
+        }
+        query(root);
+
+        int last=-1;
+        for(int i=0;i<=8001;i++){
+            if(A[i]!=last){
+                if(last!=-1) ans[last]++;
+                last=A[i];
+            }
+        }
+
+        for(int i=0;i<=8000;i++){
+            if(ans[i]) printf("%d %d\n",i,ans[i]);
+        }
+        printf("\n");
+    }
+    return 0;
+}

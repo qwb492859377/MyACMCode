@@ -1,0 +1,99 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1075                   *
+*      VjudgeProblemID:17498               *
+*      SubmitTime:2015/1/16 15:10:50       *
+*      SubmitType:C++                      *
+*      Memory:17312KB                      *
+*      CodeLen:1850B                       *
+*      RunTime:187ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef char word[11];
+typedef __int64 LL;
+const int maxn=500000+5;
+const int hashsize=1000007;
+word table_a[maxn],table_b[maxn];
+int head[hashsize],next[maxn],rear=0;
+
+bool isword(char a){
+    return 'a'<=a&&a<='z';
+}
+
+int hash(char*str){
+    int seed=131;
+    LL h=0;
+    for(int i=0;i<strlen(str);i++){
+        h=h*seed+str[i];
+    }
+    return (h&0x7FFFFFFF)%hashsize;
+}
+
+void hash_insert(word a,word b){
+    int h=hash(a);
+    memcpy(table_a[rear],a,sizeof(word));
+    memcpy(table_b[rear],b,sizeof(word));
+    next[rear]=head[h];
+    head[h]=rear;
+    rear++;
+}
+
+void hash_query(word a,word&b){
+    int h=hash(a);//printf("[%s]",a);
+    for(int i=head[h];i!=-1;i=next[i]){
+        if(memcmp(table_a[i],a,sizeof(a))==0){
+            memcpy(b,table_b[i],sizeof(word));
+            return;
+        }
+    }
+    memcpy(b,a,sizeof(word));
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    memset(head,-1,sizeof(head));
+    memset(next,-1,sizeof(next));
+    char table[100],line[maxn];
+    word a,b;
+
+    gets(table);
+    while(gets(table)&&strcmp(table,"END")!=0){
+        sscanf(table,"%s%s",b,a);
+        hash_insert(a,b);
+    }
+
+    gets(table);
+
+    memset(a,0,sizeof(a));
+    while(gets(line)&&strcmp(line,"END")!=0){
+        int len=strlen(line),cur=0,wc=0;
+        while(cur<len){
+            bool sign=false;
+            while(isword(line[cur])){
+                sign=true;
+                a[wc++]=line[cur++];
+            }
+            if(sign){
+                hash_query(a,b);
+                printf("%s",b);
+                wc=0;
+                memset(a,0,sizeof(word));
+            }else{
+                putchar(line[cur]);
+                cur++;
+            }
+        }
+        printf("\n");
+    }
+
+
+    return 0;
+}

@@ -1,0 +1,121 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1079                   *
+*      VjudgeProblemID:30351               *
+*      SubmitTime:2015/5/12 20:36:49       *
+*      SubmitType:C++                      *
+*      Memory:35736KB                      *
+*      CodeLen:2461B                       *
+*      RunTime:764ms                       *
+********************************************
+*/
+#include <cmath>
+#include <vector>
+#include <cstdio>
+#include <climits>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+const int N =100000+5;
+const int INF=0x3f3f3f3f;
+
+int n,Q;
+struct Edge {
+    int e, w, next;
+}edge[N<<1];
+
+struct LCA_online {
+    int fa[N],L[N];
+    int maxcost[N][33],anc[N][33];
+    int head[N],cost[N],cnt;
+
+    void add(int a,int b,int w){
+        edge[cnt].e = b;
+        edge[cnt].w = w;
+        edge[cnt].next = head[a];
+        head[a] = cnt++;
+    }
+
+	void init(){
+	    cnt = cost[1] = L[1] = 0;
+	    memset(head, -1, sizeof head);
+	}
+
+	void dfs(int u, int f) {
+	    fa[u] = f;
+	    for(int it = head[u]; ~it; it = edge[it].next) {
+	        int v = edge[it].e, w = edge[it].w;
+	        if(v != f) {
+	            cost[v] = w;
+	            L[v] = L[u] + 1;
+	            dfs(v, u);
+	        }
+	    }
+	}
+
+	void process() {
+	    dfs(1, -1);
+		for(int i = 1; i <= n; i++) {
+	        anc[i][0] = fa[i], maxcost[i][0] = cost[i];
+	        for(int j = 1; (1 << j) < n; j++) anc[i][j] = -1;
+	    }
+	    for(int j = 1; (1 << j) < n; j++)
+			for(int i = 1; i <= n; i++)
+	    		if(anc[i][j - 1] != -1) {
+	        		int a = anc[i][j - 1];
+	        		anc[i][j] = anc[a][j - 1];
+	        		maxcost[i][j] = max(maxcost[i][j - 1], maxcost[a][j - 1]);
+	    		}
+	}
+
+	int query(int p, int q) {
+	    int lo;
+	    if(L[p] < L[q]) swap(p, q);
+	    for(lo = 1; (1 << lo) <= L[p]; lo++); lo--;
+	    int ans = -INF;
+	    for(int i = lo; i >= 0; i--)
+	        if(L[p] - (1 << i) >= L[q])
+				ans = max(ans, maxcost[p][i]), p = anc[p][i];
+	    if(p == q)
+			return p;
+	    for(int i = lo; i >= 0; i--)
+	    	if(anc[p][i] != -1 && anc[p][i] != anc[q][i]) {
+	        	ans = max(ans, maxcost[p][i]), p = anc[p][i];
+	        	ans = max(ans, maxcost[q][i]), q = anc[q][i];
+	    	}
+	   	return fa[p];
+	}
+}g;
+
+int main(){
+    while(~scanf("%d%d",&n,&Q)){
+        g.init();
+        int u,v,k,a,b,c;
+
+        for(int i=1;i<=n-1;i++){
+            scanf("%d%d",&u,&v);
+            g.add(u,v,1);
+            g.add(v,u,1);
+        }
+        g.process();
+
+        while(Q--){
+            scanf("%d%d%d",&u,&v,&k);
+            a=g.query(u,v);
+            b=g.query(u,k);
+            c=g.query(v,k);
+
+            if(b==k&&a==c){
+                printf("YES\n");
+            }else if(a==b&&c==k){
+                printf("YES\n");
+            }else{
+                printf("NO\n");
+            }
+        }
+        puts("");
+    }
+    return 0;
+}

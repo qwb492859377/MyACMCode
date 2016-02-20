@@ -1,0 +1,56 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ACdream1735               *
+*      VjudgeProblemID:179979              *
+*      SubmitTime:2015/11/18 11:28:48      *
+*      SubmitType:C                        *
+*      Memory:4988KB                       *
+*      CodeLen:781B                        *
+*      RunTime:536ms                       *
+********************************************
+*/
+#include<stdio.h>
+#define MX 1000005
+typedef long long LL;
+
+int Y[MX];
+
+void sort_k(int A[], int L, int R) {
+    if(R - L + 1 <= 1) return;
+
+    int l = L, r = R, s = A[l];
+    while(l < r) {
+        while(l < r && A[r] >= s) r--;
+        A[l] = A[r];
+
+        while(l < r && A[l] <= s) l++;
+        A[r] = A[l];
+    }
+    A[l] = s;
+
+    sort_k(A, L, l - 1);
+    sort_k(A, l + 1, R);
+}
+
+LL abs(LL x) {
+    return x > 0 ? x : -x;
+}
+
+int main() {
+    int n, i;
+    while(~scanf("%d", &n)) {
+        for(i = 1; i <= n; i++) {
+            scanf("%*d%d", &Y[i]);
+        }
+        sort_k(Y, 1, n);
+        int mid = Y[(n + 1) / 2];
+
+        LL ans = 0;
+        for(i = 1; i <= n; i++) {
+            ans += abs(mid - Y[i]);
+        }
+        printf("%lld\n", ans);
+    }
+    return 0;
+}

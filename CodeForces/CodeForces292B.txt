@@ -1,0 +1,120 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces292B            *
+*      VjudgeProblemID:38276               *
+*      SubmitTime:2015/12/22 19:29:49      *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:5856KB                       *
+*      CodeLen:2132B                       *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e5 + 5;
+const int MS = 2e5 + 5;
+
+int Head[MX], rear;
+struct Edge {
+    int v, nxt;
+} E[MS];
+void edge_init() {
+    rear = 0;
+    memset(Head, -1, sizeof(Head));
+}
+void edge_add(int u, int v) {
+    E[rear].v = v;
+    E[rear].nxt = Head[u];
+    Head[u] = rear++;
+}
+
+int n, m;
+int IN[MX], vis[MX];
+
+bool star() {
+    int rt = 0, cnt = 0;
+    for(int i = 1; i <= n; i++) {
+        if(IN[i] == n - 1) {
+            rt = i;
+        }
+        if(IN[i] == 1) cnt++;
+    }
+    if(!rt || cnt != n - 1) return false;
+    return true;
+}
+
+bool bus() {
+    int l = 0, r = 0, cnt = 0;
+    for(int i = 1; i <= n; i++) {
+        if(IN[i] == 1) {
+            if(l) r = i;
+            else l = i;
+        }
+        if(IN[i] == 2) cnt++;
+    }
+    if(!l || !r || cnt != n - 2) return false;
+    return true;
+}
+
+int DFS(int u) {
+    vis[u] = 1;
+    int ret = 1;
+    for(int i = Head[u]; ~i; i = E[i].nxt) {
+        int v = E[i].v;
+        if(!vis[v]) ret += DFS(v);
+    }
+    return ret;
+}
+
+bool ring() {
+    int cnt = 0;
+    for(int i = 1; i <= n; i++) {
+        if(IN[i] == 2) cnt++;
+    }
+    if(cnt != n) return false;
+
+    memset(vis, 0, sizeof(vis));
+    return DFS(1) == n;
+}
+
+int main() {
+    //FIN;
+    while(~scanf("%d%d", &n, &m)) {
+        memset(IN, 0, sizeof(IN));
+        edge_init();
+
+        for(int i = 1; i <= m; i++) {
+            int u, v;
+            scanf("%d%d", &u, &v);
+            edge_add(u, v);
+            edge_add(v, u);
+            IN[u]++; IN[v]++;
+        }
+
+        if(star()) printf("star topology\n");
+        else if(bus()) printf("bus topology\n");
+        else if(ring()) printf("ring topology\n");
+        else printf("unknown topology\n");
+    }
+    return 0;
+}

@@ -1,0 +1,55 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2524                   *
+*      VjudgeProblemID:14593               *
+*      SubmitTime:2015/1/23 16:31:04       *
+*      SubmitType:C++                      *
+*      Memory:4044KB                       *
+*      CodeLen:876B                        *
+*      RunTime:329ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=500000+5;
+
+int p[maxn],vis[maxn];
+
+int find(int x){
+    return (p[x]==-1||p[x]==x)?x:(p[x]=find(p[x]));
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int n,m,u,v,ansk=0;
+    while(~scanf("%d%d",&n,&m),n+m){
+        memset(p,-1,sizeof(p));
+        memset(vis,0,sizeof(vis));
+
+        printf("Case %d: ",++ansk);
+        for(int i=0;i<m;i++){
+            scanf("%d%d",&u,&v);
+            int p1=find(u);
+            int p2=find(v);
+            //printf("[%d,%d,%d,%d]\n",u,v,p1,p2);
+            p[p2]=p1;
+        }
+
+        int sum=0;
+        for(int i=1;i<=n;i++){
+            int j=find(i);
+            if(!vis[j]){
+                vis[j]=1;
+                sum++;
+            }
+        }
+        printf("%d\n",sum);
+    }
+    return 0;
+}

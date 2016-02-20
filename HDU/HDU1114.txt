@@ -1,0 +1,59 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1114                   *
+*      VjudgeProblemID:17679               *
+*      SubmitTime:2015/1/23 16:59:19       *
+*      SubmitType:C++                      *
+*      Memory:1124KB                       *
+*      CodeLen:775B                        *
+*      RunTime:62ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=10000+5;
+const int INF=1<<30;
+int dp[maxn];
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        memset(dp,0,sizeof(dp));
+
+        int a,b,n,P;
+        scanf("%d%d%d",&a,&b,&n);P=b-a;
+
+        dp[0]=0;
+        for(int i=1;i<=P;i++){
+            dp[i]=INF;
+        }
+
+        for(int i=1;i<=n;i++){
+            scanf("%d%d",&a,&b);
+            for(int j=b;j<=P;j++){
+                dp[j]=min(dp[j],dp[j-b]+a);
+            }
+        }
+
+        if(dp[P]==INF){
+            printf("This is impossible.\n");
+        }else{
+            printf("The minimum amount of money in the piggy-bank is %d.\n",dp[P]);
+        }
+    }
+    return 0;
+}
+[volume]<INF)
+            cout<<"The minimum amount of money in the piggy-bank is "<<record[volume]<<"."<<endl;
+        else
+            cout<<"This is impossible."<<endl;
+    }
+
+    return 0;
+}

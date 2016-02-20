@@ -1,0 +1,130 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1254                   *
+*      VjudgeProblemID:33985               *
+*      SubmitTime:2015/1/17 16:36:21       *
+*      SubmitType:C++                      *
+*      Memory:1116KB                       *
+*      CodeLen:2907B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int maxn=10;
+int m,n,s[maxn][maxn];
+int dfsvis[maxn][maxn];
+int vis[maxn][maxn][4],distok[4];
+int dist[4][2]={{0,-1},{-1,0},{1,0},{0,1}};//вСиообср
+
+struct point{
+    int boxx,boxy;
+    int manx,many;
+    int dic,len;
+}begin,t,w;
+
+void DFS(int manx,int many,int boxx,int boxy){
+    dfsvis[manx][many]=1;
+    if(abs(manx-boxx)+abs(many-boxy)==1){
+        if(boxy-many==1){
+            distok[3]=1;
+        }
+        if(boxy-many==-1){
+            distok[0]=1;
+        }
+        if(boxx-manx==1){
+            distok[2]=1;
+        }
+        if(boxx-manx==-1){
+            distok[1]=1;
+        }
+    }
+    for(int k=0;k<4;k++){
+        int newx=manx+dist[k][0];
+        int newy=many+dist[k][1];
+        if(newx<1||newx>m||newy<1||newy>n||dfsvis[newx][newy]){
+            continue;
+        }
+        if(s[newx][newy]==1||(newx==boxx&&newy==boxy)){
+            continue;
+        }
+        DFS(newx,newy,boxx,boxy);
+    }
+}
+
+void flush(point&p){
+    memset(dfsvis,0,sizeof(dfsvis));
+    memset(distok,0,sizeof(distok));
+    DFS(p.manx,p.many,p.boxx,p.boxy);
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int T,temp;
+    scanf("%d",&T);
+    while(T--){
+        memset(vis,0,sizeof(vis));
+        scanf("%d%d",&m,&n);
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                scanf("%d",&temp);
+                s[i][j]=temp;
+                if(temp==2){
+                    begin.boxx=i;
+                    begin.boxy=j;
+                }else if(temp==4){
+                    begin.manx=i;
+                    begin.many=j;
+                }
+            }
+        }
+
+        queue<point>work;
+        begin.len=0;
+        int ans=-1;
+        work.push(begin);
+        while(!work.empty()){
+            t=work.front();//printf("[%d,%d,%d,%d]\n",t.boxx,t.boxy,t.dic,t.len);
+            work.pop();
+            if(s[t.boxx][t.boxy]==3){
+                ans=t.len;
+                goto loop;
+            }
+
+            flush(t);
+
+            for(int k=0;k<4;k++){
+                if(!distok[k]){
+                    continue;
+                }
+                if(vis[t.boxx][t.boxy][k]){
+                    continue;
+                }
+                w.boxx=t.boxx+dist[k][0];
+                w.boxy=t.boxy+dist[k][1];//printf("[%d,%d,%d,%d]",t.boxx,t.boxy,w.boxx,w.boxy);
+                if(w.boxx<1||w.boxx>m||w.boxy<1||w.boxy>n){
+                        continue;
+                }
+                if(s[w.boxx][w.boxy]==1){
+                    continue;
+                }
+                w.manx=t.boxx;
+                w.many=t.boxy;
+                w.dic=k;
+                w.len=t.len+1;
+                vis[t.boxx][t.boxy][k]=1;
+                work.push(w);
+            }
+
+        }
+        loop:printf("%d\n",ans);
+    }
+    return 0;
+}

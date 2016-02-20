@@ -1,0 +1,95 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1222                  *
+*      VjudgeProblemID:32792               *
+*      SubmitTime:2015/8/17 15:29:43       *
+*      SubmitType:G++                      *
+*      Memory:84484KB                      *
+*      CodeLen:1706B                       *
+*      RunTime:890ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e5 + 5;
+const int INF = 0x3f3f3f3f;
+
+char S[MX];
+int dp[MX];
+
+struct Node {
+    int num;
+    Node *Next[26];
+    Node() {
+        num = -1;
+        memset(Next, NULL, sizeof(Next));
+    }
+};
+
+void trie_add(Node*root, char*S, int d) {
+    int L = strlen(S);
+    Node *p = root;
+    for(int i = 0; i < L; i++) {
+        int id = S[i] - 'a';
+        if(p->Next[id] == NULL) {
+            p->Next[id] = new Node();
+        }
+        p = p->Next[id];
+    }
+    p->num = max(p->num, d);
+}
+
+void trie_query(Node*root, int pos, int L) {
+    if(dp[pos] < 0) return;
+
+    Node *p = root;
+    for(int i = pos, j = 1; i < L; i++, j++) {
+        int id = S[i] - 'a';
+        if(p->Next[id] == NULL) {
+            return;
+        }
+        p = p->Next[id];
+        if(p->num >= 0) dp[pos + j] = max(dp[pos + j], dp[pos] + p->num);
+    }
+}
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d%s", &n, S)) {
+        memset(dp, -INF, sizeof(dp));
+        dp[0] = 0;
+
+        Node *root = new Node();
+        for(int i = 1; i <= n; i++) {
+            char word[100]; int d;
+
+            scanf("%s%d", word, &d);
+            trie_add(root, word, d);
+        }
+
+        int L = strlen(S);
+        for(int i = 0; i < L; i++) {
+            trie_query(root, i, L);
+        }
+        printf("%d\n", dp[L] < 0 ? -1 : dp[L]);
+    }
+    return 0;
+}

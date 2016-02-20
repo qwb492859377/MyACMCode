@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2299                   *
+*      VjudgeProblemID:40961               *
+*      SubmitTime:2015/2/25 22:01:28       *
+*      SubmitType:C++                      *
+*      Memory:1124KB                       *
+*      CodeLen:769B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int maxn=50+5;
+
+struct Point{
+    int x,y;
+}p[maxn];
+
+double solve(int i,int j,int k){
+    //x1y2-x2y1
+    double a=(p[j].x-p[i].x)*(p[k].y-p[i].y);
+    double b=(p[k].x-p[i].x)*(p[j].y-p[i].y);
+    return fabs(a-b)/2.0;
+}
+
+int main(){
+    int n;
+    while(~scanf("%d",&n)){
+        for(int i=1;i<=n;i++){
+            scanf("%d%d",&p[i].x,&p[i].y);
+        }
+
+        double ans=0;
+        for(int i=1;i<=n-2;i++){
+            for(int j=i+1;j<=n-1;j++){
+                for(int k=j+1;k<=n;k++){
+                    ans=max(ans,solve(i,j,k));
+                }
+            }
+        }
+        printf("%.1lf\n",ans);
+    }
+    return 0;
+}

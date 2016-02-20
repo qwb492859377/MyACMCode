@@ -1,0 +1,257 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ACdream1214               *
+*      VjudgeProblemID:71843               *
+*      SubmitTime:2015/8/25 17:33:37       *
+*      SubmitType:C++                      *
+*      Memory:1760KB                       *
+*      CodeLen:5873B                       *
+*      RunTime:500ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define UFOR(i, a, b) for (int i = (int)a; i <= (int)b; i++)
+#define DFOR(i, a, b) for (int i = (int)a; i >= (int)b; i--)
+#define MEMINF memset(a, 0x3f3f3f3f, sizeof(a))
+#define FOUT freopen("output.txt","w+",stdout)
+#define FIN freopen("input.txt","r",stdin)
+#define MEM1(a) memset(a, -1, sizeof(a))
+#define MEM0(a) memset(a, 0, sizeof(a))
+#define rson m + 1, r, rt<<1|1
+#define lson l, m, rt<<1
+#define root 1, n, 1
+#define NR rt<<1|1
+#define NL rt<<1
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+template <typename T>void print(const T* p, const T* q, string gap = " ") {
+    int d = p < q ? 1 : -1;
+    while(p != q) {
+        cout << *p ;
+        p += d;
+        if(p != q) cout << gap;
+    } cout << endl;
+}
+inline void read(int &x) {
+    char c = getchar();
+    while(!isdigit(c)) c = getchar();
+
+    x = 0;
+    while(isdigit(c)) {
+        x = x * 10 + c - '0';
+        c = getchar();
+    }
+}
+/*--------------------fuck------------------------*/
+const int matMX = 50;
+const int DLEN = 4;
+const int MAXN = 9999;
+
+class BN {
+public:
+    int a[500];
+    int len;
+
+    BN(const int b = 0) {
+        int c, d = b;
+        len = 0;
+        memset(a, 0, sizeof(a));
+        while(d > MAXN) {
+            c = d - (d / (MAXN + 1)) * (MAXN + 1);
+            d = d / (MAXN + 1);
+            a[len++] = c;
+        }
+        a[len++] = d;
+    }
+    BN(const char *s) {
+        int t, k, index, L, i;
+        memset(a, 0, sizeof(a));
+        L = strlen(s);
+        len = L / DLEN;
+        if(L % DLEN) len++;
+        index = 0;
+        for(i = L - 1; i >= 0; i -= DLEN) {
+            t = 0;
+            k = i - DLEN + 1;
+            if(k < 0) k = 0;
+            for(int j = k; j <= i; j++) {
+                t = t * 10 + s[j] - '0';
+            }
+            a[index++] = t;
+        }
+    }
+    BN operator/(const int &b)const {
+        BN ret;
+        int i, down = 0;
+        for(int i = len - 1; i >= 0; i--) {
+            ret.a[i] = (a[i] + down * (MAXN + 1)) / b;
+            down = a[i] + down * (MAXN + 1) - ret.a[i] * b;
+        }
+        ret.len = len;
+        while(ret.a[ret.len - 1] == 0 && ret.len > 1) ret.len--;
+        return ret;
+    }
+    bool operator>(const BN &T)const {
+        int ln;
+        if(len > T.len) return true;
+        else if(len == T.len) {
+            ln = len - 1;
+            while(a[ln] == T.a[ln] && ln >= 0) ln--;
+            if(ln >= 0 && a[ln] > T.a[ln]) return true;
+            else return false;
+        } else return false;
+    }
+    BN operator-(const BN &T)const {
+        int i, j, big;
+        bool flag;
+        BN t1, t2;
+        if(*this > T) {
+            t1 = *this;
+            t2 = T;
+            flag = 0;
+        } else {
+            t1 = T;
+            t2 = *this;
+            flag = 1;
+        }
+        big = t1.len;
+        for(i = 0; i < big; i++) {
+            if(t1.a[i] < t2.a[i]) {
+                j = i + 1;
+                while(t1.a[j] == 0) j++;
+                t1.a[j--]--;
+                while(j > i) t1.a[j--] += MAXN;
+                t1.a[i] += MAXN + 1 - t2.a[i];
+            } else t1.a[i] -= t2.a[i];
+        }
+        t1.len = big;
+        while(t1.a[t1.len - 1] == 0 && t1.len > 1) {
+            t1.len--;
+            big--;
+        }
+        if(flag) t1.a[big - 1] = 0 - t1.a[big - 1];
+        return t1;
+    }
+    int operator%(const int &b)const {
+        int i, d = 0;
+        for(int i = len - 1; i >= 0; i--) {
+            d = ((d * (MAXN + 1)) % b + a[i]) % b;
+        }
+        return d;
+    }
+};
+
+
+LL mod;
+struct Mat {
+    int m, n;
+    LL S[matMX][matMX];
+    Mat(int a, int b) {
+        m = a; n = b;
+        memset(S, 0, sizeof(S));
+    }
+    Mat(int a, int b, LL w[][matMX]) {
+        m = a; n = b;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                S[i][j] = w[i][j];
+            }
+        }
+    }
+};
+
+Mat mat_mul(Mat A, Mat B) {
+    Mat C(A.m, B.n);
+    for(int i = 0; i < A.m; i++) {
+        for(int j = 0; j < B.n; j++) {
+            for(int k = 0; k < A.n; k++) {
+                C.S[i][j] = (C.S[i][j] + A.S[i][k] * B.S[k][j]) % mod;
+            }
+        }
+    }
+    return C;
+}
+
+Mat Blank(int m, int n) {
+    Mat ret(m, n);
+    for(int i = 0; i < m; i++) {
+        ret.S[i][i] = 1;
+    }
+    return ret;
+}
+
+Mat mat_pow(Mat A, BN b) {
+    Mat ret = Blank(A.m, A.n);
+    while(b > 0) {
+        if(b % 2) ret = mat_mul(ret, A);
+        A = mat_mul(A, A);
+        b = b / 2;
+    }
+    return ret;
+}
+
+int m;
+LL TB[matMX][matMX];
+void DFS(int x, int y, int p) {
+    if(p == m) {
+        TB[x][y] = 1;
+        return;
+    }
+    DFS(x << 1 | 1, y << 1, p + 1);
+    DFS(x << 1, y << 1 | 1, p + 1);
+    if(!p || (!((x & 1) && (y & 1)))) DFS(x << 1 | 1, y << 1 | 1, p + 1);
+    if(!p || (!(!(x & 1) && !(y & 1)))) DFS(x << 1, y << 1, p + 1);
+}
+
+LL power(LL a, LL b) {
+    LL ret = 1;
+    while(b) {
+        if(b & 1) ret = ret * a % mod;
+        a = a * a % mod;
+        b >>= 1;
+    }
+    return ret;
+}
+
+int main() {
+    //FIN;
+    char word[500];
+    while(~scanf("%s%d%lld", word, &m, &mod)) {
+        memset(TB, 0, sizeof(TB));
+        DFS(0, 0, 0);
+        /*for(int i=0;i<(1<<m);i++){
+            for(int j=0;j<(1<<m);j++){
+                printf("[%lld]",TB[i][j]);
+            }
+            printf("\n");
+        }*/
+
+        BN n = BN(word);
+
+        Mat s(1 << m, 1 << m, TB), fuck(1 << m, 1);
+        for(int i = 0; i < (1 << m); i++) {
+            fuck.S[i][0] = 1;
+        }
+        Mat res = mat_mul(mat_pow(s, n - 1), fuck);
+
+        LL ans = 0;
+        for(int i = 0; i < (1 << m); i++) {
+            ans = (ans + res.S[i][0]) % mod;
+        }
+        printf("%lld\n", ans);
+    }
+    return 0;
+}

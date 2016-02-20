@@ -1,0 +1,24 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2538                   *
+*      VjudgeProblemID:38308               *
+*      SubmitTime:2015/11/18 11:32:56      *
+*      SubmitType:G++                      *
+*      Memory:336KB                        *
+*      CodeLen:282B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+
+char s[] = "`1234567890-=QWERTYUIOP[]\\ASDFGHJKL;'ZXCVBNM,./";
+int main() {
+    int c, i;
+    while((c = getchar()) != EOF) {
+        for(i = 1; s[i] && s[i] != c; i++);
+        if(s[i]) printf("%c", s[i - 1]);
+        else printf("%c", c);
+    }
+    return 0;
+}

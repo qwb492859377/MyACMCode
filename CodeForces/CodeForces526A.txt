@@ -1,0 +1,55 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces526A            *
+*      VjudgeProblemID:146095              *
+*      SubmitTime:2015/4/9 13:45:12        *
+*      SubmitType:Microsoft Visual C++ 2010*
+*      Memory:4KB                          *
+*      CodeLen:698B                        *
+*      RunTime:30ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<queue>
+#include<iostream>
+#include<iomanip>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=100+5;
+
+int len;
+char S[MX];
+
+bool check(int p){
+    for(int j=1;j<=len;j++){
+        int cnt=1;
+
+        for(int k=1;k<=4;k++){
+            if(p+j*k<=len&&S[p+j*k]=='*') cnt++;
+            else break;
+        }
+
+        if(cnt==5) return true;
+    }
+    return false;
+}
+
+int main(){
+    scanf("%d%s",&len,S+1);
+
+    bool sign=false;
+    for(int i=1;i<=len;i++){
+        if(S[i]=='*'){
+            sign|=check(i);
+        }
+    }
+
+    printf("%s\n",sign?"yes":"no");
+    return 0;
+}

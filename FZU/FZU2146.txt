@@ -1,0 +1,34 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU2146                   *
+*      VjudgeProblemID:48688               *
+*      SubmitTime:2015/3/17 18:11:51       *
+*      SubmitType:GNU C++                  *
+*      Memory:224KB                        *
+*      CodeLen:411B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=20086;
+
+int main(){
+    int T,ansk=0;
+    char line[MX];
+    scanf("%d",&T);getchar();
+    while(T--){
+        gets(line);
+        printf("Case %d: %s\n",++ansk,(strlen(line)&1)?"Odd":"Even");
+    }
+    return 0;
+}

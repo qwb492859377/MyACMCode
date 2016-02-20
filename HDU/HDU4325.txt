@@ -1,0 +1,108 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4325                   *
+*      VjudgeProblemID:30579               *
+*      SubmitTime:2015/10/12 20:23:15      *
+*      SubmitType:G++                      *
+*      Memory:7044KB                       *
+*      CodeLen:2003B                       *
+*      RunTime:499ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 3e5 + 5;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,rear,1
+
+int S[MX << 2];
+int L[MX], R[MX], Q[MX];
+int rear, A[MX];
+
+void build(int l, int r, int rt) {
+    memset(S, 0, sizeof(S));
+}
+
+void update(int L, int R, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        S[rt]++;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    if(L <= m) update(L, R, lson);
+    if(R > m) update(L, R, rson);
+}
+
+int query(int x, int l, int r, int rt) {
+    if(l == r) {
+        return S[rt];
+    }
+
+    int m = (l + r) >> 1, ret = S[rt];
+    if(x <= m) ret += query(x, lson);
+    else ret += query(x, rson);
+    return ret;
+}
+
+int BS(int x) {
+    int l = 1, r = rear, m;
+    while(l <= r) {
+        m = (l + r) >> 1;
+        if(A[m] == x) return m;
+        if(A[m] <= x) l = m + 1;
+        else r = m - 1;
+    }
+    return -1;
+}
+
+int main() {
+    int T, ansk = 0; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        int n, m;
+        scanf("%d%d", &n, &m);
+
+        build(root);
+        for(int i = 1; i <= n; i++) {
+            scanf("%d%d", &L[i], &R[i]);
+            A[i] = L[i]; A[n + i] = R[i];
+        }
+
+        for(int i = 1; i <= m; i++) {
+            scanf("%d", &Q[i]);
+            A[2 * n + i] = Q[i];
+        }
+        sort(A + 1, A + 1 + 2 * n + m);
+        rear = unique(A + 1, A + 1 + 2 * n + m) - A - 1;
+
+        for(int i = 1; i <= n; i++) {
+            update(BS(L[i]), BS(R[i]), root);
+        }
+        printf("Case #%d:\n", ++ansk);
+        for(int i = 1; i <= m; i++) {
+            printf("%d\n", query(BS(Q[i]), root));
+        }
+    }
+    return 0;
+}

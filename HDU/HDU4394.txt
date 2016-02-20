@@ -1,0 +1,78 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4394                   *
+*      VjudgeProblemID:31581               *
+*      SubmitTime:2015/1/18 18:48:58       *
+*      SubmitType:G++                      *
+*      Memory:1208KB                       *
+*      CodeLen:1982B                       *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include <iostream>
+#include <cstdio>
+#include <string>
+#include <cmath>
+#include <queue>
+#include <algorithm>
+typedef long long ll;
+ll rec[20],n,T;
+bool success;
+class digit{//class 可以改为struct没有什么影响
+public :
+    ll  sum,lengths,currec;
+    digit(ll sum,ll lengths,ll currec):sum(sum),lengths(lengths),currec(currec){}
+    digit(){}
+    friend bool operator<(const digit &a,const digit &b){//降序排列
+    return a.sum>b.sum;
+    }
+};
+using namespace std;
+void BFS(ll n){
+   ll templengths=0,tmp=n;
+   while(tmp){
+    templengths++;//记录位数
+    tmp/=10;
+   }
+   priority_queue<digit>target;//优先队列《可以根据要求进行升序（具体操作是每次取最大的出来）与降序排序每次取最小的出来》
+   digit curob(0,0,0),chagob;//初始化（位数没有，面临的数字选择状态没有，以及他本身的数字没有）
+   target.push(curob);
+   while(!target.empty()&&!success){
+    curob=target.top();//取数据
+    target.pop();//去除
+    if((curob.sum*curob.sum)%rec[templengths]==n){//fuhe->solution
+        cout<<curob.sum<<endl;
+        success=true;
+        return;
+    }
+    for(ll i=1;i<=9&&curob.currec==0;i++){//gege->target（最高位从零开始数到九）
+        digit newob=curob;
+        newob.currec=i;
+        target.push(newob);
+    }
+    chagob.sum=curob.sum+curob.currec*rec[curob.lengths];//tiaowei将数字加一个最高位
+    chagob.lengths=curob.lengths+1;//位数加一
+    chagob.currec=0;//（当他的位数增加的时候，他的下一个最高位变为零进行）变化变为零
+    if((chagob.sum*chagob.sum)%rec[chagob.lengths]==n%rec[chagob.lengths]){//chagob.lengths ->equals
+        target.push(chagob);
+    }
+   }
+}
+int main(){
+rec[0]=1;rec[1]=10;
+for(ll i=2;i<=18;i++){//位数
+    rec[i]=rec[i-1]*10;
+}
+//freopen("D://imput.txt","r",stdin);
+cin>>T;
+while(T--){
+    success=false;
+    cin>>n;
+    BFS(n);
+    if(!success){
+        cout<<"None"<<endl;
+    }
+}
+return 0;
+}

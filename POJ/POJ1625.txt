@@ -1,0 +1,206 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1625                   *
+*      VjudgeProblemID:16398               *
+*      SubmitTime:2015/10/23 11:49:43      *
+*      SubmitType:G++                      *
+*      Memory:952KB                        *
+*      CodeLen:4618B                       *
+*      RunTime:110ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef unsigned long long ULL;
+
+/*MX为总长度*/
+const int MX = 2e2 + 5;
+const int P = 128;
+
+int G[MX][MX];
+
+struct AC_machine {
+    int rear, root, ID[MX], s;
+    int Next[MX][P], Fail[MX], End[MX];
+
+    void Init(char *A) {
+        rear = 0;
+        s = strlen(A);
+        for(int i = 0; i < s; i++) {
+            ID[A[i]] = i;
+        }
+        root = New();
+    }
+
+    int New() {
+        End[rear] = 0;
+        for(int i = 0; i < s; i++) {
+            Next[rear][i] = -1;
+        }
+        return rear++;
+    }
+
+    void Add(char *A) {
+        int now = root, n = strlen(A);
+        for(int i = 0; i < n; i++) {
+            int id = ID[A[i]];
+            if(Next[now][id] == -1) {
+                Next[now][id] = New();
+            }
+            now = Next[now][id];
+        }
+        End[now] = 1;
+    }
+
+    void Build() {
+        queue<int>Q;
+        Fail[root] = root;
+        for(int i = 0; i < s; i++) {
+            if(Next[root][i] == -1) {
+                Next[root][i] = root;
+            } else {
+                Fail[Next[root][i]] = root;
+                Q.push(Next[root][i]);
+            }
+        }
+
+        while(!Q.empty()) {
+            int u = Q.front(); Q.pop();
+
+            if(End[Fail[u]]) End[u] = 1;
+            for(int i = 0; i < s; i++) {
+                if(Next[u][i] == -1) {
+                    Next[u][i] = Next[Fail[u]][i];
+                } else {
+                    Fail[Next[u][i]] = Next[Fail[u]][i];
+                    Q.push(Next[u][i]);
+                }
+            }
+        }
+    }
+
+    int Query() {
+        memset(G, 0, sizeof(G));
+        for(int i = 0; i < rear; i++) {
+            for(int j = 0; j < s; j++) {
+                if(End[Next[i][j]] == 0) {
+                    G[i][Next[i][j]]++;
+                }
+            }
+        }
+        return rear;
+    }
+} AC;
+
+struct BigInteger {
+    int A[30];
+    enum {MOD = 10000};
+    BigInteger() {
+        memset(A, 0, sizeof(A));
+        A[0] = 1;
+    }
+    void set(int x) {
+        memset(A, 0, sizeof(A));
+        A[0] = 1;
+        A[1] = x;
+    }
+    void print() {
+        printf("%d", A[A[0]]);
+        for (int i = A[0] - 1; i > 0; i--) {
+            if (A[i] == 0) {
+                printf("0000");
+                continue;
+            }
+            for (int k = 10; k * A[i] < MOD; k *= 10) printf("0");
+            printf("%d", A[i]);
+        }
+        printf("\n");
+    }
+    int& operator [] (int p) {
+        return A[p];
+    }
+    const int& operator [] (int p) const {
+        return A[p];
+    }
+    BigInteger operator + (const BigInteger& B) {
+        BigInteger C;
+        C[0] = max(A[0], B[0]);
+        for (int i = 1; i <= C[0]; i++)
+            C[i] += A[i] + B[i], C[i + 1] += C[i] / MOD, C[i] %= MOD;
+        if (C[C[0] + 1] > 0) C[0]++;
+        return C;
+    }
+    BigInteger operator * (const BigInteger& B) {
+        BigInteger C;
+        C[0] = A[0] + B[0];
+        for (int i = 1; i <= A[0]; i++)
+            for (int j = 1; j <= B[0]; j++) {
+                C[i + j - 1] += A[i] * B[j], C[i + j] += C[i + j - 1] / MOD, C[i + j - 1] %= MOD;
+            }
+        if (C[C[0]] == 0) C[0]--;
+        return C;
+    }
+};
+
+char word[MX];
+BigInteger dp[2][MX];
+
+int main() {
+    int n, m, p; //FIN;
+    while(~scanf("%d%d%d", &n, &m, &p)) {
+        memset(dp, 0, sizeof(dp));
+        scanf("%s", word);
+        AC.Init(word);
+
+        for(int i = 1; i <= p; i++) {
+            scanf("%s", word);
+            AC.Add(word);
+        }
+        AC.Build();
+        int s = AC.Query();
+
+        int cur = 0, nxt = 1;
+        dp[cur][0].set(1);
+        for(int i = 1; i <= m; i++) {
+            for(int j = 0; j < s; j++) {
+                dp[nxt][j].set(0);
+            }
+
+            for(int j = 0; j < s; j++) {
+                for(int k = 0; k < s; k++) {
+                    if(G[j][k]) {
+                        BigInteger temp;
+                        temp.set(G[j][k]);
+                        dp[nxt][k] = dp[nxt][k] + dp[cur][j] * temp;
+                    }
+                }
+            }
+            swap(cur, nxt);
+        }
+
+        BigInteger ans;
+        for(int i = 0; i < s; i++) {
+            ans = ans + dp[cur][i];
+        }
+        ans.print();
+    }
+    return 0;
+}

@@ -1,0 +1,52 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU1055                   *
+*      VjudgeProblemID:31198               *
+*      SubmitTime:2015/2/10 21:46:41       *
+*      SubmitType:GNU C++                  *
+*      Memory:208KB                        *
+*      CodeLen:778B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=105;
+
+int w[26];
+
+int main(){
+    int n;
+    char oper[10];
+    while(~scanf("%d",&n),n!=-1){
+        memset(w,0,sizeof(w));
+
+        w[0]=1;
+        for(int i=1;i<=n;i++){
+            scanf("%s",oper);
+            int p1=oper[0]-'a';
+            int p2=oper[2]-'a';
+            w[p1]=w[p2];
+        }
+
+        bool first=true;
+        for(int i=0;i<26;i++){
+            if(w[i]){
+                if(first){
+                    first=false;
+                }else{
+                    printf(" ");
+                }
+                printf("%c",'a'+i);
+            }
+        }
+        if(first) printf("none");
+        printf("\n");
+    }
+    return 0;
+}

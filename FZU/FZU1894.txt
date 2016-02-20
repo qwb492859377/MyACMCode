@@ -1,0 +1,79 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU1894                   *
+*      VjudgeProblemID:29869               *
+*      SubmitTime:2015/10/28 21:59:25      *
+*      SubmitType:GNU C++                  *
+*      Memory:8056KB                       *
+*      CodeLen:1479B                       *
+*      RunTime:984ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1e6 + 5;
+const int INF = 0x3f3f3f3f;
+
+char w[100];
+int A[MX];
+int Q[MX], cur, rear;
+
+inline int read() {
+    char c = getchar();
+    while(!isdigit(c)) c = getchar();
+
+    int x = 0;
+    while(isdigit(c)) {
+        x = x * 10 + c - '0';
+        c = getchar();
+    }
+    return x;
+}
+
+int main() {
+    int T; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        int n = 0, L = 1;
+        cur = rear = 0;
+        while(scanf("%s", w), w[0] != 'E') {
+            if(w[0] == 'S') continue;
+            if(w[0] == 'C') {
+                /*加入单调队列*/
+                scanf("%s", w);
+                A[++n] = read();
+                while(cur < rear && A[Q[rear - 1]] < A[n]) rear--;
+                Q[rear++] = n;
+            } else if(w[0] == 'G') {
+                /*退出单调队列*/
+                if(cur < rear && Q[cur] == L) cur++;
+                L++;
+            } else {
+                /*查询*/
+                if(cur == rear) printf("-1\n");
+                else printf("%d\n", A[Q[cur]]);
+            }
+        }
+
+    }
+    return 0;
+}

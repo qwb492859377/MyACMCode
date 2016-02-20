@@ -1,0 +1,61 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3280                   *
+*      VjudgeProblemID:16272               *
+*      SubmitTime:2015/7/28 13:16:48       *
+*      SubmitType:C++                      *
+*      Memory:15964KB                      *
+*      CodeLen:1031B                       *
+*      RunTime:141ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 2e3 + 5;
+const int INF = 0x3f3f3f3f;
+#pragma comment(linker,"/STACK:102400000,102400000")
+
+char S[MX];
+int cost[26];
+int dp[MX][MX];
+
+int DP(int L, int R) {
+    if(L > R) return 0;
+    if(dp[L][R]) return dp[L][R];
+
+    if(S[L] == S[R]) {
+        return dp[L][R] = DP(L + 1, R - 1);
+    }
+    int ret = dp[L][R] = min(DP(L, R - 1) + cost[S[R] - 'a'], DP(L + 1, R) + cost[S[L] - 'a']);
+    return ret;
+}
+
+int main() {
+    int n, L;
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%d%d", &n, &L)) {
+        memset(dp, 0, sizeof(dp));
+
+        scanf("%s", S + 1);
+        for(int i = 1; i <= n; i++) {
+            char s[5];
+            int u, v;
+            scanf("%s%d%d", s, &u, &v);
+            cost[s[0] - 'a'] = min(u, v);
+        }
+        printf("%d\n", DP(1, L));
+    }
+    return 0;
+}

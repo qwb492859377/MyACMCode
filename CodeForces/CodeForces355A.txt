@@ -1,0 +1,40 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces355A            *
+*      VjudgeProblemID:47055               *
+*      SubmitTime:2015/1/16 18:46:01       *
+*      SubmitType:PHP 5.3                  *
+*      Memory:16KB                         *
+*      CodeLen:125B                        *
+*      RunTime:46ms                        *
+********************************************
+*/
+<?php
+fscanf(STDIN,"%d%d",$k,$d);if(!$d)die($k==1?"0\n":"No solution\n");echo $d;for($i=0;$i<$k-1;$i++)echo "0";echo "\n";
+?>
+		for($i=0;$i<$k-1;$i++){
+			echo "0";
+		}
+		echo "\n";
+	}
+}
+?>5]={0};
+        if(d==0){
+            printf("%s\n",k==1?"0":"No solution");
+            continue;
+        }
+
+        for(int i=1;i<k;i++){
+            if(d>0){
+                s[i]='1';
+                d--;
+            }else{
+                s[i]='0';
+            }
+        }
+        s[k]='0'+d;
+        printf("%s\n",s+1);
+    }
+    return 0;
+}

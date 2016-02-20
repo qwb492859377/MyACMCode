@@ -1,0 +1,33 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:LightOJ1433               *
+*      VjudgeProblemID:28515               *
+*      SubmitTime:2015/1/14 20:30:57       *
+*      SubmitType:C++                      *
+*      Memory:1224KB                       *
+*      CodeLen:504B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const double pi=3.1415926535;
+
+int main(){
+    int T,ansk=0;
+    scanf("%d",&T);
+    while(T--){
+        double ox,oy,ax,ay,bx,by,r,l,d,j;
+        scanf("%lf%lf%lf%lf%lf%lf",&ox,&oy,&ax,&ay,&bx,&by);
+        r=sqrt((ax-ox)*(ax-ox)+(ay-oy)*(ay-oy));
+        d=sqrt((ax-bx)*(ax-bx)+(ay-by)*(ay-by));
+        j=asin(d/(2*r));
+        printf("Case %d: %.8lf\n",++ansk,2*j*r);
+    }
+    return 0;
+}

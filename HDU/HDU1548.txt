@@ -1,0 +1,71 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1548                   *
+*      VjudgeProblemID:18359               *
+*      SubmitTime:2014/12/16 17:18:43      *
+*      SubmitType:C++                      *
+*      Memory:1104KB                       *
+*      CodeLen:1095B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int maxn=205;
+
+int key[maxn];
+int vis[maxn];
+
+int main(){
+    int n;
+    while(~scanf("%d",&n)&&n){
+        memset(vis,0,sizeof(vis));
+
+        int A,B;
+        scanf("%d%d",&A,&B);
+
+        for(int i=1;i<=n;i++){
+            scanf("%d",&key[i]);
+        }
+        if(A<1||A>n||B<1||B>n){
+            printf("-1\n");
+            continue;
+        }
+
+        queue<int>work;
+        work.push(A);
+
+        int ans=-1;
+        while(!work.empty()){
+            int temp=work.front();
+            work.pop();
+
+            if(temp==B){
+                ans=vis[temp];
+                break;
+            }
+
+            int k;
+            k=temp+key[temp];
+            if(k<=n&&!vis[k]){
+                vis[k]=vis[temp]+1;
+                work.push(k);
+            }
+
+            k=temp-key[temp];
+            if(k>0&&!vis[k]){
+                vis[k]=vis[temp]+1;
+                work.push(k);
+            }
+        }
+
+        printf("%d\n",ans);
+    }
+    return 0;
+}

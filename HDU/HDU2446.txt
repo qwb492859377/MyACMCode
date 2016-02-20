@@ -1,0 +1,73 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2446                   *
+*      VjudgeProblemID:11791               *
+*      SubmitTime:2014/12/3 11:59:26       *
+*      SubmitType:C++                      *
+*      Memory:252KB                        *
+*      CodeLen:1250B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+
+LL S;
+LL funci(LL i){
+    return (i*(i+1)*(i+2)/6);
+}
+LL funcj(LL j){
+    return (j*j-j+2)/2;
+}
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        scanf("%I64d",&S);
+        if(S==1){
+            printf("1 1 1\n");
+            continue;
+        }
+        int l=1,r=1664520,mid;
+        LL fl=funci(l),fr=funci(r),fm;
+        do{
+            mid=(l+r)/2;
+            fm=funci(mid);//printf("[%d,%d,%d     %I64d,%I64d,%I64d]\n",l,mid,r,fl,fm,fr);
+            if(fm>=S){
+                fr=fm;
+                r=mid;
+            }else{
+                fl=fm;
+                l=mid;
+            }
+        }while(r-l>1);
+        int ansi=r,ansj,ansk;
+        S=S-funci(ansi-1);//printf("[%I64d]",S);
+
+        l=1,r=1664520;
+        do{
+            mid=(l+r)/2;
+            fm=funcj(mid);
+            if(fm>S){
+                fr=fm;
+                r=mid;
+            }else{
+                fl=fm;
+                l=mid;
+            }
+        }while(r-l>1);
+        //printf("{%d,%d}\n",l,r);
+
+        ansj=l;
+        ansk=S-funcj(ansj)+1;
+        printf("%d %d %d\n",ansi,ansj,ansk);
+    }
+    return 0;
+}

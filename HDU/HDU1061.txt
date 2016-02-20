@@ -1,0 +1,47 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1061                   *
+*      VjudgeProblemID:15708               *
+*      SubmitTime:2014/12/21 9:46:30       *
+*      SubmitType:C++                      *
+*      Memory:1100KB                       *
+*      CodeLen:516B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int mod=10;
+
+int pow_mod(int a,int b){
+    if(b==0){
+        return 1;
+    }
+    if(b==1){
+        return a%mod;
+    }
+
+    int t=pow_mod(a%mod,b/2);
+    if(b%2==0){
+        //Å¼Êý
+        return t*t%mod;
+    }
+    return t*t*a%mod;
+}
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        int n;
+        scanf("%d",&n);
+
+        printf("%d\n",pow_mod(n%mod,n));
+    }
+    return 0;
+}

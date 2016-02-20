@@ -1,0 +1,45 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3469                   *
+*      VjudgeProblemID:17907               *
+*      SubmitTime:2015/8/15 13:44:25       *
+*      SubmitType:C++                      *
+*      Memory:1612KB                       *
+*      CodeLen:580B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e6 + 5;
+
+int main() {
+    int T, n, ansk = 0;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d", &n);
+
+        int ans;
+        if(n == 1) ans = 1;
+        else if(n == 2) ans = 2;
+        else ans = 2 * n - 4;
+        printf("Case %d: %d\n", ++ansk, ans);
+    }
+    return 0;
+}

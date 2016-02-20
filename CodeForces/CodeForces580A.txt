@@ -1,0 +1,54 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces580A            *
+*      VjudgeProblemID:246826              *
+*      SubmitTime:2015/10/15 21:50:46      *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:792KB                        *
+*      CodeLen:839B                        *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1e5 + 5;
+
+int A[MX], F[MX];
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+
+        F[1] = 1;
+        int ans = 1;
+        for(int i = 2; i <= n; i++) {
+            if(A[i] >= A[i - 1]) F[i] = F[i - 1] + 1;
+            else F[i] = 1;
+            ans = max(ans, F[i]);
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

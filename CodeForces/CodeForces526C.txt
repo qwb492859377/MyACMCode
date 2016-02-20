@@ -1,0 +1,34 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces526C            *
+*      VjudgeProblemID:146098              *
+*      SubmitTime:2015/4/10 13:58:25       *
+*      SubmitType:Microsoft Visual C++ 2010*
+*      Memory:8KB                          *
+*      CodeLen:468B                        *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+
+int main(){
+    LL C,Hr,Hb,Wr,Wb;
+    scanf("%I64d%I64d%I64d%I64d%I64d",&C,&Hr,&Hb,&Wr,&Wb);
+
+    LL ans=0;
+    for(int i=0;(LL)i*i<=C;i++){
+        if(C-Wr*i>=0) ans=max(ans,Hr*i+(C-Wr*i)/Wb*Hb);
+        if(C-Wb*i>=0) ans=max(ans,Hb*i+(C-Wb*i)/Wr*Hr);
+    }
+    printf("%I64d\n",ans);
+    return 0;
+}

@@ -1,0 +1,57 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:LightOJ1004               *
+*      VjudgeProblemID:25830               *
+*      SubmitTime:2015/1/26 15:44:52       *
+*      SubmitType:C++                      *
+*      Memory:2416KB                       *
+*      CodeLen:1025B                       *
+*      RunTime:88ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<string>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+const int maxn=300+5;
+const int INF=0x3F3F3F3F;
+
+int dp[maxn][maxn],A[maxn][maxn];
+
+int main(){
+    int T,ansk=0;
+    scanf("%d",&T);
+    while(T--){
+        int n;
+        scanf("%d",&n);
+        for(int i=1;i<=2*n-1;i++){
+            int ends=(i<=n)?i:(2*n-i);
+            for(int j=1;j<=ends;j++){
+                scanf("%d",&A[i][j]);
+            }
+        }
+        printf("Case %d: ",++ansk);
+        memset(dp,-0x3F,sizeof(dp));
+
+        dp[1][1]=A[1][1];
+        for(int i=2;i<=2*n-1;i++){
+            int ends=(i<=n)?i:(2*n-i);
+            for(int j=1;j<=ends;j++){
+                if(i<=n){
+                    dp[i][j]=max(dp[i-1][j],dp[i-1][j-1]);
+                }else{
+                    dp[i][j]=max(dp[i-1][j],dp[i-1][j+1]);
+                }
+                dp[i][j]+=A[i][j];
+            }
+        }
+
+        printf("%d\n",dp[2*n-1][1]);
+    }
+    return 0;
+}

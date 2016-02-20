@@ -1,0 +1,125 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1392                   *
+*      VjudgeProblemID:18630               *
+*      SubmitTime:2015/4/2 13:44:39        *
+*      SubmitType:C++                      *
+*      Memory:1628KB                       *
+*      CodeLen:1373B                       *
+*      RunTime:93ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=50000+5;
+const double exps=1e-6;
+
+struct Node{
+    double x,y;
+    bool operator<(const Node&b) const{
+        if(fabs(x-b.x)<exps) return y<b.y;
+        return x<b.x;
+    }
+}P[MX],R[MX];
+
+double cross(Node a,Node b,Node c){
+    return ((b.x-a.x)*(c.y-a.y)-(c.x-a.x)*(b.y-a.y));
+}
+
+double length(Node a,Node b){
+    return sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
+}
+
+int convex(int n){
+    int m=0,k;
+    sort(P,P+n);
+    for(int i=0;i<n;i++){
+        while(m>1&&cross(R[m-1],P[i],R[m-2])<=0) m--;
+        R[m++]=P[i];
+    }
+
+    k=m;
+    for(int i=n-2;i>=0;i--){
+        while(m>k&&cross(R[m-1],P[i],R[m-2])<=0) m--;
+        R[m++]=P[i];
+    }
+    if(n>1) m--;
+    return m;
+}
+
+int main(){
+    int n;
+    while(~scanf("%d",&n),n){
+        for(int i=0;i<n;i++){
+            scanf("%lf%lf",&P[i].x,&P[i].y);
+        }
+
+        if(n<=1){
+            printf("0.00\n");
+            continue;
+        }
+        if(n==2){
+            printf("%.2lf\n",length(P[0],P[1]));
+            continue;
+        }
+
+        int rear=convex(n);
+        double ans=0;
+        for(int i=0;i<rear;i++){
+            ans+=length(R[i],R[(i+1)%rear]);
+        }
+        printf("%.2lf\n",ans);
+    }
+    return 0;
+}
+,ans);
+    }
+    return 0;
+}
+t p1=T[i],p2=T[(i+1)%(top+1)];
+            ans+=dis(P[p1],P[p2]);
+        }
+        printf("%.2lf\n",ans);
+    }
+    return 0;
+}
+     stack[top]=i;
+        }
+    }
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int n;
+    while(~scanf("%d",&n),n){
+        init(n);
+        graham(n);
+
+        /*for(int i=0;i<n;i++){
+            printf("[%d,%d]",list[i].x,list[i].y);
+        }
+        for(int i=0;i<=top;i++){
+            printf("(%d)",stack[i]);
+        }*/
+
+        double ans=dis(list[0],list[stack[top]]);
+        int last=0,id;
+        for(int i=1;i<=top;i++){
+            id=stack[i];
+            ans+=dis(list[last],list[id]);
+            last=id;
+        }
+        printf("%.2lf\n",n==2?ans/2:ans);
+    }
+
+    return 0;
+}

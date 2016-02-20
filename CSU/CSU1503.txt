@@ -1,0 +1,114 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1503                   *
+*      VjudgeProblemID:70415               *
+*      SubmitTime:2015/8/17 0:18:23        *
+*      SubmitType:C++                      *
+*      Memory:1496KB                       *
+*      CodeLen:3044B                       *
+*      RunTime:24ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 10;
+const int INF = 0x3f3f3f3f;
+const double exps = 1e-8;
+
+void solve(int x1, double y1, double x2, double y2, double &K, double &B) {
+    K = (x1 - x2) / (y2 - y1);
+    B = (y1 + y2) / 2 - (x1 - x2) * (x1 + x2) / 2 / (y2 - y1);
+}
+
+bool solve2(int x1, double y1, double x2, double y2, double &K, double &B) {
+    if(x2 == x1) return true;
+    K = (y2 - y1) / (x2 - x1);
+    B = -x1 * K + y1;
+    return false;
+}
+
+double dist(double x1, double y1, double x2, double y2) {
+    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
+double cross(double x1, double x2, double y1, double y2) {
+    return x1 * y2 - y1 * x2;
+}
+
+int main() {
+    int ansk = 0; //FIN;
+    double x1, y1, x2, y2, x3, y3, xp, yp;
+    while(~scanf("%lf%lf%lf%lf%lf%lf%lf%lf", &x1, &y1, &x2, &y2, &x3, &y3, &xp, &yp)) {
+        double K1, B1, K2, B2;
+        solve(x1, y1, x2, y2, K1, B1);
+        solve(x2, y2, x3, y3, K2, B2);
+
+        double X, Y, R;
+        if(fabs(y1 - y2) < exps) {
+            X = (x1 + x2) / 2;
+            Y = K2 * X + B2;
+        } else if(fabs(y2 - y3) < exps) {
+            X = (x2 + x3) / 2;
+            Y = K1 * X + B1;
+        } else {
+            Y = (K2 * B1 - K1 * B2) / (K2 - K1);
+            X = (B2 - B1) / (K1 - K2);
+        }
+        R = dist(X, Y, x1, y1);
+        //printf("[%lf,%lf,%lf]\n", X, Y, R);
+
+        bool sign1 = false, sign2 = false;
+        if(solve2(x1, y1, X, Y, K1, B1)) {
+            if((x3 - x1) * (xp - x1) > 0) sign1 = true;
+        } else {
+            if((K1 * x3 + B1 - y3) * (K1 * xp + B1 - yp) > 0) sign1 = true;
+        }
+
+        if(solve2(x3, y3, X, Y, K2, B2)) {
+            if((x1 - x3) * (xp - x3) > 0) sign2 = true;
+        } else {
+            if((K2 * x1 + B2 - y1) * (K2 * xp + B2 - yp) > 0) sign2 = true;
+        }
+
+        double ans;
+        bool p1, p2, p3, sign = sign1 && sign2;
+        p1 = cross(x1 - X, y1 - Y, x3 - X, y3 - Y) >= 0 ? true : false;
+        p2 = cross(x1 - X, y1 - Y, x2 - X, y2 - Y) >= 0 ? true : false;
+        p3 = cross(x2 - X, y2 - Y, x3 - X, y3 - Y) >= 0 ? true : false;
+        if(!((p1 && p2 && p3) || (!p1 && !p2 && !p3))) sign ^= 1;
+
+        if(fabs(cross(x1 - X, y1 - Y, x3 - X, y3 - Y)) < exps) {
+            if(fabs(x1 - x3) < exps) {
+                sign = (xp - x1) * (x2 - x1) > 0 ? true : false;
+            } else {
+                sign = (K1 * x2 + B1 - y2) * (K1 * xp + B1 - yp) > 0 ? true : false;
+            }
+        }
+
+        //printf("[%d,%d  %d]", sign1, sign2,sign);
+        if(sign) {
+            ans = fabs(dist(xp, yp, X, Y) - R);
+        } else {
+            ans = min(dist(xp, yp, x1, y1), dist(xp, yp, x3, y3));
+        }
+        printf("Case %d: %.3lf\n", ++ansk, ans);
+    }
+    return 0;
+}

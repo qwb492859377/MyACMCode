@@ -1,0 +1,93 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2544                   *
+*      VjudgeProblemID:10951               *
+*      SubmitTime:2015/8/4 12:10:11        *
+*      SubmitType:C++                      *
+*      Memory:1920KB                       *
+*      CodeLen:1582B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<string>
+#include<iostream>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 20000 + 5;
+const int INF = 0x3f3f3f3f;
+
+int rear, d[MX];
+int Head[MX], Next[MX];
+
+struct Edge {
+    int u, v, cost;
+} E[MX];
+
+void edge_init() {
+    rear = 0;
+    memset(Head, -1, sizeof(Head));
+    memset(Next, -1, sizeof(Next));
+}
+
+void edge_add(int u, int v, int cost) {
+    E[rear].u = u;
+    E[rear].v = v;
+    E[rear].cost = cost;
+    Next[rear] = Head[u];
+    Head[u] = rear++;
+}
+
+
+void dijistra(int Begin) {
+    memset(d, INF, sizeof(d));
+    d[Begin] = 0;
+
+    priority_queue<PII, vector<PII>, greater<PII> >work;
+    work.push(PII(0, Begin));
+
+    while(!work.empty()) {
+        PII f = work.top();
+        work.pop();
+
+        int dist = f.first, u = f.second;
+
+        for(int id = Head[u]; ~id; id = Next[id]) {
+            int cost = E[id].cost, v = E[id].v;
+            if(dist + cost < d[v]) {
+                d[v] = dist + cost;
+                work.push(PII(dist + cost, v));
+            }
+        }
+    }
+}
+
+int main() {
+    int m, n;
+    //freopen("input.txt","r",stdin);
+    while(~scanf("%d%d", &n, &m), m + n) {
+        edge_init();
+
+        for(int i = 1; i <= m; i++) {
+            int u, v, cost;
+            scanf("%d%d%d", &u, &v, &cost);
+            edge_add(u, v, cost);
+            edge_add(v, u, cost);
+        }
+
+        dijistra(1);
+        printf("%d\n", d[n]);
+    }
+    return 0;
+}

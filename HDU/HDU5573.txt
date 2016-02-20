@@ -1,0 +1,58 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU5573                   *
+*      VjudgeProblemID:287119              *
+*      SubmitTime:2015/11/30 22:57:17      *
+*      SubmitType:G++                      *
+*      Memory:1560KB                       *
+*      CodeLen:1010B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 100 + 5;
+
+int k;
+LL n;
+
+int main() {
+    int T, ansk = 0; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%I64d%d", &n, &k);
+        LL sum = 0;
+        for(int i = 0; i < k; i++) {
+            sum += 1LL << i;
+        }
+        LL t = (sum - n + 1) / 2;
+        printf("Case #%d:\n", ++ansk);
+        for(int i = 0; i < k - 1; i++) {
+            if(t >> i & 1) printf("%I64d %c\n", 1LL << i, '-');
+            else printf("%I64d %c\n", 1LL << i, '+');
+        }
+        sum = 1 << (k - 1);
+        if(n % 2 == 0) sum++;
+        printf("%I64d +\n", sum);
+    }
+    return 0;
+}

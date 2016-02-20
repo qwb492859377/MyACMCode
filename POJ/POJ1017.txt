@@ -1,0 +1,81 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1017                   *
+*      VjudgeProblemID:16476               *
+*      SubmitTime:2014/12/9 17:29:46       *
+*      SubmitType:C++                      *
+*      Memory:164KB                        *
+*      CodeLen:1653B                       *
+*      RunTime:16ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int s[7];
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    while(~scanf("%d",&s[1])){
+        bool ok=s[1];
+        for(int i=2;i<=6;i++){
+            scanf("%d",&s[i]);
+            ok=ok||s[i];
+        }
+        if(!ok){
+            break;
+        }
+
+        int ans=0,t;
+        if(s[6]>0){
+            ans+=s[6];
+        }//printf("[%d,%d,%d]%d\n",s[1],s[2],s[3],ans);
+        if(s[5]>0){
+            ans+=s[5];
+            s[1]=s[1]-11*s[5];
+        }//printf("[%d,%d,%d]%d\n",s[1],s[2],s[3],ans);
+        if(s[4]>0){
+            ans+=s[4];
+            s[2]-=s[4]*5;
+        }//("[%d,%d,%d]%d\n",s[1],s[2],s[3],ans);
+        if(s[3]>0){
+            t=(s[3]+3)/4;
+            ans+=t;
+            s[3]-=4*t;
+        }//printf("[%d,%d,%d]%d\n",s[1],s[2],s[3],ans);
+        if(s[3]<0){
+            t=-s[3];
+            if(t==3){
+                s[2]-=5;
+                s[1]-=7;
+            }else if(t==2){
+                s[2]-=3;
+                s[1]-=6;
+            }else{
+                s[2]-=1;
+                s[1]-=5;
+            }
+        }//printf("[%d,%d,%d]%d\n",s[1],s[2],s[3],ans);
+        if(s[2]>0){
+            t=(s[2]+8)/9;
+            ans+=t;
+            s[2]-=9*t;
+        }//printf("[%d,%d,%d]%d\n",s[1],s[2],s[3],ans);
+        if(s[2]<0){
+            t=-s[2];
+            s[1]-=t*4;
+        }//printf("[%d,%d,%d]%d\n",s[1],s[2],s[3],ans);
+        if(s[1]>0){
+            t=(s[1]+35)/36;
+            ans+=t;
+        }//printf("[%d,%d,%d]%d\n",s[1],s[2],s[3],ans);
+        printf("%d\n",ans);
+    }
+    return 0;
+}

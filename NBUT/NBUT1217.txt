@@ -1,0 +1,58 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1217                  *
+*      VjudgeProblemID:32787               *
+*      SubmitTime:2015/8/17 12:34:32       *
+*      SubmitType:G++                      *
+*      Memory:220KB                        *
+*      CodeLen:948B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+string st[4] = {"bowl", "knife", "fork", "chopsticks"};
+int cnt[4];
+
+int main(){
+    int n;
+    while (~scanf("%d", &n)) {
+        memset(cnt, 0, sizeof(cnt));
+        bool first = true;
+        while (n--) {
+            string k;
+            cin >> k;
+            for (int i = 0; i < 4; i++) {
+                if (k == st[i] && !cnt[i]) {
+                    cnt[i] = 1;
+                    if (first) {
+                        first = false;
+                    }
+                    else cout << ' ';
+
+                    cout << st[i];
+                }
+            }
+        }
+
+        cout << '\n';
+    }
+    return 0;
+}

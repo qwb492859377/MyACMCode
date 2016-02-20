@@ -1,0 +1,47 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2188                   *
+*      VjudgeProblemID:26664               *
+*      SubmitTime:2015/12/6 22:00:50       *
+*      SubmitType:G++                      *
+*      Memory:1560KB                       *
+*      CodeLen:674B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 5e2 + 5;
+
+int A[MX];
+
+int main() {
+    int T, m, n; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d%d", &n, &m);
+        if(n % (m + 1)) printf("Grass\n");
+        else printf("Rabbit\n");
+    }
+    return 0;
+}

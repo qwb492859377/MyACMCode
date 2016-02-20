@@ -1,0 +1,81 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:URAL1147                  *
+*      VjudgeProblemID:18052               *
+*      SubmitTime:2015/5/2 9:43:01         *
+*      SubmitType:Visual C++ 2010          *
+*      Memory:164KB                        *
+*      CodeLen:1289B                       *
+*      RunTime:375ms                       *
+********************************************
+*/
+#include<iostream>
+#include<cstring>
+#include<cstdio>
+#define MAXC 2501
+#define MAXN 1001
+
+using namespace std;
+
+struct rect1
+{
+    int x1,y1,x2,y2,c;
+}r[MAXN];
+int ans[MAXC],n;
+
+void Search(int x1,int y1,int x2,int y2,int c,int k)
+{
+    if(k==n)
+    {
+        ans[c]+=(x2-x1)*(y2-y1);
+        return ;
+    }
+    if(x2<=r[k].x1||x1>=r[k].x2||y2<=r[k].y1||y1>=r[k].y2)
+    {
+        Search(x1,y1,x2,y2,c,k+1);
+        return ;
+    }
+
+    if(x1<=r[k].x1)
+    {
+        Search(x1,y1,r[k].x1,y2,c,k+1);
+        x1=r[k].x1;
+    }
+    if(x2>=r[k].x2)
+    {
+        Search(r[k].x2,y1,x2,y2,c,k+1);
+        x2=r[k].x2;
+    }
+    if(y1<=r[k].y1)
+    {
+        Search(x1,y1,x2,r[k].y1,c,k+1);
+        y1=r[k].y1;
+    }
+    if(y2>=r[k].y2)
+    {
+        Search(x1,r[k].y2,x2,y2,c,k+1);
+    }
+}
+
+int main()
+{
+    int a,b,i;
+    while(scanf("%d %d %d",&a,&b,&n)==3)
+    {
+        memset(ans,0,sizeof(ans));
+        for(i=0;i<n;i++)
+            scanf("%d%d%d%d%d",&r[i].x1,&r[i].y1,&r[i].x2,&r[i].y2,&r[i].c);
+        for(i=0;i<n;i++)
+        {
+            Search(r[i].x1,r[i].y1,r[i].x2,r[i].y2,r[i].c,i+1);
+        }
+        ans[1]=a*b;
+        for(i=2;i<MAXC;i++) ans[1]-=ans[i];
+        for(i=1;i<MAXC;i++)
+        {
+            if(ans[i]) printf("%d %d\n",i,ans[i]);
+        }
+    }
+    return 0;
+}

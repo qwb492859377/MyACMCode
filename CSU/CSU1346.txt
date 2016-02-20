@@ -1,0 +1,44 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1346                   *
+*      VjudgeProblemID:51715               *
+*      SubmitTime:2015/11/19 13:58:04      *
+*      SubmitType:C++                      *
+*      Memory:1484KB                       *
+*      CodeLen:700B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+int main() {
+    int T; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        int a, b, c;
+        scanf("%d%d%d", &a, &b, &c);
+        if(!(abs(a - b) % 3) || !(abs(a - c) % 3) || !(abs(b - c) % 3)) printf("Yes\n");
+        else printf("No\n");
+    }
+    return 0;
+}

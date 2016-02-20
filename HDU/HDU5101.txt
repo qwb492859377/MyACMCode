@@ -1,0 +1,58 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU5101                   *
+*      VjudgeProblemID:73887               *
+*      SubmitTime:2015/2/26 13:58:25       *
+*      SubmitType:C++                      *
+*      Memory:1904KB                       *
+*      CodeLen:975B                        *
+*      RunTime:748ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+
+int rear[1005];
+int C[1005][105];
+int S[1005*105];
+
+int main(){
+    int T,n,k,m,t;
+    scanf("%d",&T);
+    while(T--){
+        memset(rear,0,sizeof(rear));
+
+        scanf("%d%d",&n,&k);
+        for(int i=1;i<=n;i++){
+            scanf("%d",&m);
+
+            for(int j=1;j<=m;j++){
+                scanf("%d",&t);
+                S[rear[0]++]=t;
+                C[i][rear[i]++]=t;
+            }
+        }
+
+        LL a=0,b=0;
+        sort(S,S+rear[0]);
+        for(int i=0;i<rear[0]-1;i++){
+            a+=S+rear[0]-upper_bound(S+i+1,S+rear[0],k-S[i]);
+        }
+
+        for(int i=1;i<=n;i++){
+            sort(C[i],C[i]+rear[i]);
+            for(int j=0;j<rear[i]-1;j++){
+                b+=C[i]+rear[i]-upper_bound(C[i]+j+1,C[i]+rear[i],k-C[i][j]);
+            }
+        }
+        printf("%I64d\n",a-b);
+    }
+    return 0;
+}

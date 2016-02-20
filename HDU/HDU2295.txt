@@ -1,0 +1,168 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2295                   *
+*      VjudgeProblemID:11400               *
+*      SubmitTime:2015/9/15 15:58:48       *
+*      SubmitType:C++                      *
+*      Memory:1840KB                       *
+*      CodeLen:3656B                       *
+*      RunTime:374ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 50 + 5;
+const int MN = 3000 + 5;
+const double exps = 1e-8;
+const int INF = 0x3f3f3f3f;
+
+struct DLX {
+    int m, n;
+    int H[MX], S[MX], vis[MX];
+    int Row[MN], Col[MN], rear;
+    int L[MN], R[MN], U[MN], D[MN];
+
+    void Init(int _m, int _n) {
+        m = _m; n = _n;
+        rear = n;
+        for(int i = 0; i <= n; i++) {
+            S[i] = 0;
+            L[i] = i - 1;
+            R[i] = i + 1;
+            U[i] = D[i] = i;
+        }
+        L[0] = n; R[n] = 0;
+        for(int i = 1; i <= m; i++) {
+            H[i] = -1;
+        }
+    }
+
+    void Link(int r, int c) {
+        int rt = ++rear;
+        Row[rt] = r; Col[rt] = c; S[c]++;
+
+        D[rt] = D[c]; U[D[c]] = rt;
+        U[rt] = c; D[c] = rt;
+        if(H[r] == -1) {
+            H[r] = L[rt] = R[rt] = rt;
+        } else {
+            int id = H[r];
+            R[rt] = R[id]; L[R[id]] = rt;
+            L[rt] = id; R[id] = rt;
+        }
+    }
+
+    void Remove(int c) {
+        for(int i = D[c]; i != c; i = D[i]) {
+            R[L[i]] = R[i]; L[R[i]] = L[i];
+        }
+    }
+
+    void Resume(int c) {
+        for(int i = U[c]; i != c; i = U[i]) {
+            R[L[i]] = L[R[i]] = i;
+        }
+    }
+
+    int h() {
+        int ret = 0;
+        memset(vis, 0, sizeof(vis));
+        for(int c = R[0]; c != 0; c = R[c]) {
+            if(!vis[c]) {
+                ret++;
+                vis[c] = 1;
+                for(int i = D[c]; i != c; i = D[i]) {
+                    for(int j = R[i]; j != i; j = R[j]) {
+                        vis[Col[j]] = 1;
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+
+    bool Dance(int cnt, int K) {
+        if(cnt + h() > K) return false;
+        if(R[0] == 0)  return true;
+
+        int c = R[0];
+        for(int i = R[0]; i != 0; i = R[i]) {
+            if(S[i] < S[c]) c = i;
+        }
+
+        for(int i = D[c]; i != c; i = D[i]) {
+            Remove(i);
+            for(int j = R[i]; j != i; j = R[j]) Remove(j);
+            if(Dance(cnt + 1, K)) return true;
+            for(int j = L[i]; j != i; j = L[j]) Resume(j);
+            Resume(i);
+        }
+        return false;
+    }
+} G;
+
+struct Point {
+    double x, y;
+    void Input() {
+        scanf("%lf%lf", &x, &y);
+    }
+} A[MX], B[MX];
+
+double W[MX][MX];
+
+int dcmp(double x) {
+    if(fabs(x) < exps) return 0;
+    return x < 0 ? -1 : 1;
+}
+
+int main() {
+    int T, n, m, K; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d%d%d", &n, &m, &K);
+        for(int i = 1; i <= n; i++) A[i].Input();
+        for(int i = 1; i <= m; i++) B[i].Input();
+
+        for(int i = 1; i <= m; i++) {
+            for(int j = 1; j <= n; j++) {
+                W[i][j] = sqrt((B[i].x - A[j].x) * (B[i].x - A[j].x) + (B[i].y - A[j].y) * (B[i].y - A[j].y));
+            }
+        }
+
+        double L = 0, R = 2000, M;
+        for(int t = 1; t <= 100; t++) {
+            M = (L + R) / 2;
+
+            G.Init(m, n);
+            for(int i = 1; i <= m; i++) {
+                for(int j = 1; j <= n; j++) {
+                    if(dcmp(W[i][j] - M) <= 0) {
+                        G.Link(i, j);
+                    }
+                }
+            }
+            if(G.Dance(0, K)) R = M;
+            else L = M;
+        }
+        printf("%.6lf\n", M);
+    }
+    return 0;
+}

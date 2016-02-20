@@ -1,0 +1,77 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces510B            *
+*      VjudgeProblemID:115821              *
+*      SubmitTime:2015/10/9 13:05:48       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:164KB                        *
+*      CodeLen:1485B                       *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 50 + 5;
+
+int n, m;
+int vis[MX][MX];
+char S[MX][MX];
+int dist[][2] = {{1, 0}, { -1, 0}, {0, 1}, {0, -1}};
+
+bool DFS(int x, int y, char w, int cnt) {
+    vis[x][y] = cnt;
+    for(int k = 0; k < 4; k++) {
+        int nx = x + dist[k][0];
+        int ny = y + dist[k][1];
+        if(nx < 1 || nx > n || ny < 1 || ny > m || S[nx][ny] != w) continue;
+        if(vis[nx][ny]){
+            if(cnt - vis[nx][ny] >= 3) return true;
+            continue;
+        }
+        if(DFS(nx, ny, w, cnt + 1)) return true;
+    }
+    return false;
+}
+
+int main() {//FIN;
+    while(~scanf("%d%d", &n, &m)) {
+        memset(vis, 0, sizeof(vis));
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%s", S[i] + 1);
+        }
+
+        bool sign = false;
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= m; j++) {
+                if(!vis[i][j] && DFS(i, j, S[i][j], 1)) {
+                    sign = true;
+                    break;
+                }
+            }
+
+            if(sign) break;
+        }
+        printf("%s\n", sign ? "Yes" : "No");
+    }
+    return 0;
+}

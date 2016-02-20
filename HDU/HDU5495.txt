@@ -1,0 +1,70 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU5495                   *
+*      VjudgeProblemID:252438              *
+*      SubmitTime:2015/10/11 10:38:09      *
+*      SubmitType:G++                      *
+*      Memory:3128KB                       *
+*      CodeLen:1215B                       *
+*      RunTime:1466ms                      *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.in","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1e5 + 5;
+
+int A[MX], B[MX], nxt[MX], vis[MX];
+
+int main() {
+    int T, n; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        memset(vis, 0, sizeof(vis));
+        scanf("%d", &n);
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &B[i]);
+        }
+        for(int i = 1; i <= n; i++) {
+            nxt[A[i]] = B[i];
+        }
+
+        int ans = n;
+        for(int i = 1; i <= n; i++) {
+            if(vis[i]) continue;
+
+            int id = i, now = nxt[id];
+            if(now == id) continue;
+
+            ans--;
+            vis[id] = 1;
+            while(now != id) {
+                vis[now] = 1;
+                now = nxt[now];
+            }
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

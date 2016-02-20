@@ -1,0 +1,133 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2482                   *
+*      VjudgeProblemID:10341               *
+*      SubmitTime:2015/8/11 17:47:09       *
+*      SubmitType:C++                      *
+*      Memory:1976KB                       *
+*      CodeLen:2695B                       *
+*      RunTime:110ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<deque>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,rear,1
+
+int const MX = 4e4 + 5;
+
+int rear;
+deque<int>work;
+LL A[MX], WL[MX], WR[MX];
+int MAX[MX << 2], col[MX << 2];
+
+struct Que {
+    int d;
+    int top, L, R;
+    Que() {}
+    Que(int _top, int _L, int _R, int _d) {
+        top = _top; L = _L; R = _R; d = _d;
+    }
+    bool operator<(const Que &b)const {
+        return top < b.top;
+    }
+} Q[MX];
+
+int BS(LL x) {
+    int L = 1, R = rear, m;
+    while(L <= R) {
+        m = (L + R) >> 1;
+        if(A[m] == x) return m;
+        if(A[m] > x) R = m - 1;
+        else L = m + 1;
+    }
+    return -1;
+}
+
+void push_up(int rt) {
+    MAX[rt] = max(MAX[rt << 1], MAX[rt << 1 | 1]);
+}
+
+void push_down(int rt) {
+    if(col[rt]) {
+        col[rt << 1] += col[rt];
+        col[rt << 1 | 1] += col[rt];
+        MAX[rt << 1] += col[rt];
+        MAX[rt << 1 | 1] += col[rt];
+        col[rt] = 0;
+    }
+}
+
+void update(int L, int R, int d, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        col[rt] += d;
+        MAX[rt] += d;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    push_down(rt);
+    if(L <= m) update(L, R, d, lson);
+    if(R > m) update(L, R, d, rson);
+    push_up(rt);
+}
+
+int main() {
+    int n, W, H;
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%d%d%d", &n, &W, &H)) {
+        rear = 0;
+        work.clear();
+        memset(MAX, 0, sizeof(MAX));
+        memset(col, 0, sizeof(col));
+
+        //W -= 2; H -= 2; //fuck!!
+        for(int i = 1; i <= n; i++) {
+            int d, y;
+            scanf("%I64d%I64d%d", &WL[i], &y, &d);
+            WR[i] = WL[i] + W - 1;
+            Q[i] = Que(y, 0, 0, d);
+            A[++rear] = WL[i];
+            A[++rear] = WR[i];
+        }
+        sort(A + 1, A + 1 + rear);
+        rear = unique(A + 1, A + 1 + rear) - A - 1;
+
+        for(int i = 1; i <= n; i++) {
+            Q[i].L = BS(WL[i]);
+            Q[i].R = BS(WR[i]);
+        }
+        sort(Q + 1, Q + 1 + n);
+
+        int ans = 0;
+        for(int i = 1; i <= n; i++) {
+            while(!work.empty() && Q[i].top - Q[work.back()].top >= H) {
+                int id = work.back();
+                work.pop_back();
+                update(Q[id].L, Q[id].R, -Q[id].d, root);
+            }
+            work.push_front(i);
+            update(Q[i].L, Q[i].R, Q[i].d, root);
+            ans = max(ans, MAX[1]);
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

@@ -1,0 +1,71 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2739                   *
+*      VjudgeProblemID:18023               *
+*      SubmitTime:2015/11/28 11:34:45      *
+*      SubmitType:G++                      *
+*      Memory:796KB                        *
+*      CodeLen:1210B                       *
+*      RunTime:94ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1e4 + 5;
+
+int ans[MX], vis[MX], prime[MX], rear;
+
+void prime_init() {
+    memset(vis, 0, sizeof(vis));
+    rear = 0;
+    vis[1] = 1; prime[0] = 0;
+    for(int i = 2; i < MX; i++) {
+        if(vis[i]) continue;
+        prime [++rear] = i;
+        for(int j = 2 * i; j < MX; j += i) {
+            vis[j] = 1;
+        }
+    }
+}
+
+void ans_init() {
+    for(int i = 2; i < MX; i++) {
+        int L = 0, R = 0, sum = 0, cnt = 0;
+        while(prime[L] <= i) {
+            sum -= prime[L++];
+            while(R + 1 <= rear && prime[R + 1] + sum <= i) sum += prime[++R];
+            if(sum == i) cnt++;
+        }
+        ans[i] = cnt;
+    }
+}
+
+int main() {
+    prime_init();
+    ans_init();
+
+    int n; //FIN;
+    while(~scanf("%d", &n), n) {
+        printf("%d\n", ans[n]);
+    }
+    return 0;
+}

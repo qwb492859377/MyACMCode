@@ -1,0 +1,62 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces520B            *
+*      VjudgeProblemID:127062              *
+*      SubmitTime:2015/3/13 11:55:05       *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:12608KB                      *
+*      CodeLen:831B                        *
+*      RunTime:46ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+const int MX=1e6+5;
+
+int vis[MX];
+struct Node{
+    int x,len;
+}t;
+
+int main(){
+    memset(vis,0,sizeof(vis));
+
+    int n,m,ans=0;
+    scanf("%d%d",&n,&m);
+    queue<Node>work;
+    struct Node beg={n,0};
+    work.push(beg);
+
+    while(!work.empty()){
+        Node f=work.front();
+        work.pop();
+
+        vis[f.x]=1;
+        if(f.x==m){
+            ans=f.len;
+            break;
+        }
+
+        if(f.x*2<MX&&!vis[f.x*2]){
+            t.x=f.x*2;
+            t.len=f.len+1;
+            work.push(t);
+        }
+
+        if(f.x-1>0&&!vis[f.x-1]){
+            t.x=f.x-1;
+            t.len=f.len+1;
+            work.push(t);
+        }
+    }
+
+    printf("%d\n",ans);
+}

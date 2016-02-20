@@ -1,0 +1,83 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3951                   *
+*      VjudgeProblemID:22393               *
+*      SubmitTime:2015/12/6 22:40:07       *
+*      SubmitType:G++                      *
+*      Memory:1568KB                       *
+*      CodeLen:1540B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e2 + 5;
+/*
+SG´ò±í³ÌÐò
+int SG[MX], vis[MX];
+
+int main() {
+    int k = 7;
+    SG[0] = 0;
+    for(int n = 1; n < MX; n++) {
+        memset(vis, 0, sizeof(vis));
+        for(int j = 1; j <= k; j++) {
+            for(int a = 0; a <= (n - j) / 2; a++) {
+                int t = SG[a] ^ SG[n - j - a];
+                vis[t] = 1;
+            }
+        }
+        for(int i = 0; i <= n; i++) {
+            if(!vis[i]) {
+                SG[n] = i;
+                break;
+            }
+        }
+    }
+
+    for(int n = 1; n < MX; n++) {
+        bool sign = false;
+        for(int j = 1; j <= min(k, n); j++) {
+            if(SG[n - j] == 0) sign = true;
+        }
+        if(!sign) printf("[%d]", n);
+    }
+    return 0;
+}*/
+
+int main() {
+    int T, ansk = 0; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        int n, k;
+        scanf("%d%d", &n, &k);
+        printf("Case %d: ", ++ansk);
+        if(k == 1) {
+            printf("%s\n", (n & 1) ? "first" : "second");
+        } else {
+            if(n <= k) printf("first\n");
+            else printf("second\n");
+        }
+    }
+    return 0;
+}

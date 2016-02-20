@@ -1,0 +1,77 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3254                   *
+*      VjudgeProblemID:21819               *
+*      SubmitTime:2015/11/22 13:15:48      *
+*      SubmitType:G++                      *
+*      Memory:736KB                        *
+*      CodeLen:1691B                       *
+*      RunTime:79ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+#pragma comment(linker, "/STACK:102400000,102400000")
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MN = 12 + 5;
+const int MX = 5000 + 5;
+const int mod = 1e8;
+
+int A[MN][MN];
+LL dp[2][MX];
+
+int main() {
+    int n, m; //FIN;
+    while(~scanf("%d%d", &n, &m)) {
+        memset(dp, 0, sizeof(dp));
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= m; j++) {
+                scanf("%d", &A[i][j]);
+            }
+        }
+
+        int cur = 0, nxt = 1;
+        dp[cur][0] = 1;
+
+        LL ans = 1;
+        for(int x = 1; x <= n; x++) {
+            for(int y = 1; y <= m; y++) {
+                memset(dp[nxt], 0, sizeof(dp[nxt]));
+                for(int S = 0; S < (1 << m); S++) {
+                    int P = S << 1;
+                    if(S >> (m - 1) & 1) P ^= 1 << m;
+                    dp[nxt][P] += dp[cur][S];
+                    dp[nxt][P] %= mod;
+
+                    if(A[x][y] && (x == 1 || !(S >> (m - 1) & 1)) && (y == 1 || !(S & 1))) {
+                        dp[nxt][S << 1 | 1] += dp[cur][S];
+                        dp[nxt][S << 1 | 1] %= mod;
+                        ans = (dp[nxt][S << 1 | 1] + ans) % mod;
+                    }
+                }
+                swap(cur, nxt);
+            }
+        }
+        printf("%I64d\n", ans);
+    }
+    return 0;
+}

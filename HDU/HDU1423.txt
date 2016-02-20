@@ -1,0 +1,66 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1423                   *
+*      VjudgeProblemID:17363               *
+*      SubmitTime:2015/7/27 20:36:39       *
+*      SubmitType:C++                      *
+*      Memory:2604KB                       *
+*      CodeLen:1168B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 500 + 5;
+const int INF = 0x3f3f3f3f;
+
+int dp[MX][MX];
+LL A[MX], B[MX];
+
+int main() {
+    int T;
+    //freopen("input.txt","r",stdin);
+    scanf("%d", &T);
+    while(T--) {
+        int m, n;
+        scanf("%d", &m);
+        memset(dp, 0, sizeof(dp));
+        for(int i = 1; i <= m; i++) {
+            scanf("%I64d", &A[i]);
+        }
+
+        scanf("%d", &n);
+        for(int i = 1; i <= n; i++) {
+            scanf("%I64d", &B[i]);
+        }
+
+        int ans = 0;
+        for(int i = 1; i <= m; i++) {
+            int Max = 0;
+            for(int j = 1; j <= n; j++) {
+                if(A[i] == B[j]) {
+                    dp[i][j] = Max + 1;
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+                if(A[i] > B[j]) Max = max(Max, dp[i - 1][j]);
+                ans = max(ans, dp[i][j]);
+            }
+        }
+        printf("%d\n", ans);
+        if(T) printf("\n");
+    }
+    return 0;
+}

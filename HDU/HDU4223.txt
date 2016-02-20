@@ -1,0 +1,45 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4223                   *
+*      VjudgeProblemID:27730               *
+*      SubmitTime:2015/6/10 12:39:05       *
+*      SubmitType:C++                      *
+*      Memory:1612KB                       *
+*      CodeLen:619B                        *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cstdlib>
+#include<algorithm>
+using namespace std;
+const int MX=1000+5;
+const int INF=0x3f3f3f3f;
+
+int S[MX];
+int main(){
+    int T,n,t,ansk=0;
+    scanf("%d",&T);
+
+    while(T--){
+        scanf("%d",&n);
+        memset(S,0,sizeof(S));
+
+        for(int i=1;i<=n;i++){
+            scanf("%d",&t);
+            S[i]=S[i-1]+t;
+        }
+
+        int ans=INF;
+        for(int i=1;i<=n;i++){
+            for(int j=i;j<=n;j++){
+                ans=min(ans,abs(S[j]-S[i-1]));
+            }
+        }
+        printf("Case %d: %d\n",++ansk,ans);
+    }
+    return 0;
+}

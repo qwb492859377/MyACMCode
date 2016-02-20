@@ -1,0 +1,33 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:LightOJ1072               *
+*      VjudgeProblemID:26789               *
+*      SubmitTime:2015/1/14 20:10:48       *
+*      SubmitType:C++                      *
+*      Memory:1200KB                       *
+*      CodeLen:400B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const double pi=3.1415926535;
+
+int main(){
+    int T,ansk=0;
+    scanf("%d",&T);
+    while(T--){
+        double R,r,d,c;
+        int n;
+        scanf("%lf%d",&R,&n);
+        d=1.0*(n-2)*pi/(2*n);
+        c=cos(d);
+        printf("Case %d: %.10lf\n",++ansk,R*c/(c+1));
+    }
+    return 0;
+}

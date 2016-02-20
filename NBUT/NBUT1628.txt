@@ -1,0 +1,68 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1628                  *
+*      VjudgeProblemID:287955              *
+*      SubmitTime:2015/11/30 15:05:27      *
+*      SubmitType:G++                      *
+*      Memory:308KB                        *
+*      CodeLen:1277B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 100 + 5;
+const int INF = 0x3f3f3f3f;
+
+int n, k;
+int A[2][MX], dp[MX][2][MX];
+
+int solve() {
+    memset(dp, INF, sizeof(dp));
+    for(int i = 0; i <= k; i++) {
+        for(int j = 1; j <= n; j++) {
+            dp[i][0][j] = min(i > 0 ? dp[i - 1][1][j] : INF, j > 1 ? dp[i][0][j - 1] + A[0][j - 1] : INF);
+            dp[i][1][j] = min(i > 0 ? dp[i - 1][0][j] : INF, j > 1 ? dp[i][1][j - 1] + A[1][j - 1] : INF);
+            if(i == 0 && j == 1) dp[i][0][j] = 0;
+        }
+    }
+
+    int ans = INF;
+    for(int i = 0; i <= k; i++) {
+        ans = min(ans, dp[i][1][n]);
+    }
+    return ans;
+}
+
+
+int main() {
+    //FIN;
+    while(~scanf("%d%d", &n, &k)) {
+        for(int j = 0; j <= 1; j++) {
+            for(int i = 1; i <= n - 1; i++) {
+                scanf("%d", &A[j][i]);
+            }
+        }
+        printf("%d\n", solve());
+    }
+    return 0;
+}

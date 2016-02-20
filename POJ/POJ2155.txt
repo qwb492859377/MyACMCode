@@ -1,0 +1,115 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2155                   *
+*      VjudgeProblemID:10491               *
+*      SubmitTime:2015/8/7 14:24:21        *
+*      SubmitType:C++                      *
+*      Memory:15956KB                      *
+*      CodeLen:2280B                       *
+*      RunTime:969ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<set>
+#include<string>
+#include<iostream>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<LL, int> PLI;
+
+const int MX = 1e3 + 5;
+const int INF = 0x3f3f3f3f;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,n,1
+
+int T, n, Q;
+char S[MX << 2][MX << 2];
+
+void build() {
+    memset(S, 0, sizeof(S));
+}
+
+void update_y(int xr, int Y1, int Y2, int l, int r, int rt) {
+    if(Y1 <= l && r <= Y2) {
+        //printf("[%d,%d]",xr,rt);
+        S[xr][rt]++;
+        S[xr][rt] %= 2;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    if(Y1 <= m) update_y(xr, Y1, Y2, lson);
+    if(Y2 > m)  update_y(xr, Y1, Y2, rson);
+}
+
+void update_x(int X1, int X2, int Y1, int Y2, int l, int r, int rt) {
+    if(X1 <= l && r <= X2) {
+        //printf("{%d,%d    %d,%d  %d}",X1,X2,l,r,rt);
+        update_y(rt, Y1, Y2, root);
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    if(X1 <= m) update_x(X1, X2, Y1, Y2, lson);
+    if(X2 > m)  update_x(X1, X2, Y1, Y2, rson);
+}
+
+int query_y(int xr, int Y, int l, int r, int rt) {
+    if(l == r) {
+        return S[xr][rt];
+    }
+
+    int m = (l + r) >> 1, ret = S[xr][rt];
+    if(Y <= m) ret += query_y(xr, Y, lson);
+    if(Y > m)  ret += query_y(xr, Y, rson);
+    return ret%2;
+}
+
+
+int query_x(int X, int Y, int l, int r, int rt) {
+    if(l == r) {
+        return query_y(rt, Y, root);
+    }
+
+    int m = (l + r) >> 1, ret = query_y(rt, Y, root);
+    if(X <= m) ret += query_x(X, Y, lson);
+    if(X > m)  ret += query_x(X, Y, rson);
+    return ret%2;
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    scanf("%d", &T);
+    bool first;
+    while(T--) {
+        build();
+        if(first) first=false;
+        else printf("\n");
+
+        scanf("%d%d", &n, &Q);
+
+        while(Q--) {
+            char op[5]; int X1, Y1, X2, Y2;
+            scanf("%s", op);
+
+            if(op[0] == 'C') {
+                scanf("%d%d%d%d", &X1, &Y1, &X2, &Y2);
+                update_x(X1, X2, Y1, Y2, root);//printf("[%d,%d]",S[3][1]);
+            } else {
+                scanf("%d%d", &X1, &Y1);
+                printf("%d\n", query_x(X1, Y1, root));
+            }
+        }
+    }
+    return 0;
+}

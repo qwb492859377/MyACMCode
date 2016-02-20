@@ -1,0 +1,77 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces584C            *
+*      VjudgeProblemID:254404              *
+*      SubmitTime:2015/11/4 0:31:49        *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:300KB                        *
+*      CodeLen:1566B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e5 + 5;
+
+char A[MX], B[MX], C[MX];
+
+int main() {
+    int n, m; //FIN;
+    while(~scanf("%d%d", &n, &m)) {
+        memset(C, 0, sizeof(C));
+        scanf("%s%s", A + 1, B + 1);
+        m = n - m;
+
+        int sum = 0;
+        for(int i = 1; i <= n; i++) {
+            if(A[i] == B[i]) sum++;
+        }
+
+        if((n - sum) / 2 + sum < m) {
+            printf("-1\n");
+            continue;
+        }
+
+        int k = min(m, sum);
+        for(int i = 1, j = 1; j <= k && i <= n; i++) {
+            if(A[i] == B[i]) C[i] = A[i], j++;
+        }
+        int s = m - k;
+        for(int i = 1, j = 1; j <= s && i <= n; i++) {
+            if(A[i] != B[i] && !C[i]) C[i] = A[i], j++;
+        }
+        for(int i = 1, j = 1; j <= s && i <= n; i++) {
+            if(A[i] != B[i] && !C[i]) C[i] = B[i], j++;
+        }
+        for(int i = 1; i <= n; i++) {
+            if(!C[i]) for(int j = 'a'; j <= 'z'; j++) {
+                    if(A[i] != j && B[i] != j){
+                        C[i] = j;
+                        break;
+                    }
+                }
+        }
+        printf("%s\n", C + 1);
+    }
+    return 0;
+}

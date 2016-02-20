@@ -1,0 +1,62 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1251                   *
+*      VjudgeProblemID:16379               *
+*      SubmitTime:2015/2/22 18:42:38       *
+*      SubmitType:C++                      *
+*      Memory:44624KB                      *
+*      CodeLen:875B                        *
+*      RunTime:156ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+
+struct node{
+    int num;
+    node*next[26];
+    node(){
+        num=0;
+        memset(next,NULL,sizeof(next));
+    }
+};
+
+void tree_insert(node*root,char*s){
+    for(int i=0;i<strlen(s);i++){
+        int t=s[i]-'a';
+        if(root->next[t]==NULL) root->next[t]=new node();
+        root=root->next[t];
+        root->num++;
+    }
+}
+
+int tree_query(node*root,char*s){
+    for(int i=0;i<strlen(s);i++){
+        int t=s[i]-'a';
+        if(root->next[t]==NULL) return 0;
+        root=root->next[t];
+    }
+    return root->num;
+}
+
+int main(){
+    char line[20];
+    node*root=new node();
+    while(gets(line)&&strlen(line)){
+        tree_insert(root,line);
+    }
+    while(gets(line)){
+        printf("%d\n",tree_query(root,line));
+    }
+    return 0;
+}
+    printf("%d\n",tree_query(root,word));
+    }
+    return 0;
+}

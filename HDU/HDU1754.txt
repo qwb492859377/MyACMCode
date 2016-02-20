@@ -1,0 +1,121 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1754                   *
+*      VjudgeProblemID:14797               *
+*      SubmitTime:2016/1/7 0:57:41         *
+*      SubmitType:G++                      *
+*      Memory:6268KB                       *
+*      CodeLen:2588B                       *
+*      RunTime:1138ms                      *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iomanip>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 2e5 + 5;
+const int mod = 1e9 + 7;
+const int INF = 0x3f3f3f3f;
+
+int s[MX], MAX[MX], size[MX];
+int son[MX][2], fa[MX], root, sz;
+void Link(int x, int y, int c) {
+    fa[x] = y; son[y][c] = x;
+}
+void push_up(int rt) {
+    size[rt] = size[son[rt][0]] + size[son[rt][1]] + 1;
+    MAX[rt] = max(max(MAX[son[rt][0]], MAX[son[rt][1]]), s[rt]);
+}
+void Rotate(int x, int c) {
+    int y = fa[x];
+    Link(x, fa[y], son[fa[y]][1] == y);
+    Link(son[x][!c], y, c);
+    Link(y, x, !c);
+    push_up(y);
+}
+void Splay(int x, int g) {
+    while(fa[x] != g) {
+        int y = fa[x], cx = son[y][1] == x, cy = son[fa[y]][1] == y;
+        if(fa[y] == g) Rotate(x, cx);
+        else {
+            if(cx == cy) Rotate(y, cy);
+            else Rotate(x, cx);
+            Rotate(x, cy);
+        }
+    }
+    push_up(x);
+    if(!g) root = x;
+}
+void NewNode(int f, int &rt) {
+    rt = ++sz;
+    fa[rt] = f, size[rt] = 1;
+    son[rt][0] = son[rt][1] = 0;
+}
+int Select(int k, int g) {
+    int rt = root;
+    while(size[son[rt][0]] != k) {
+        if(size[son[rt][0]] > k) rt = son[rt][0];
+        else k -= size[son[rt][0]] + 1, rt = son[rt][1];
+    }
+    Splay(rt, g);
+    return rt;
+}
+void Build(int l, int r, int &rt, int f) {
+    if(l > r) return;
+    int m = (l + r) >> 1, t;
+    NewNode(f, rt);
+    Build(l, m - 1, son[rt][0], rt);
+    scanf("%d", &t); MAX[rt] = s[rt] = t;
+    Build(m + 1, r, son[rt][1], rt);
+    push_up(rt);
+}
+void Prepare(int n) {
+    sz = 0;
+    NewNode(0, root); MAX[1] = s[1] = 0;
+    NewNode(root, son[root][1]); MAX[2] = s[2] = 0;
+    Build(1, n, son[2][0], 2);
+    Splay(3, 0);
+}
+int Query(int l, int r) {
+    Select(l - 1, 0);
+    Select(r + 1, root);
+    return MAX[son[son[root][1]][0]];
+}
+int Update(int p, int t) {
+    Select(p, 0);
+    s[root] = t;
+    MAX[root] = max(MAX[root], t);
+}
+
+int main() {
+    int n, m; //FIN;
+    while(~scanf("%d%d", &n, &m)) {
+        Prepare(n);
+        for(int i = 1; i <= m; i++) {
+            char op[10]; int a, b;
+            scanf("%s%d%d", op, &a, &b);
+            if(op[0] == 'Q') printf("%d\n", Query(a, b));
+            else Update(a, b);
+        }
+    }
+    return 0;
+}

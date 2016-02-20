@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1060                   *
+*      VjudgeProblemID:26537               *
+*      SubmitTime:2014/12/21 11:47:20      *
+*      SubmitType:G++                      *
+*      Memory:1076KB                       *
+*      CodeLen:619B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+const double exps=1e-8;
+const int mod=10;
+
+double dm(double s){
+    int l=log10(s);
+    return s/pow(10,1.0*l);
+}
+
+double solve(double a,int b){
+    if(b==0){
+        return 1.0;
+    }
+    if(b==1){
+        return a;
+    }
+    double t=solve(a,b/2);
+    if(b%2==0){
+        return dm(t*t);
+    }
+    return dm(t*t*a);
+}
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        int n;
+        scanf("%d",&n);
+        printf("%d\n",int(solve(dm(1.0*n),n)));
+    }
+    return 0;
+}

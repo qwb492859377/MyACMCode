@@ -1,0 +1,94 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU2183                   *
+*      VjudgeProblemID:138460              *
+*      SubmitTime:2015/5/3 22:25:48        *
+*      SubmitType:GNU C++                  *
+*      Memory:324KB                        *
+*      CodeLen:1855B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=10005;
+
+char S1[MX],S2[MX];
+char A[MX],B[MX];
+int Acnt[MX],Bcnt[MX];
+
+int read(char*S,int len,int cur,int &newp){
+    int w=0,i;
+    for(i=cur;S[i]!=']';i++){
+        w=w*10+S[i]-'0';
+    }
+    newp=i;
+    return w;
+}
+
+int main(){
+    while(scanf("%s%s",S1+1,S2+1)==2){
+        memset(Acnt,0,sizeof(Acnt));
+        memset(Bcnt,0,sizeof(Bcnt));
+
+        int l1=strlen(S1+1),l2=strlen(S2+1),r1=0,r2=0;
+        for(int i=1;i<=l1;i++){
+            if(S1[i]==A[r1]&&r1) r1--;
+
+            A[++r1]=S1[i];
+            if(i+1<=l1&&S1[i+1]=='['){
+                int newp;
+                Acnt[r1]+=read(S1,l1,i+2,newp);
+                i=newp;
+            }else{
+                Acnt[r1]+=1;
+            }
+        }
+
+        for(int i=1;i<=l2;i++){
+            if(S2[i]==B[r2]&&r2) r2--;
+
+            B[++r2]=S2[i];
+            Bcnt[r2]+=1;
+        }
+
+        bool ans=false;
+        for(int i=1;i<=r1&&i+r2-1<=r1;i++){
+            bool sign=true;
+            for(int j=1;j<=r2;j++){
+                if(A[i+j-1]==B[j]){
+                    if((j==1||j==r2)){
+                        if(Acnt[i+j-1]<Bcnt[j]){
+                            sign=false;
+                            break;
+                        }
+                    }else{
+                        if(Acnt[i+j-1]!=Bcnt[j]){
+                            sign=false;
+                            break;
+                        }
+                    }
+                }else{
+                    sign=false;
+                    break;
+                }
+            }
+
+            if(sign){
+                ans=true;
+                break;
+            }
+        }
+
+        printf("%s\n",ans?"True":"False");
+    }
+    return 0;
+}

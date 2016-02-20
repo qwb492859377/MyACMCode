@@ -1,0 +1,133 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3414                   *
+*      VjudgeProblemID:15208               *
+*      SubmitTime:2015/2/22 17:31:41       *
+*      SubmitType:C++                      *
+*      Memory:328KB                        *
+*      CodeLen:2820B                       *
+*      RunTime:16ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int maxn=100+5;
+int vis[maxn][maxn];
+char dist[][2][100]={{"FILL(1)","FILL(2)"},{"DROP(1)","DROP(2)"},{"POUR(1,2)","POUR(2,1)"}};
+
+struct LAST{
+    int w;
+    int op,i,j;
+}last[maxn][maxn];
+
+struct Q{
+    int a,b;
+}t,f,ans;
+
+void print_ans(int a,int b,int cnt){
+    if(!a&&!b){
+        printf("%d\n",cnt);
+        return;
+    }
+    LAST &l=last[a][b];
+    print_ans(l.i,l.j,cnt+1);
+    printf("%s\n",dist[l.op][l.w]);
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int A,B,C;
+    while(~scanf("%d%d%d",&A,&B,&C)){
+        memset(vis,0,sizeof(vis));
+        f.a=0,f.b=0;
+
+        queue<Q>work;
+        work.push(f);
+
+        bool sign=false;
+        while(!work.empty()){
+            f=work.front();
+            work.pop();
+
+            vis[f.a][f.b]=1;
+            if(f.a==C||f.b==C){
+                sign=true;
+                ans=f;
+                break;
+            }
+
+            //FILL
+            t=f;t.a=A;
+            if(!vis[t.a][t.b]){
+                last[t.a][t.b].op=0;
+                last[t.a][t.b].w=0;
+                last[t.a][t.b].i=f.a;
+                last[t.a][t.b].j=f.b;
+                work.push(t);
+            }
+            t=f;t.b=B;
+            if(!vis[t.a][t.b]){
+                last[t.a][t.b].op=0;
+                last[t.a][t.b].w=1;
+                last[t.a][t.b].i=f.a;
+                last[t.a][t.b].j=f.b;
+                work.push(t);
+            }
+
+            //DROP
+            t=f;t.a=0;
+            if(!vis[t.a][t.b]){
+                last[t.a][t.b].op=1;
+                last[t.a][t.b].w=0;
+                last[t.a][t.b].i=f.a;
+                last[t.a][t.b].j=f.b;
+                work.push(t);
+            }
+            t=f;t.b=0;
+            if(!vis[t.a][t.b]){
+                last[t.a][t.b].op=1;
+                last[t.a][t.b].w=1;
+                last[t.a][t.b].i=f.a;
+                last[t.a][t.b].j=f.b;
+                work.push(t);
+            }
+
+            //POUR
+            t=f;
+            int p=min(t.a,B-t.b);
+            t.a-=p;t.b+=p;
+            if(!vis[t.a][t.b]){
+                last[t.a][t.b].op=2;
+                last[t.a][t.b].w=0;
+                last[t.a][t.b].i=f.a;
+                last[t.a][t.b].j=f.b;
+                work.push(t);
+            }
+
+            t=f;
+            p=min(t.b,A-t.a);
+            t.a+=p;t.b-=p;
+            if(!vis[t.a][t.b]){
+                last[t.a][t.b].op=2;
+                last[t.a][t.b].w=1;
+                last[t.a][t.b].i=f.a;
+                last[t.a][t.b].j=f.b;
+                work.push(t);
+            }
+        }
+
+        if(sign){
+            print_ans(ans.a,ans.b,0);
+        }else{
+            printf("impossible\n");
+        }
+    }
+    return 0;
+}

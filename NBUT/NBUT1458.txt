@@ -1,0 +1,128 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1458                  *
+*      VjudgeProblemID:38740               *
+*      SubmitTime:2015/8/21 19:17:56       *
+*      SubmitType:G++                      *
+*      Memory:16268KB                      *
+*      CodeLen:3190B                       *
+*      RunTime:406ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<sstream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+const int MX = 100020;
+
+int nq;
+int ty[MX * 3], ql[MX * 3], qr[MX * 3], qk[MX * 3], rep[MX * 3];
+vector<int>dp[MX << 2];
+int L[MX << 2], R[MX << 2];
+int val[MX];
+int n, m;
+int cur, rear, via[MX], a[MX];
+vector<int>V;
+
+int getid(int x) {
+    return lower_bound(V.begin(), V.end(), x) - V.begin();
+}
+inline int low(int x) {
+    return x & (-x);
+}
+int ask(int loc) {
+    int ret = 0;
+    for(int i = loc; i >= 1; i -= low(i))if(via[i] == cur)ret += a[i];
+    return ret;
+}
+void upd(int loc, int w) {
+    for(int i = loc; i <= n; i += low(i)) {
+        if(via[i] < cur) {
+            via[i] = cur;
+            a[i] = w;
+        } else a[i] += w;
+    }
+}
+int main() {//FIN;
+    while(~scanf("%d%d", &n,&m)) {
+        dp[0].clear();
+        V.clear();
+        nq = 0;
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &qr[nq]);
+            val[i] = qr[nq];
+            V.push_back(val[i]);
+            ql[nq] = i;
+            ty[nq] = 1;
+            dp[0].push_back(nq++);
+        }
+
+        for(int i = 0; i < m; i++) {
+            scanf("%d%d%d", &ql[nq], &qr[nq], &qk[nq]);
+            ty[nq] = 2;
+            /*else {
+                V.push_back(qr[nq]);
+                dp[0].push_back(nq++);
+                ty[nq] = -1;
+                ql[nq] = ql[nq - 1];
+                qr[nq] = val[ql[nq]];
+                val[ql[nq]] = qr[nq - 1];
+            }*/
+            dp[0].push_back(nq++);
+        }
+        sort(V.begin(), V.end());
+        V.erase(unique(V.begin(), V.end()), V.end());
+
+        for(int i = 0; i < nq; i++)if(ty[i] != 2)qr[i] = getid(qr[i]);
+        for(int i = 1; i <= n; i++)a[i] = 0, via[i] = 0;
+        L[0] = 0, R[0] = V.size() - 1;
+
+        cur = 0, rear = 1;
+        while(cur < rear) {
+            if(L[cur] == R[cur]) {
+                for(int i = 0; i < dp[cur].size(); i++) {
+                    int u = dp[cur][i];
+                    if(ty[u] == 2)rep[u] = V[L[cur]];
+                }
+            } else {
+                int mid = (L[cur] + R[cur]) >> 1;
+                L[rear] = L[cur], R[rear] = mid;
+                dp[rear].clear();
+                int ls = rear++;
+                L[rear] = mid + 1, R[rear] = R[cur];
+                dp[rear].clear();
+                int rs = rear++;
+                for(int i = 0; i < dp[cur].size(); i++) {
+                    int u = dp[cur][i];
+                    if(ty[u] == 2) {
+                        int t = ask(qr[u]) - ask(ql[u] - 1);
+                        if(t >= qk[u])dp[ls].push_back(u);
+                        else qk[u] -= t, dp[rs].push_back(u);
+                    } else {
+                        if(qr[u] <= mid)dp[ls].push_back(u), upd(ql[u], ty[u]);
+                        else dp[rs].push_back(u);
+                    }
+                }
+            }
+            cur++;
+        }
+
+        for(int i = 0; i < nq; i++){
+            if(ty[i] == 2) printf("%d\n", rep[i]);
+        }
+    }
+}

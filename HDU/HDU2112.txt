@@ -1,0 +1,120 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2112                   *
+*      VjudgeProblemID:22265               *
+*      SubmitTime:2015/7/24 23:31:57       *
+*      SubmitType:C++                      *
+*      Memory:6100KB                       *
+*      CodeLen:2405B                       *
+*      RunTime:436ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 2e4 + 5;
+const int INF = 0x3f3f3f3f;
+const int HS = 1000007;
+
+char word[MX][35];
+int H_head[HS], H_next[MX], H_rear;
+int rear, Head[MX], Next[MX];
+int d[MX];
+
+struct Edge {
+    int u, v, cost;
+} E[MX];
+
+void edge_init() {
+    rear = 0;
+    memset(Head, -1, sizeof(Head));
+    memset(Next, -1, sizeof(Next));
+}
+
+void edge_add(int u, int v, int cost) {
+    E[rear].u = u;
+    E[rear].v = v;
+    E[rear].cost = cost;
+    Next[rear] = Head[u];
+    Head[u] = rear++;
+}
+
+int Hash(char*S) {
+    int len = strlen(S), ret = 0;
+    for(int i = 0; i < len; i++) {
+        ret = ret * 131 + S[i];
+    }
+    return (ret & 0x7fffffff) % HS;
+}
+
+void Hash_init() {
+    H_rear = 0;
+    memset(H_head, -1, sizeof(H_head));
+    memset(H_next, -1, sizeof(H_next));
+}
+
+int Hash_query(char*S) {
+    int h = Hash(S);
+
+    for(int i = H_head[h]; ~i; i = H_next[i]) {
+        if(strcmp(word[i], S) == 0) return i;
+    }
+
+    strcpy(word[H_rear], S);
+    H_next[H_rear] = H_head[h];
+    H_head[h] = H_rear;
+    return H_rear++;
+}
+
+int main() {
+    //freopen("input.txt","r",stdin);
+    int n, Begin, End;
+    char oper1[35], oper2[35];
+    while(~scanf("%d", &n), n > 0) {
+        Hash_init();
+        edge_init();
+        memset(d, INF, sizeof(d));
+
+        scanf("%s%s", oper1, oper2);
+        Begin = Hash_query(oper1);
+        End = Hash_query(oper2);
+
+        for(int i = 1; i <= n; i++) {
+            int u, v, cost;
+            scanf("%s%s%d", oper1, oper2, &cost);
+            u = Hash_query(oper1), v = Hash_query(oper2);
+            edge_add(u, v, cost);
+            edge_add(v, u, cost);
+        }
+
+        d[Begin] = 0;
+        priority_queue<PII,vector<PII>,greater<PII> >work;
+        work.push(PII(0, Begin));
+        while(!work.empty()) {
+            PII f = work.top();
+            work.pop();
+
+            int dist = f.first, u = f.second;
+
+            for(int id = Head[u]; ~id; id = Next[id]) {
+                int cost = E[id].cost, v = E[id].v;
+                if(dist + cost < d[v]) {
+                    d[v] = dist + cost;
+                    work.push(PII(dist + cost, v));
+                }
+            }
+        }
+        printf("%d\n", d[End] == INF ? -1 : d[End]);
+    }
+    return 0;
+}

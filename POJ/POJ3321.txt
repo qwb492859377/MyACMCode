@@ -1,0 +1,133 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3321                   *
+*      VjudgeProblemID:10486               *
+*      SubmitTime:2015/8/9 11:39:38        *
+*      SubmitType:C++                      *
+*      Memory:7460KB                       *
+*      CodeLen:2252B                       *
+*      RunTime:469ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<LL, int> PLI;
+
+const int MX = 2e5 + 5;
+const int INF = 0x3f3f3f3f;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,n,1
+#define RR rt<<1|1
+#define LL rt<<1
+
+int S[MX << 2];
+int Beg[MX], End[MX], clock;
+int Head[MX], Next[MX], rear;
+
+struct Edge {
+    int u, v;
+} E[MX];
+
+void edge_init() {
+    rear = 0;
+    memset(Head, -1, sizeof(Head));
+}
+
+void edge_add(int u, int v) {
+    E[rear].u = u;
+    E[rear].v = v;
+    Next[rear] = Head[u];
+    Head[u] = rear++;
+}
+
+int DFS(int u, int from) {
+    Beg[u] = ++clock;
+    int last = Beg[u];
+    for(int i = Head[u]; ~i; i = Next[i]) {
+        int v = E[i].v;
+        if(v == from) continue;
+        last = DFS(v, u);
+    }
+    return End[u] = last;
+}
+
+void push_up(int rt) {
+    S[rt] = S[LL] + S[RR];
+}
+
+void build(int l, int r, int rt) {
+    if(l == r) {
+        S[rt] = 1;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    build(lson);
+    build(rson);
+    push_up(rt);
+}
+
+void update(int x, int l, int r, int rt) {
+    if(l == r) {
+        S[rt] ^= 1;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    if(x <= m) update(x, lson);
+    else update(x, rson);
+    push_up(rt);
+}
+
+int query(int L, int R, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        return S[rt];
+    }
+
+    int m = (l + r) >> 1, ret = 0;
+    if(L <= m) ret += query(L, R, lson);
+    if(R > m) ret += query(L, R, rson);
+    return ret;
+}
+
+int main() {
+    int n, Q;
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%d", &n)) {
+        clock = 0;
+        edge_init();
+
+        for(int i = 1; i <= n - 1; i++) {
+            int u, v;
+            scanf("%d%d", &u, &v);
+            edge_add(u, v);
+            edge_add(v, u);
+        }
+        DFS(1, -1);
+        build(root);
+
+        scanf("%d", &Q);
+        while(Q--) {
+            char op[5]; int x;
+            scanf("%s%d", op, &x);
+            if(op[0] == 'Q') {
+                printf("%d\n", query(Beg[x], End[x], root));
+            } else update(Beg[x], root);
+        }
+    }
+    return 0;
+}

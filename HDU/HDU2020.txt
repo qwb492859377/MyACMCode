@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2020                   *
+*      VjudgeProblemID:30714               *
+*      SubmitTime:2015/11/2 16:03:38       *
+*      SubmitType:C                        *
+*      Memory:1652KB                       *
+*      CodeLen:628B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+#define MX 100+5
+
+int A[MX];
+int f(int x) {
+    return x < 0 ? -x : x;
+}
+
+int main() {
+    int n, i, j, t;
+    while(~scanf("%d", &n), n) {
+        for(i = 0; i < n; i++) {
+            scanf("%d", &A[i]);
+        }
+
+        for(i = 0; i < n - 1; i++) {
+            for(j = 0; j < n - 1 - i; j++) {
+                if(f(A[j]) < f(A[j + 1])) {
+                    t = A[j];
+                    A[j] = A[j + 1];
+                    A[j + 1] = t;
+                }
+            }
+        }
+
+        for(i = 0; i < n; i++) {
+            printf("%d%c", A[i], i == n - 1 ? '\n' : ' ');
+        }
+    }
+    return 0;
+}
+ sort(A + 1, A + 1 + n, cmp);
+
+        for(int i = 1; i <= n; i++) {
+            printf("%d%c", A[i], i == n ? '\n' : ' ');
+        }
+    }
+    return 0;
+}

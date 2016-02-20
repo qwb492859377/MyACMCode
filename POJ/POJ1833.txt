@@ -1,0 +1,55 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1833                   *
+*      VjudgeProblemID:11566               *
+*      SubmitTime:2015/12/12 18:02:55      *
+*      SubmitType:C++                      *
+*      Memory:172KB                        *
+*      CodeLen:909B                        *
+*      RunTime:469ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("input.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 2e3 + 5;
+
+int A[MX];
+
+int main() {
+    int T, n, k; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d%d", &n, &k);
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+        for(int i = 1; i <= k; i++) {
+            if(!next_permutation(A + 1, A + 1 + n)) {
+                sort(A + 1, A + 1 + n);
+            }
+        }
+        for(int i = 1; i <= n; i++) {
+            printf("%d%c", A[i], i == n ? '\n' : ' ');
+        }
+    }
+    return 0;
+}

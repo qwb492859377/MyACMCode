@@ -1,0 +1,175 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ZOJ3430                   *
+*      VjudgeProblemID:16400               *
+*      SubmitTime:2015/10/23 10:02:01      *
+*      SubmitType:C++ (g++ 4.7.2)          *
+*      Memory:16972KB                      *
+*      CodeLen:3856B                       *
+*      RunTime:50ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+/*MX为总长度*/
+const int MN = 600 + 5;
+const int MX = 33000 + 5;
+const int P = 256;
+
+struct AC_machine {
+    int rear, root, vis[MN];
+    short Next[MX][P], Fail[MX], End[MX];
+
+    void Init() {
+        rear = 0;
+        root = New();
+    }
+
+    int New() {
+        rear++;
+        End[rear] = 0;
+        for(int i = 0; i < P; i++) {
+            Next[rear][i] = -1;
+        }
+        return rear;
+    }
+
+    void Add(unsigned char *A, int n, int u) {
+        int now = root;
+        for(int i = 0; i < n; i++) {
+            int id = A[i];
+            if(Next[now][id] == -1) {
+                Next[now][id] = New();
+            }
+            now = Next[now][id];
+        }
+        End[now] = u;
+    }
+
+    void Build() {
+        queue<int>Q;
+        Fail[root] = root;
+        for(int i = 0; i < P; i++) {
+            if(Next[root][i] == -1) {
+                Next[root][i] = root;
+            } else {
+                Fail[Next[root][i]] = root;
+                Q.push(Next[root][i]);
+            }
+        }
+
+        while(!Q.empty()) {
+            int u = Q.front();
+            Q.pop();
+
+            for(int i = 0; i < P; i++) {
+                if(Next[u][i] == -1) {
+                    Next[u][i] = Next[Fail[u]][i];
+                } else {
+                    Fail[Next[u][i]] = Next[Fail[u]][i];
+                    Q.push(Next[u][i]);
+                }
+            }
+        }
+    }
+
+    int Query(unsigned char *S, int n) {
+        memset(vis, 0, sizeof(vis));
+        int now = root, ret = 0;
+        for(int i = 0; i < n; i++) {
+            now = Next[now][S[i]];
+            int temp = now;
+
+            while(temp != root) {
+                if(End[temp] && !vis[End[temp]]) {
+                    vis[End[temp]] = 1;
+                    ret++;
+                }
+                temp = Fail[temp];
+            }
+        }
+        return ret;
+    }
+} AC;
+inline int ID(char x) {
+    if('A' <= x && x <= 'Z') return x - 'A';
+    if('a' <= x && x <= 'z') return 26 + x - 'a';
+    if('0' <= x && x <= '9') return 52 + x - '0';
+    if(x == '+') return 62;
+    if(x == '/') return 63;
+    return 0;
+}
+
+int base64_decode(char *A, unsigned char *B) {
+    int n = strlen(A), r = 0;
+    for(int t = 0; t < n / 4 - 1; t++) {
+        int ret = 0;
+        for(int j = t * 4; j < (t + 1) * 4; j++) {
+            ret = ret << 6 | ID(A[j]);
+        }
+        B[r++] = ret >> 16 & 255;
+        B[r++] = ret >> 8 & 255;
+        B[r++] = ret & 255;
+    }
+
+    int ret = 0;
+    for(int j = n - 4; j <= n - 1; j++) {
+        if(A[j] != '=') ret = ret << 6 | ID(A[j]);
+    }
+    if(A[n - 2] == '=' && A[n - 1] == '=') {
+        B[r++] = ret >> 4 & 255;
+    } else if(A[n - 1] == '=') {
+        B[r++] = ret >> 10 & 255;
+        B[r++] = ret >> 2 & 255;
+    } else {
+        B[r++] = ret >> 16 & 255;
+        B[r++] = ret >> 8 & 255;
+        B[r++] = ret & 255;
+    }
+    B[r] = 0;
+    return r;
+}
+
+char word[MX];
+unsigned char after[MX];
+
+int main() {
+    int n, m; //FIN;
+    while(~scanf("%d", &n)) {
+        AC.Init();
+        for(int i = 1; i <= n; i++) {
+            scanf("%s", word);
+            int len = base64_decode(word, after);
+            AC.Add(after, len, i);
+        }
+        AC.Build();
+
+        scanf("%d", &m);
+        for(int i = 1; i <= m; i++) {
+            scanf("%s", word);
+            int len = base64_decode(word, after);
+            printf("%d\n", AC.Query(after, len));
+        }
+        printf("\n");
+    }
+    return 0;
+}

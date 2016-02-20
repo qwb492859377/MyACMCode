@@ -1,0 +1,53 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2577                   *
+*      VjudgeProblemID:18362               *
+*      SubmitTime:2015/1/25 10:37:02       *
+*      SubmitType:C++                      *
+*      Memory:1112KB                       *
+*      CodeLen:841B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=105;
+const int INF=0x3F3F3F3F;
+
+int dp[maxn][2];
+char s[maxn];
+
+int is_low(char a){
+    if('a'<=a&&a<='z'){
+        return 0;
+    }
+    return 1;
+}
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        memset(dp,0x3F,sizeof(dp));
+        dp[0][0]=0;
+
+        scanf("%s",s+1);
+        int n=strlen(s+1);
+
+        for(int i=1;i<=n;i++){
+            int j=is_low(s[i]);
+            dp[i][j]=min(dp[i][j],dp[i-1][j]+1);
+            dp[i][j]=min(dp[i][j],dp[i-1][!j]+2);
+            dp[i][!j]=min(dp[i][!j],dp[i-1][!j]+2);
+            dp[i][!j]=min(dp[i][!j],dp[i-1][j]+2);
+        }
+        //printf("[%d,%d,%d]",1,dp[1][0],dp[1][1]);
+        printf("%d\n",min(dp[n][0],dp[n][1]+1));
+    }
+    return 0;
+}

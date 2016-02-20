@@ -1,0 +1,28 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2011                   *
+*      VjudgeProblemID:32830               *
+*      SubmitTime:2015/11/2 15:53:50       *
+*      SubmitType:C                        *
+*      Memory:1648KB                       *
+*      CodeLen:306B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+
+int main() {
+    int T, n;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d", &n);
+        double ans = 0;
+        for(int i = 1; i <= n; i++) {
+            if(i % 2) ans += 1.0 / i;
+            else ans -= 1.0 / i;
+        }
+        printf("%.2lf\n", ans);
+    }
+    return 0;
+}

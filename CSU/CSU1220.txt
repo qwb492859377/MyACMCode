@@ -1,0 +1,41 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1220                   *
+*      VjudgeProblemID:44788               *
+*      SubmitTime:2014/11/23 13:26:27      *
+*      SubmitType:C++                      *
+*      Memory:1000KB                       *
+*      CodeLen:479B                        *
+*      RunTime:452ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+
+int ps[10005];
+int main(){
+  int m,n,t;
+  while(~scanf("%d%d",&n,&m)){
+    int maxn=0,maxi=1;
+    memset(ps,0,sizeof(ps));
+    for(int i=1;i<=m;i++){
+      scanf("%d",&t);
+      ps[t]++;
+      if(ps[t]>=maxn){
+        if(ps[t]==maxn&&t>=maxi){
+          continue;
+        }
+        maxn=ps[t];
+        maxi=t;
+      }
+    }
+    printf("%d\n",maxi);
+  }
+  return 0;
+}

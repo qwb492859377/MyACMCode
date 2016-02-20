@@ -1,0 +1,84 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1237                   *
+*      VjudgeProblemID:19367               *
+*      SubmitTime:2015/7/21 13:10:35       *
+*      SubmitType:C++                      *
+*      Memory:1628KB                       *
+*      CodeLen:1510B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<cctype>
+#include<stack>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 20000 + 5;
+const int INF = 0x3f3f3f3f;
+
+char S[MX];
+int dist[][2] = {{1, 0}, { -1, 0}, {0, 1}, {0, -1}};
+
+int main() {
+    while(gets(S + 1)) {
+        int N = strlen(S + 1);
+
+        if(S[1] == '0' && N == 1) break;
+
+        char op = '+';
+        int x = 0;
+        stack<double>work;
+        for(int cur = 1; cur <= N; cur++) {
+            while(S[cur]==' ') cur++;
+
+            while(isdigit(S[cur])) {
+                x = x * 10 + S[cur] - '0';
+                cur++;
+            }
+
+            double last;
+            switch(op) {
+            case '+':
+                work.push(x);
+                break;
+            case '-':
+                work.push(-x);
+                break;
+            case '*':
+                last = work.top();
+                work.pop();
+                work.push(last * x);
+                break;
+            case '/':
+                last = work.top();
+                work.pop();
+                work.push(last / x);
+                break;
+            }
+
+            while(S[cur] == ' ') cur++;
+            op = S[cur];
+            x = 0;
+        }
+
+        double ans = 0;
+        while(!work.empty()) {
+            ans += work.top();
+            work.pop();
+        }
+
+        printf("%.2lf\n", ans);
+    }
+    return 0;
+}

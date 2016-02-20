@@ -1,0 +1,53 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1610                  *
+*      VjudgeProblemID:279486              *
+*      SubmitTime:2015/11/16 19:53:13      *
+*      SubmitType:G++                      *
+*      Memory:220KB                        *
+*      CodeLen:952B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 2000 + 5;
+
+int main() {
+    //FIN;
+    LL m, n;
+    while(~scanf("%I64d%I64d", &n, &m)) {
+        LL k = (n - 1) / (m * 2) + 1;
+        LL b = (n - 1) % (m * 2) + 1;
+
+        LL ret = -m * m * (k - 1);
+        if(b <= m) {
+            ret += (1 + (k - 1) * 4 * m + b) * b / 2;
+        } else {
+            ret += ((k - 1) * 4 * m + 1 + m) * m / 2;
+            ret -= (m + (k - 1) * 2 * m + 1 + m + (k - 1) * 2 * m + (b - m)) * (b - m) / 2;
+        }
+        printf("%I64d\n", ret);
+    }
+    return 0;
+}

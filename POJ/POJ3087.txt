@@ -1,0 +1,96 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3087                   *
+*      VjudgeProblemID:15207               *
+*      SubmitTime:2015/1/18 17:22:21       *
+*      SubmitType:C++                      *
+*      Memory:172KB                        *
+*      CodeLen:1174B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=205;
+char table[maxn][maxn];
+int rear,n;
+
+void upside(char*s){
+    char temp;
+    int cup=strlen(s)-1;
+    for(int i=0;i<=cup/2;i++){
+        temp=s[cup-i];
+        s[cup-i]=s[i];
+        s[i]=temp;
+    }
+}
+
+bool shuffle(char*s){
+    char temp[maxn];
+    strcpy(temp,s);
+    int cur[2];
+    cur[0]=n;cur[1]=0;
+    for(int i=0;i<2*n;i++){
+        s[i]=temp[cur[i%2]++];
+    }
+    for(int i=0;i<rear;i++){
+        if(strcmp(s,table[i])==0){
+            return false;
+        }
+    }
+    strcpy(table[rear++],s);
+    return true;
+}
+
+int main(){
+    int T,ansk=0;
+    scanf("%d",&T);
+    while(T--){
+        rear=0;
+        char word1[maxn],word2[maxn],goal[maxn];
+        scanf("%d%s%s%s",&n,word1,word2,goal);
+        upside(word1);upside(word2);upside(goal);
+        strcat(word2,word1);
+
+        int ans=0,sign=false;
+        while(shuffle(word2)){
+            ans++;
+            if(strcmp(word2,goal)==0){
+                sign=true;
+                break;
+            }
+        }
+        printf("%d %d\n",++ansk,sign?ans:-1);
+    }
+    return 0;
+}
+   int cur=0;
+        for(int i=0;i<2*n;i++){
+            end[i]=temp3[2*n-i-1];
+        }
+        for(int i=0;i<n;i++){
+            word[cur++]=temp2[n-i-1];
+        }
+        for(int i=0;i<n;i++){
+            word[cur++]=temp[n-i-1];
+        }
+        //printf("[%s,%s]",word,end);
+        int ans=0,sign=0;
+        while(shuffle(word)){
+                //printf("[%s]\n",word);
+            ans++;
+            if(memcmp(word,end,sizeof(status))==0){
+                sign=1;
+                break;
+            }
+        }
+        printf("%d ",++ansk);
+        printf("%d\n",sign?ans:-1);
+    }
+    return 0;
+}

@@ -1,0 +1,32 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU2062                   *
+*      VjudgeProblemID:29398               *
+*      SubmitTime:2014/12/27 21:03:49      *
+*      SubmitType:GNU C++                  *
+*      Memory:208KB                        *
+*      CodeLen:379B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const double exps=1e-9;
+const int INF=1<<30;
+const int maxn=1e5+10;
+
+int main(){
+    double n;
+    while(~scanf("%lf",&n)){
+        double x=log2(n+1);
+        printf("%.0lf\n",ceil(x));
+        //printf("%d\n",int(x+exps));
+    }
+    return 0;
+}

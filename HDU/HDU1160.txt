@@ -1,0 +1,74 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1160                   *
+*      VjudgeProblemID:30429               *
+*      SubmitTime:2015/1/24 15:48:44       *
+*      SubmitType:C++                      *
+*      Memory:1156KB                       *
+*      CodeLen:1222B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=1005;
+int dp[maxn],last[maxn],vis[10005];
+
+struct Mouse{
+    int weight,speed,id;
+    bool operator<(const Mouse&b) const{
+        return weight<b.weight;
+    }
+}mouse[maxn];
+
+void print_ans(int x){
+    if(last[x]!=-1){
+        print_ans(last[x]);
+    }
+    printf("%d\n",mouse[x].id);
+}
+
+int main(){
+    memset(vis,0,sizeof(vis));
+    memset(dp,0,sizeof(dp));
+    memset(last,-1,sizeof(last));
+
+    int id=0,rear=0,a,b;
+    while(~scanf("%d%d",&a,&b)){//wight,speed
+        id++;
+        if(b>vis[a]){
+            vis[a]=b;
+            mouse[rear].weight=a;
+            mouse[rear].speed=b;
+            mouse[rear].id=id;
+            rear++;
+        }
+    }
+
+    sort(mouse,mouse+rear);
+
+    for(int i=0;i<rear;i++){
+        for(int j=0;j<i;j++){
+            if(mouse[j].speed>mouse[i].speed&&dp[j]>dp[i]){
+                dp[i]=dp[j];
+                last[i]=j;
+            }
+        }
+        dp[i]++;
+    }
+
+    int anscur=0;
+    for(int i=0;i<rear;i++){
+        if(dp[i]>dp[anscur]){
+            anscur=i;
+        }
+    }
+    printf("%d\n",dp[anscur]);
+    print_ans(anscur);
+    return 0;
+}

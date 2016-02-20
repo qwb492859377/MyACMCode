@@ -1,0 +1,65 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1948                   *
+*      VjudgeProblemID:16575               *
+*      SubmitTime:2015/7/29 11:03:56       *
+*      SubmitType:C++                      *
+*      Memory:4100KB                       *
+*      CodeLen:1228B                       *
+*      RunTime:219ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e3 + 5;
+const int INF = 0x3f3f3f3f;
+
+int A[MX];
+int dp[MX][MX];
+
+int getS(int a, int b, int c) {
+    if(a >= b + c || b >= a + c || c >= a + b) return -1;
+    double p = (a + b + c) / 2.0;
+    return sqrt(p * (p - a) * (p - b) * (p - c)) * 100;
+}
+
+int main() {
+    int n;
+    //freopen("input.txt","r",stdin);
+    while(~scanf("%d", &n)) {
+        memset(dp, 0, sizeof(dp));
+
+        int sum = 0, V;
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+            sum += A[i];
+        }
+        V = sum / 2;
+
+        int ans = -1;
+        dp[0][0] = 1;
+        for(int i = 1; i <= n; i++) {
+            for(int j = V; j >= 0; j--) {
+                for(int k = j; k >= 0; k--) {
+                    if(j >= A[i] && dp[j - A[i]][k]) dp[j][k] = 1;
+                    if(k >= A[i] && dp[j][k - A[i]]) dp[j][k] = 1;
+                    if(dp[j][k]) ans = max(ans, getS(sum - j - k, j, k));
+                }
+            }
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

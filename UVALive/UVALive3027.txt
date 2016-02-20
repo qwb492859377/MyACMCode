@@ -1,0 +1,58 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:UVALive3027               *
+*      VjudgeProblemID:33982               *
+*      SubmitTime:2015/4/14 15:34:46       *
+*      SubmitType:C++ 4.8.2                *
+*      Memory:0KB                          *
+*      CodeLen:852B                        *
+*      RunTime:69ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=20000+5;
+const int mod=1000;
+
+int P[MX],H[MX];
+
+int find(int x){
+    if(P[x]==x){
+        return x;
+    }
+    int root=find(P[x]);
+    H[x]+=H[P[x]];
+    return P[x]=root;
+}
+
+int main(){
+    int T,n,a,b;
+    scanf("%d",&T);
+    while(T--){
+        scanf("%d",&n);
+        for(int i=1;i<=n;i++){
+            P[i]=i;
+            H[i]=0;
+        }
+
+        char OP[10];
+        while(scanf("%s",OP)){
+            if(OP[0]=='E'){
+                scanf("%d",&a);find(a);
+                printf("%d\n",H[a]);
+            }else if(OP[0]=='I'){
+                scanf("%d%d",&a,&b);
+                P[a]=b;H[a]=abs(a-b)%1000;
+            }else break;
+        }
+    }
+    return 0;
+}

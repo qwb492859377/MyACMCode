@@ -1,0 +1,53 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces332B            *
+*      VjudgeProblemID:45676               *
+*      SubmitTime:2015/2/26 16:26:41       *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:3036KB                       *
+*      CodeLen:725B                        *
+*      RunTime:124ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+const int maxn=2e5+5;
+
+LL S[maxn],W[maxn];
+
+int main(){
+    int n,k,t;
+    scanf("%d%d",&n,&k);
+
+    S[0]=0;
+    for(int i=1;i<=n;i++){
+        scanf("%d",&t);
+        S[i]=S[i-1]+t;
+    }
+    for(int i=1;i<=n-k+1;i++){
+        W[i]=S[i+k-1]-S[i-1];
+    }
+
+    LL maxAB=0,maxB=0;
+    int curA,cB,curB;
+    for(int i=n-2*k+1;i>=1;i--){
+        if(W[i+k]>=maxB){
+            maxB=W[i+k];
+            cB=i+k;
+        }
+        if(W[i]+maxB>=maxAB){
+            maxAB=W[i]+maxB;
+            curA=i;
+            curB=cB;
+        }
+    }
+    printf("%d %d",curA,curB);
+    return 0;
+}

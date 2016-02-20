@@ -1,0 +1,73 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1549                   *
+*      VjudgeProblemID:142983              *
+*      SubmitTime:2015/9/22 13:36:01       *
+*      SubmitType:C++                      *
+*      Memory:1520KB                       *
+*      CodeLen:1358B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+#pragma comment(linker, "/STACK:102400000,102400000")
+using namespace std;
+typedef long long LL;
+
+const int MX = 1000 + 5;
+
+int n;
+double X[MX], Y[MX], len[MX], dist;
+
+double getlen(double x, double y) {
+    return sqrt(x * x + y * y);
+}
+
+int DFS(int id, double sum) {
+    if(id > n) return 0;
+
+    int ret = 0;
+    while(sum <= len[id]) {
+        double tol = sum / len[id];
+        double x = tol * X[id + 1] + (1 - tol) * X[id];
+        double y = tol * Y[id + 1] + (1 - tol) * Y[id];
+        printf("%.2lf,%.2lf\n", x, y);
+        sum += dist;
+        ret++;
+    }
+    ret += DFS(id + 1, sum - len[id]);
+    return ret;
+}
+
+int main() {
+    //FIN;
+    while(~scanf("%d%lf", &n, &dist)) {
+        for(int i = 1; i <= n + 1; i++) {
+            scanf("%lf%lf", &X[i], &Y[i]);
+        }
+        for(int i = 1; i <= n; i++) {
+            len[i] = getlen(X[i + 1] - X[i], Y[i + 1] - Y[i]);
+        }
+
+        int ret = DFS(1, dist);
+        if(ret == 0) printf("No Such Points.\n");
+    }
+    return 0;
+}

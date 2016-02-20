@@ -1,0 +1,74 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1069                   *
+*      VjudgeProblemID:19392               *
+*      SubmitTime:2015/2/26 19:25:31       *
+*      SubmitType:C++                      *
+*      Memory:1120KB                       *
+*      CodeLen:1269B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+const int INF=0x3f3f3f3f;
+
+struct Edge{
+    int x,y,h;
+}E[100];
+vector<int>G[100];
+
+int dp[100],rear;
+int solve(int x){
+    if(dp[x]) return dp[x];
+
+    int ans=0;
+    for(int i=0;i<G[x].size();i++){
+        ans=max(ans,solve(G[x][i]));
+    }
+    return dp[x]=E[x].h+ans;
+}
+
+int main(){
+    int n,e[3],ansk=0;
+    while(~scanf("%d",&n),n){
+        rear=0;
+        memset(dp,0,sizeof(dp));
+
+        for(int i=1;i<=n;i++){
+            scanf("%d%d%d",&e[0],&e[1],&e[2]);sort(e,e+3);
+            E[rear].x=e[0],E[rear].y=e[1],E[rear].h=e[2];
+            E[rear+1].x=e[1],E[rear+1].y=e[2],E[rear+1].h=e[0];
+            E[rear+2].x=e[0],E[rear+2].y=e[2],E[rear+2].h=e[1];
+            rear+=3;
+        }
+
+        for(int i=0;i<rear;i++){
+            G[i].clear();
+            for(int j=0;j<rear;j++){
+                if(E[i].x>E[j].x&&E[i].y>E[j].y){
+                    G[i].push_back(j);
+                }
+            }
+        }
+
+        int ans=0;
+        for(int i=0;i<rear;i++){
+            ans=max(ans,solve(i));
+        }
+        printf("Case %d: maximum height = %d\n",++ansk,ans);
+    }
+    return 0;
+}
+eight = %d\n",++ansk,ans);
+    }
+    return 0;
+}

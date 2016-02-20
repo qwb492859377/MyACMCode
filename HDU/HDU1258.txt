@@ -1,0 +1,102 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1258                   *
+*      VjudgeProblemID:18501               *
+*      SubmitTime:2015/7/20 11:19:30       *
+*      SubmitType:C++                      *
+*      Memory:5724KB                       *
+*      CodeLen:1500B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 100 + 5;
+const int INF = 0x3f3f3f3f;
+
+int K, n;
+int A[MX];
+int ans[10000][MX], tot;
+
+void DFS(int cur, int sum, int cnt) {
+    sum += A[cur];
+    if(sum > K) return;
+    ans[0][++cnt] = A[cur];
+
+    if(sum == K) {
+        ans[0][0] = cnt;
+        for(int i = 1; i <= tot; i++) {
+            if(memcmp(ans[0], ans[i], sizeof(int) * (cnt + 1)) == 0) return;
+        }
+
+        memcpy(ans[++tot], ans[0], sizeof(int) * (cnt + 1));
+        return;
+    }
+
+    for(int i = cur + 1; i <= n; i++) {
+        DFS(i, sum, cnt);
+    }
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%d%d", &K, &n), K + n) {
+        tot = 0;
+        memset(ans, 0, sizeof(ans));
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+        sort(A + 1, A + 1 + n, greater<int>());
+
+        A[0] = 0;
+        for(int i = 1; i <= n; i++) {
+            DFS(i, 0, 0);
+        }
+
+        printf("Sums of %d:\n", K);
+        if(!tot) {
+            printf("NONE\n");
+            continue;
+        }
+
+        for(int i = 1; i <= tot; i++) {
+            int rear = ans[i][0];
+            printf("%d", ans[i][1]);
+            for(int j = 2; j <= rear; j++) {
+                printf("+%d", ans[i][j]);
+            }
+            printf("\n");
+        }
+    }
+    return 0;
+}
+   scanf("%d",&an[i]);
+        }
+        sort(an+1,an+1+n,cmp);
+
+        printf("Sums of %d:\n",goal);
+
+        sign=false;
+        for(int i=1;i<=n;i++){
+            ordrear=0;
+            DFS(i,0);
+        }
+
+        if(!sign){
+            printf("NONE\n");
+        }
+    }
+    return 0;
+}

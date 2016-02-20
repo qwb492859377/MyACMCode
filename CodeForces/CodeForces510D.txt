@@ -1,0 +1,79 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces510D            *
+*      VjudgeProblemID:115870              *
+*      SubmitTime:2015/10/9 18:06:00       *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:16KB                         *
+*      CodeLen:1629B                       *
+*      RunTime:78ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 300 + 5;
+const int INF = 0x3f3f3f3f;
+
+int n;
+int dp[1 << 10];
+int A[MX], cost[MX], prime[MX];
+
+int main() { //FIN;
+    while(~scanf("%d", &n)) {
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &cost[i]);
+        }
+
+        int ans = INF;
+        for(int i = 1; i <= n; i++) {
+            memset(dp, INF, sizeof(dp));
+
+            int rear = 0, t = A[i];
+            for(int j = 2; (LL)j * j <= A[i]; j ++) {
+                if(t % j == 0) {
+                    prime[rear++] = j;
+                    while(t % j == 0) t /= j;
+                }
+            }
+            if(t != 1) prime[rear++] = t;
+
+            dp[0] = 0;
+            for(int j = 1; j <= n; j++) {
+                int x = 0;
+                for(int k = 0; k < rear; k++) {
+                    if(A[j] % prime[k]) x ^= 1 << k;
+                }
+
+                for(int S = 0; S < (1 << rear); S++) {
+                    if(dp[S] < INF) dp[S | x] = min(dp[S | x], dp[S] + cost[j]);
+                }
+            }
+            ans = min(ans, dp[(1 << rear) - 1] + cost[i]);
+        }
+        printf("%d\n", ans == INF ? -1 : ans);
+    }
+    return 0;
+}

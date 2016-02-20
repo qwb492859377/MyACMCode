@@ -1,0 +1,50 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces584A            *
+*      VjudgeProblemID:181077              *
+*      SubmitTime:2015/10/19 22:27:34      *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:4KB                          *
+*      CodeLen:750B                        *
+*      RunTime:30ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1e6 + 5;
+
+int main() {
+    int n, t; //FIN;
+    while(~scanf("%d%d", &n, &t)) {
+        if(n == 1 && t == 10) {
+            printf("-1\n");
+            continue;
+        }
+
+        printf("%d", t);
+        for(int i = 2; i <= (t == 10 ? n - 1 : n); i++) {
+            printf("0");
+        }
+        printf("\n");
+    }
+    return 0;
+}

@@ -1,0 +1,104 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:UESTC1217                 *
+*      VjudgeProblemID:266693              *
+*      SubmitTime:2015/11/10 23:07:02      *
+*      SubmitType:C++                      *
+*      Memory:4916KB                       *
+*      CodeLen:1893B                       *
+*      RunTime:2363ms                      *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1000 + 5;
+const int mod = 1e9 + 7;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,rear,1
+
+int A[MX], B[MX], rear;
+int S[MX][MX];
+
+int BS(int x) {
+    int l = 1, r = rear, m;
+
+    while(l <= r) {
+        m = (l + r) >> 1;
+        if(B[m] == x) return m;
+        if(B[m] < x) l = m + 1;
+        else r = m - 1;
+    }
+    return -1;
+}
+
+int query(int id, int x) {
+    int ret = 0;
+    for(; x; x -= x & -x) {
+        ret += S[id][x];
+        ret %= mod;
+    }
+    return ret;
+}
+
+void update(int id, int x, int d) {
+    for(; x <= rear; x += x & -x) {
+        S[id][x] += d;
+        S[id][x] %= mod;
+    }
+}
+
+int main() {
+    int T, ansk = 0; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        int n, m;
+        scanf("%d%d", &n, &m);
+        for(int i = 0; i <= n; i++) {
+            for(int j = 0; j <= n; j++) {
+                S[i][j] = 0;
+            }
+        }
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+            B[i] = A[i];
+        }
+        sort(B + 1, B + n + 1);
+        rear = unique(B + 1, B + n + 1) - B - 1;
+
+        int ret = 0;
+        for(int i = 1; i <= n; i++) {
+            int r = BS(A[i]);
+
+            update(1, r, 1);
+            for(int j = 2; j <= min(n, m); j++) {
+                int res = query(j - 1, r - 1);
+                update(j, r, res);
+            }
+        }
+        ret = query(m, rear);
+        printf("Case #%d: %d\n", ++ansk, ret);
+    }
+    return 0;
+}

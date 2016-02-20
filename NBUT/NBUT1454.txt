@@ -1,0 +1,95 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1454                  *
+*      VjudgeProblemID:46172               *
+*      SubmitTime:2015/8/25 21:09:38       *
+*      SubmitType:G++                      *
+*      Memory:9024KB                       *
+*      CodeLen:1829B                       *
+*      RunTime:1468ms                      *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e6 + 5;
+const int INF = 0x3f3f3f3f;
+
+bool sign[MX];
+int subprim[MX], prim[MX], totleprm = 0;
+
+void getprim(int n) {
+    memset(sign,0,sizeof(sign));
+
+    sign[1] = 1;
+    for(int i = 2; i <= n; i++) {
+        if(sign[i]) continue;
+        prim[totleprm++] = i;
+
+        if((LL)i * i > n) continue;
+        for(int j = i * i; j <= n; j += i) {
+            sign[j] = 1;
+        }
+    }
+}
+
+int getSubPrim(int a, int b) {
+    int totl = 0, i;LL j;
+    memset(sign, true, sizeof(sign));
+
+    if(a < 2) a = 2;
+    LL l = b - a + 1;
+    for(i = 0; i < totleprm; i++) {
+        if((j = prim[i] * (a / prim[i])) < a) j += prim[i];
+        if(j < prim[i]*prim[i]) j = prim[i] * prim[i];
+        for(; j <= b; j += prim[i]) sign[j - a] = false;
+    }
+    for(i = 0; i < l; i++) if(sign[i]) {
+            subprim[totl++] = a + i;
+        }
+    return totl;
+}
+
+int main() {
+
+    getprim(100000);
+    int L, R;//FIN;
+    while(~scanf("%d%d", &L, &R)) {
+        int MinL = 0, MinR = INF, MaxL = 0, MaxR = 0;
+        int rear = getSubPrim(L, R);
+        if(rear < 2) {
+            printf("-1\n");
+            continue;
+        }
+
+        for(int i = 0; i < rear - 1; i++) {
+            if(MinR - MinL > subprim[i + 1] - subprim[i]) MinL = subprim[i], MinR = subprim[i + 1];
+            if(MaxR - MaxL < subprim[i + 1] - subprim[i]) MaxL = subprim[i], MaxR = subprim[i + 1];
+        }
+        printf("%d %d %d %d\n", MinL, MinR, MaxL, MaxR);
+    }
+    return 0;
+}
+ 1];
+        }
+        printf("%d %d %d %d\n", MinL, MinR, MaxL, MaxR);
+    }
+    return 0;
+}
+}

@@ -1,0 +1,78 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3591                   *
+*      VjudgeProblemID:12319               *
+*      SubmitTime:2015/8/16 10:26:10       *
+*      SubmitType:G++                      *
+*      Memory:1732KB                       *
+*      CodeLen:1464B                       *
+*      RunTime:93ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 2e4 + 5;
+const int INF = 0x3f3f3f3f;
+
+int A[MX], B[MX];
+int dp1[MX], dp2[MX];
+
+void solve(int x, int t, int V) {
+    for(int i = V; i >= x; i--) {
+        dp1[i] = min(dp1[i], dp1[i - x] + t);
+    }
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int n, V = 20000, T, ansk = 0;
+    while(~scanf("%d%d", &n, &T), n + T) {
+        memset(dp1, INF, sizeof(dp1));
+        memset(dp2, INF, sizeof(dp2));
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &B[i]);
+        }
+
+        dp1[0] = dp2[0] = 0;
+        for(int i = 1; i <= n; i++) {
+            int t = 1;
+            while(B[i] > t) {
+                solve(t * A[i], t, V);
+                B[i] -= t;
+                t <<= 1;
+            }
+            solve(B[i]*A[i], B[i], V);
+
+            for(int j = A[i]; j <= V; j++) {
+                dp2[j] = min(dp2[j], dp2[j - A[i]] + 1);
+            }
+        }
+
+        int ans = INF;
+        for(int i = T; i <= V; i++) {
+            ans = min(ans, dp1[i] + dp2[i - T]);
+        }
+        printf("Case %d: %d\n", ++ansk, ans == INF ? -1 : ans);
+    }
+    return 0;
+}

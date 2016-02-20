@@ -1,0 +1,81 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2054                   *
+*      VjudgeProblemID:21607               *
+*      SubmitTime:2014/11/16 11:30:36      *
+*      SubmitType:G++                      *
+*      Memory:2152KB                       *
+*      CodeLen:1133B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+
+void func1(char *s){
+  int len=strlen(s);
+  int cur=-1;
+  for(int i=0;i<len;i++){
+    if(s[i]=='.'){
+      cur=i;
+      break;
+    }
+  }
+  if(cur==-1){
+    return;
+  }
+  for(int i=len-1;i>=cur;i--){
+    if(s[i]=='0'||s[i]=='.'){
+      s[i]=0;
+    }else{
+      return;
+    }
+  }
+}
+
+int func2(char *s){
+  int cur=0;
+  for(int i=0;i<strlen(s);i++){
+    if(s[i]=='0'){
+      cur++;
+    }else{
+      break;
+    }
+  }
+  return cur;
+}
+
+int main(){
+  char ss1[1000005],ss2[1000005],*s1,*s2;
+  while(~scanf("%s %s",ss1,ss2)){
+    s1=ss1;s2=ss2;
+    bool l1=s1[0]=='-',l2=s2[0]=='-';
+    if(l1||s1[0]=='+'){
+      s1++;
+    }
+    if(l2||s2[0]=='+'){
+      s2++;
+    }
+    func1(s1);func1(s2);
+    int k1=func2(s1),k2=func2(s2);
+    //printf("[%s,%s]",s1+k1,s2+k2);
+    if(strcmp(s1+k1,s2+k2)==0&&l1==l2){
+      printf("YES\n");
+    }else{
+      //printf("{%d,%d}",strlen(s1+k1),strlen(s2+k2));
+      if(!strlen(s1+k1)&&!strlen(s2+k2)){
+        printf("YES\n");
+      }else{
+        printf("NO\n");
+      }
+    }
+
+  }
+  return 0;
+}

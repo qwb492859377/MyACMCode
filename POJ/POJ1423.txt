@@ -1,0 +1,59 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1423                   *
+*      VjudgeProblemID:17562               *
+*      SubmitTime:2014/12/21 21:25:16      *
+*      SubmitType:C++                      *
+*      Memory:228KB                        *
+*      CodeLen:788B                        *
+*      RunTime:579ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=10000005;
+const double exps=1e-8;
+
+struct Num{
+    int n,ans,id;
+    bool operator<(const Num&b) const{
+        return n<b.n;
+    }
+}ans[maxn];
+
+int id[maxn];
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    for(int i=1;i<=T;i++){
+        scanf("%d",&ans[i].n);
+        ans[i].id=i;
+    }
+    sort(ans+1,ans+1+T);
+
+    double s=0,a,b;
+    int i=1;
+    while(i<=T){
+        for(int j=1;j<=1e7;j++){
+            s+=log10(1.0*j);
+            while(ans[i].n==j){
+                ans[i].ans=s+1;
+                id[ans[i].id]=i;
+                i++;
+            }
+        }
+    }
+    for(int i=1;i<=T;i++){
+        printf("%d\n",ans[id[i]].ans);
+    }
+
+    return 0;
+}
+rn 0;
+}

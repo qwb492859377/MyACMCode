@@ -1,0 +1,47 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2289                   *
+*      VjudgeProblemID:15721               *
+*      SubmitTime:2014/11/30 21:48:15      *
+*      SubmitType:C++                      *
+*      Memory:240KB                        *
+*      CodeLen:673B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+double r,R,H,V,pi;
+
+bool big(double h){
+    double s1=r*r*pi,r2=(R-r)*h/H+r;
+    double s2=r2*r2*pi;
+    double v=(s1+s2+sqrt(s1*s2))*h/3;
+    return v>V;
+}
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    pi=3.1415926535;
+    while(T--){
+        scanf("%lf%lf%lf%lf",&r,&R,&H,&V);
+        double l=0,r=H,mid;
+        do{
+            mid=(l+r)/2;
+            if(big(mid)){
+                //mid的水比V大
+                r=mid;
+            }else{
+                l=mid;
+            }
+        }while(r-l>1e-7);
+        printf("%.6lf\n",r);
+    }
+    return 0;
+}

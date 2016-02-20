@@ -1,0 +1,43 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces518A            *
+*      VjudgeProblemID:125216              *
+*      SubmitTime:2015/3/13 11:43:47       *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:0KB                          *
+*      CodeLen:550B                        *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int MX=200;
+
+int main(){
+    char s1[MX],s2[MX];
+    scanf("%s%s",s1,s2);
+    int L=strlen(s1),t=1;
+    for(int i=L-1;i>=0;i--){
+        s1[i]++;
+        if(s1[i]>'z'){
+            s1[i]='a';
+            t=1;
+        }else{
+            t=0;
+            break;
+        }
+    }
+    if(!t&&strcmp(s1,s2)<0){
+        printf("%s\n",s1);
+    }else{
+        printf("No such string\n");
+    }
+    return 0;
+}

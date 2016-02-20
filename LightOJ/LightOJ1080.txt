@@ -1,0 +1,84 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:LightOJ1080               *
+*      VjudgeProblemID:26797               *
+*      SubmitTime:2015/1/26 15:10:56       *
+*      SubmitType:C++                      *
+*      Memory:4912KB                       *
+*      CodeLen:1413B                       *
+*      RunTime:524ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<string>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+const int maxn=1e5 + 5;
+char line[maxn],oper[10];
+int table[maxn<<2],col[maxn<<2];
+
+void build(int l,int r,int rt){
+    col[rt]=0;
+
+    if(l==r){
+        table[rt]=line[l]-'0';
+        return;
+    }
+    int m=(l+r)>>1;
+    build(lson);
+    build(rson);
+}
+
+void update(int a,int b,int l,int r,int rt){
+    if(a<=l&&r<=b){
+        col[rt]=!col[rt];
+        return;
+    }
+    int m=(l+r)>>1;
+    if(a<=m) update(a,b,lson);
+    if(b>m)  update(a,b,rson);
+}
+
+int query(int a,int p,int l,int r,int rt){
+    if(col[rt]) p=!p;
+
+    if(l==r&&l==a){
+        if(p) return !table[rt];
+        else return table[rt];
+    }
+
+    int m=(l+r)>>1;
+    if(a<=m) return query(a,p,lson);
+    else return query(a,p,rson);
+}
+
+int main(){
+    int T,ansk=0,m,a,b;
+    scanf("%d",&T);
+    while(T--){
+        scanf("%s%d",line+1,&m);
+        int len=strlen(line+1);
+        build(1,len,1);
+
+        printf("Case %d:\n",++ansk);
+
+        for(int i=1;i<=m;i++){
+            scanf("%s",oper);
+            if(oper[0]=='I'){
+                scanf("%d%d",&a,&b);
+                update(a,b,1,len,1);
+            }else{
+                scanf("%d",&a);
+                printf("%d\n",query(a,0,1,len,1));
+            }
+        }
+    }
+    return 0;
+}

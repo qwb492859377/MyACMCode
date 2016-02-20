@@ -1,0 +1,42 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2025                   *
+*      VjudgeProblemID:17477               *
+*      SubmitTime:2014/12/14 9:11:58       *
+*      SubmitType:C++                      *
+*      Memory:1092KB                       *
+*      CodeLen:550B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+
+
+char s[200];
+int main(){
+    while(~scanf("%s",s)){
+        char maxi=0;
+        for(int i=0;i<strlen(s);i++){
+            if(s[i]>maxi){
+                maxi=s[i];
+            }
+        }
+
+        for(int i=0;i<strlen(s);i++){
+            if(s[i]==maxi){
+                printf("%c(max)",s[i]);
+            }else{
+                printf("%c",s[i]);
+            }
+        }
+        printf("\n");
+    }
+    return 0;
+}

@@ -1,0 +1,160 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces510E            *
+*      VjudgeProblemID:115871              *
+*      SubmitTime:2015/10/10 11:10:10      *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:756KB                        *
+*      CodeLen:3903B                       *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 300 + 5;
+const int INF = 0x3f3f3f3f;
+
+vector<int>G[MX], temp;
+vector<vector<int> >ans;
+int maze[MX][MX], TO[MX][MX], vis[MX];
+int gap[MX], dis[MX], pre[MX], cur[MX];
+
+int sap(int start, int end, int nodenum) {
+    memset(cur, 0, sizeof(cur));
+    memset(dis, 0, sizeof(dis));
+    memset(gap, 0, sizeof(gap));
+    int u = pre[start] = start, maxflow = 0, aug = -1;
+    gap[0] = nodenum;
+    while(dis[start] < nodenum) {
+loop:
+        for(int v = cur[u]; v < nodenum; v++) {
+            if(maze[u][v] && dis[u] == dis[v] + 1) {
+                if(aug == -1 || aug > maze[u][v]) aug = maze[u][v];
+                pre[v] = u; u = cur[u] = v;
+                if(v == end) {
+                    maxflow += aug;
+                    for(u = pre[u]; v != start; v = u, u = pre[u]) {
+                        maze[u][v] -= aug;
+                        maze[v][u] += aug;
+                    }
+                    aug = -1;
+                }
+                goto loop;
+            }
+        }
+        int mindis = nodenum - 1;
+        for(int v = 0; v < nodenum; v++) {
+            if(maze[u][v] && mindis > dis[v]) {
+                cur[u] = v;
+                mindis = dis[v];
+            }
+        }
+        if((--gap[dis[u]]) == 0) break;
+        gap[dis[u] = mindis + 1]++;
+        u = pre[u];
+    }
+    return maxflow;
+}
+
+bool is_prime(int x) {
+    for(int i = 2; i * i <= x; i++) {
+        if(!(x % i)) return false;
+    }
+    return true;
+}
+
+void DFS(int u) {
+    vis[u] = 1;
+    temp.push_back(u);
+    for(int i = 0; i < G[u].size(); i++) {
+        int v = G[u][i];
+        if(!vis[v]) DFS(v);
+    }
+}
+
+int A[MX];
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        ans.clear();
+        for(int i = 1; i <= n; i++) G[i].clear();
+        memset(TO, 0, sizeof(TO));
+        memset(maze, 0, sizeof(maze));
+        memset(vis, 0, sizeof(vis));
+
+        int s = 0, t = n + 1, cnt = 0;
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+            if(A[i] % 2 == 0) {
+                maze[s][i] += 2;
+                cnt++;
+            } else maze[i][t] += 2;
+        }
+
+        for(int i = 1; i <= n; i++) {
+            for(int j = i + 1; j <= n; j++) {
+                if(is_prime(A[i] + A[j])) {
+                    if(A[i] % 2 == 0) {
+                        maze[i][j]++;
+                        TO[i][j] = 1;
+                    } else {
+                        maze[j][i]++;
+                        TO[j][i] = 1;
+                    }
+                }
+            }
+        }
+
+        int ret = sap(s, t, n + 2);
+        if(ret != 2 * cnt) printf("Impossible\n");
+        else {
+            for(int i = 1; i <= n; i++) if(A[i] % 2 == 0) {
+                    for(int j = 1; j <= n; j++) {
+                        if(TO[i][j] && !maze[i][j]) {
+                            G[i].push_back(j);
+                            G[j].push_back(i);
+                        }
+                    }
+                }
+
+            for(int i = 1; i <= n; i++) {
+                temp.clear();
+                if(!vis[i]){
+                    DFS(i);
+                    ans.push_back(temp);
+                }
+
+            }
+
+            printf("%d\n", (int)ans.size());
+            for(int i = 0; i < ans.size(); i++) {
+                printf("%d", (int)ans[i].size());
+                for(int j = 0; j < ans[i].size(); j++) {
+                    printf(" %d", ans[i][j]);
+                }
+                printf("\n");
+            }
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,35 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4861                   *
+*      VjudgeProblemID:51987               *
+*      SubmitTime:2015/7/16 17:02:53       *
+*      SubmitType:C++                      *
+*      Memory:1600KB                       *
+*      CodeLen:390B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+
+const int MX = 1000 + 5;
+const int mod = 1e9 + 7;
+const int INF = 0x3f3f3f3f;
+
+LL k,p;
+int main(){
+    while(~scanf("%I64d%I64d",&k,&p)){
+        LL w=k/(p-1);
+        printf("%s\n",w%2?"YES":"NO");
+    }
+    return 0;
+}

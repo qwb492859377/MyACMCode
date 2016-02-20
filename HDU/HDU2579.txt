@@ -1,0 +1,95 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2579                   *
+*      VjudgeProblemID:18773               *
+*      SubmitTime:2015/8/20 22:57:38       *
+*      SubmitType:G++                      *
+*      Memory:1704KB                       *
+*      CodeLen:2024B                       *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e2 + 5;
+const int INF = 0x3f3f3f3f;
+
+char S[MX][MX];
+bool vis[MX][MX][10];
+int dist[][2] = {{1, 0}, { -1, 0}, {0, 1}, {0, -1}};
+
+struct Point {
+    int x, y, time;
+    Point(int _x = 0, int _y = 0, int _time = 0) {
+        x = _x; y = _y; time = _time;
+    }
+} B, E;
+
+int main() {
+    //FIN;
+    int T, m, n, k;
+    scanf("%d", &T);
+    while(T--) {
+        memset(vis, 0, sizeof(vis));
+
+        scanf("%d%d%d", &m, &n, &k);
+        for(int i = 1; i <= m; i++) {
+            scanf("%s", S[i] + 1);
+            for(int j = 1; j <= n; j++) {
+                if(S[i][j] == 'Y') B = Point(i, j, 0);
+                if(S[i][j] == 'G') E = Point(i, j, 0);
+            }
+        }
+
+        queue<Point>Q;
+        Q.push(B);
+
+        int ans = -1;
+        while(!Q.empty()) {
+            Point f = Q.front();
+            Q.pop();
+
+            vis[f.x][f.y][f.time % k] = 1;
+            if(f.x == E.x && f.y == E.y) {
+                ans = f.time;
+                break;
+            }
+
+            for(int i = 0; i < 4; i++) {
+                int nt = f.time + 1;
+                int nx = f.x + dist[i][0];
+                int ny = f.y + dist[i][1];
+                if(nx < 1 || nx > m || ny < 1 || ny > n) continue;
+                if(vis[nx][ny][nt % k]) continue;
+
+                if(S[nx][ny] == '#') {
+                    vis[nx][ny][nt % k] = 1;
+                    if(nt % k == 0) Q.push(Point(nx, ny, nt));
+                } else {
+                    vis[nx][ny][nt % k] = 1;
+                    Q.push(Point(nx, ny, nt));
+                }
+            }
+        }
+        if(ans == -1) printf("Please give me another chance!\n");
+        else printf("%d\n", ans);
+    }
+    return 0;
+}

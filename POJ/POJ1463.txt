@@ -1,0 +1,74 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1463                   *
+*      VjudgeProblemID:18778               *
+*      SubmitTime:2015/7/27 10:35:07       *
+*      SubmitType:C++                      *
+*      Memory:200KB                        *
+*      CodeLen:1326B                       *
+*      RunTime:547ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1500 + 5;
+const int INF = 0x3f3f3f3f;
+
+int p[MX], IN[MX], col[MX];
+
+int main() {
+    int n;
+    //freopen("input.txt", "r", stdin);
+    while(~scanf("%d", &n)) {
+        memset(IN, 0, sizeof(IN));
+        memset(p, -1, sizeof(p));
+        memset(col, 0, sizeof(col));
+
+        for(int i = 0; i < n; i++) {
+            int u, v, num;
+            scanf("%d:(%d)", &u, &num);
+            for(int j = 1; j <= num; j++) {
+                scanf("%d", &v);
+                p[v] = u;
+                IN[u]++;
+            }
+        }
+
+        queue<int>work;
+        for(int i = 0; i < n; i++) {
+            if(p[i] != -1 && !IN[i]) {
+                work.push(i);
+            }
+        }
+
+        int ans = 0;
+        while(!work.empty()) {
+            int f = work.front();
+            work.pop();
+
+            ans += col[f];
+            if(p[f] != -1) {
+                int v = p[f];
+                col[v] |= col[f] ^ 1;
+                IN[v]--;
+                if(!IN[v]) {
+                    work.push(v);
+                }
+            }
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

@@ -1,0 +1,44 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1606                  *
+*      VjudgeProblemID:279481              *
+*      SubmitTime:2015/11/16 19:08:59      *
+*      SubmitType:G++                      *
+*      Memory:320KB                        *
+*      CodeLen:604B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 100000 + 5;
+
+char S[MX];
+
+int main() {
+    int a, b;
+    while(~scanf("%d%d", &a, &b)) {
+        printf("%d\n", min(a, b)*min(a, b));
+    }
+    return 0;
+}

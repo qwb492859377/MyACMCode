@@ -1,0 +1,48 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ZOJ3714                   *
+*      VjudgeProblemID:38589               *
+*      SubmitTime:2014/12/23 14:30:29      *
+*      SubmitType:C++ (g++ 4.7.2)          *
+*      Memory:172KB                        *
+*      CodeLen:654B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=202;
+
+int s[maxn*2],w[maxn];
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    int n,m;
+    while(T--){
+        scanf("%d%d",&n,&m);
+
+        s[0]=0;
+        for(int i=1;i<=n;i++){
+            scanf("%d",&w[i]);
+            s[i]=s[i-1]+w[i];
+        }
+        for(int i=n+1;i<=2*n;i++){
+            s[i]=s[i-1]+w[i-n];
+        }
+
+        int ans=-1;
+        for(int i=1;i<=2*n;i++){
+            if(i+m-1<=2*n){
+                ans=max(ans,s[i+m-1]-s[i-1]);
+            }
+        }
+        printf("%d\n",ans);
+    }
+    return 0;
+}

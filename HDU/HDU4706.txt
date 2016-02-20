@@ -1,0 +1,58 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4706                   *
+*      VjudgeProblemID:46467               *
+*      SubmitTime:2015/8/19 12:11:36       *
+*      SubmitType:C++                      *
+*      Memory:1728KB                       *
+*      CodeLen:926B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 100 + 5;
+
+char S[MX][MX];
+int main() {
+    int t = 0;
+    for(int n = 3; n <= 10; n++) {
+        memset(S, ' ', sizeof(S));
+
+        for(int i = 1; i <= n; i++) {
+            S[i][1] = t + 'a';
+            t++; t %= 26;
+        }
+        for(int i = 1; i <= n - 2; i++) {
+            S[n - i][i + 1] = t + 'a';
+            t++; t %= 26;
+        }
+        for(int i = 1; i <= n; i++) {
+            S[i][n] = t + 'a';
+            t++; t %= 26;
+        }
+
+        for(int i = 1; i <= n; i++) {
+            S[i][n + 1] = 0;
+            printf("%s\n", S[i] + 1);
+        }
+    }
+    return 0;
+}

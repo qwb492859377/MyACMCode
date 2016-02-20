@@ -1,0 +1,82 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2209                   *
+*      VjudgeProblemID:30716               *
+*      SubmitTime:2014/12/15 18:07:22      *
+*      SubmitType:C++                      *
+*      Memory:6164KB                       *
+*      CodeLen:1347B                       *
+*      RunTime:1170ms                      *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+
+int len,vis[1048580];
+
+int oper(int w,int o){
+    int t;
+    if(o==1){
+        return w^3;
+    }
+    if(o==len){
+        t=(1<<(len-1)) + (1<<(len-2));
+        return w^t;
+    }
+    t= (1<<(o-1)) + (1<<o) + (1<<(o-2));
+    return w^t;
+}
+
+int main(){
+    char s[25];
+    while(~scanf("%s",s)){
+        memset(vis,0,sizeof(vis));
+
+        len=strlen(s);
+        int beg=0,end=0;
+        for(int i=0;i<len;i++){
+            if(s[len-i-1]=='1'){
+                beg|=1<<i;
+            }
+        }
+        if(beg==1&&len==1){
+            printf("1\n");
+            continue;
+        }
+
+        queue<int>work;
+        work.push(beg);
+
+        int ans=-1;
+        while(!work.empty()){
+            int temp=work.front();
+            work.pop();
+
+            if(temp==end){
+                ans=vis[temp];
+                break;
+            }
+            for(int i=1;i<=len;i++){
+                int k=oper(temp,i);
+                if(k<0||k>=1048580||vis[k]){
+                    continue;
+                }
+                vis[k]=vis[temp]+1;
+                work.push(k);
+            }
+        }
+
+        if(ans!=-1){
+            printf("%d\n",ans);
+        }else{
+            printf("NO\n");
+        }
+    }
+    return 0;
+}

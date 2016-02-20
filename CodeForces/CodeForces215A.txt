@@ -1,0 +1,53 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CodeForces215A            *
+*      VjudgeProblemID:30797               *
+*      SubmitTime:2015/1/19 14:35:17       *
+*      SubmitType:GNU C++ 4.7              *
+*      Memory:0KB                          *
+*      CodeLen:714B                        *
+*      RunTime:124ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=55;
+
+int A[maxn],B[maxn];
+
+int main(){
+    int m,n;
+    scanf("%d",&m);
+    for(int i=1;i<=m;i++){
+        scanf("%d",&A[i]);
+    }
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++){
+        scanf("%d",&B[i]);
+    }
+
+    int w=0;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(B[i]%A[j]==0){
+                w=max(w,B[i]/A[j]);
+            }
+        }
+    }
+
+    int ans=0;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(B[i]%A[j]==0&&B[i]/A[j]==w){
+                ans++;
+            }
+        }
+    }
+    printf("%d",ans);
+    return 0;
+}

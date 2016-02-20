@@ -1,0 +1,85 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1272                   *
+*      VjudgeProblemID:11138               *
+*      SubmitTime:2015/1/23 14:58:26       *
+*      SubmitType:C++                      *
+*      Memory:2280KB                       *
+*      CodeLen:1047B                       *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=100005;
+int p[maxn],u[maxn],v[maxn];
+
+int find(int x){
+    return p[x]==-1?x:p[x]=find(p[x]);
+}
+
+int main(){
+    while(~scanf("%d%d",&u[0],&v[0])){
+        if(u[0]==-1&&v[0]==-1){
+            break;
+        }
+        if(!u[0]&&!v[0]){
+            printf("Yes\n");
+        }
+        int rear=1;
+        int maxx=max(u[0],v[0]);
+        while(scanf("%d%d",&u[rear],&v[rear])&&u[rear]){
+            rear++;
+        }
+
+        memset(p,-1,sizeof(p));
+        int sign=false,id;
+        for(int i=0;i<rear;i++){
+            int p1=find(u[i]);
+            int p2=find(v[i]);
+            if(p1==p2){
+                goto loop;
+            }
+            p[p2]=p1;
+        }
+
+        id=find(maxx);
+        for(int i=0;i<rear;i++){
+            if(find(u[i])!=id||find(v[i])!=id){
+                goto loop;
+            }
+        }
+        sign=true;
+
+        loop:
+            printf("%s\n",sign?"Yes":"No");
+    }
+    return 0;
+}
+   goto loop;
+            }
+        }
+        sign=true;
+
+        loop:
+            printf("%s\n",sign?"Yes":"No");
+    }
+    return 0;
+}
+            }
+            if(sign){
+                printf("Yes\n");
+            }else{
+                printf("No\n");
+            }
+        }else{
+            printf("No\n");
+        }
+    }
+    return 0;
+}

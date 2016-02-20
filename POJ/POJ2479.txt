@@ -1,0 +1,66 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2479                   *
+*      VjudgeProblemID:19810               *
+*      SubmitTime:2015/7/25 12:35:31       *
+*      SubmitType:C++                      *
+*      Memory:1128KB                       *
+*      CodeLen:1136B                       *
+*      RunTime:438ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 50000 + 5;
+const int INF = 0x3f3f3f3f;
+#define For(i,x,y) for(int i=x;i<=y;i++)
+#define Mem(x,y) memset(x,y,sizeof(x))
+
+int n;
+int dpL[MX], dpR[MX], sL[MX], sR[MX];
+int A[MX];
+
+int main() {
+    //freopen("input.txt","r",stdin);
+    int T;
+    scanf("%d", &T);
+    while(T--) {
+        Mem(dpL, -INF);
+        Mem(dpR, -INF);
+        Mem(sL, -INF);
+        Mem(sR, -INF);
+
+        scanf("%d", &n);
+        For(i, 1, n) {
+            scanf("%d", &A[i]);
+        }
+
+        For(i, 1, n) {
+            dpL[i] = dpL[i - 1] >= 0 ? dpL[i - 1] + A[i] : A[i];
+            sL[i] = max(sL[i - 1], dpL[i]);
+        }
+
+        for(int i = n; i >= 1; i--) {
+            dpR[i] = dpR[i + 1] >= 0 ? dpR[i + 1] + A[i] : A[i];
+            sR[i] = max(sR[i + 1], dpR[i]);
+        }
+
+        int ans = -INF;
+        For(i, 1, n - 1) {
+            ans = max(ans, sL[i] + sR[i + 1]);
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

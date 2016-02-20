@@ -1,0 +1,144 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1552                   *
+*      VjudgeProblemID:143209              *
+*      SubmitTime:2015/9/21 0:41:57        *
+*      SubmitType:C++                      *
+*      Memory:1532KB                       *
+*      CodeLen:2524B                       *
+*      RunTime:1268ms                      *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 200 + 5;
+
+LL multi(LL a, LL b, LL mod) {
+    LL ret = 0;
+    while(b) {
+        if(b & 1) ret = ret + a;
+        if(ret >= mod) ret -= mod;
+
+        a = (a + a) % mod;
+        if(a >= mod) a -= mod;
+        b >>= 1;
+    }
+    return ret;
+}
+
+LL power(LL a, LL b, LL mod) {
+    LL ret = 1;
+    while(b) {
+        if(b & 1) ret = multi(ret, a, mod);
+        a = multi(a, a, mod);
+        b >>= 1;
+    }
+    return ret;
+}
+
+bool Miller_Rabin(LL n) {
+    LL u = n - 1, pre, x;
+    int i, j, k = 0;
+    if(n == 2 || n == 3 || n == 5 || n == 7 || n == 11)  return true;
+    if(n == 1 || (!(n % 2)) || (!(n % 3)) || (!(n % 5)) || (!(n % 7)) || (!(n % 11)))   return false;
+    for(; !(u & 1); k++, u >>= 1);
+    srand(time(NULL));
+    for(i = 0; i < 5; i++) {
+        x = rand() % (n - 2) + 2;
+        x = power(x, u, n);
+        pre = x;
+        for(j = 0; j < k; j++) {
+            x = multi(x, x, n);
+            if(x == 1 && pre != 1 && pre != (n - 1))
+                return false;
+            pre = x;
+        }
+        if(x != 1)  return false;
+    }
+    return true;
+}
+
+LL A[MX];
+int match[MX];
+bool vis[MX], G[MX][MX];
+
+bool DFS(int n, int u) {
+    vis[u] = true;
+    for(int i = 1; i <= n; i++) {
+        if(!G[u][i]) continue;
+        int v = i, w = match[v];
+        if(w < 0 || !vis[w] && DFS(n, w)) {
+            match[v] = u;
+            match[u] = v;
+            return true;
+        }
+    }
+    return false;
+}
+
+int BM(int n) {
+    int ret = 0;
+    memset(match, -1, sizeof(match));
+    for(int i = 1; i <= n; i++) {
+        if(match[i] < 0) {
+            memset(vis, 0, sizeof(vis));
+            if(DFS(n, i)) ret++;
+        }
+    }
+    return ret;
+}
+
+int main() {
+    int n; //FIN;
+    while(~scanf("%d", &n)) {
+        memset(G, 0, sizeof(G));
+        for(int i = 1; i <= n; i++) {
+            scanf("%lld", &A[i]);
+        }
+
+        for(int i = 1; i <= n; i++) {
+            for(int j = i + 1; j <= n; j++) {
+                if(Miller_Rabin(A[i] + A[j])) {
+                    G[i][j] = G[j][i] = 1;
+                }
+            }
+        }
+
+        printf("%d\n", BM(n));
+    }
+    return 0;
+}
+) {
+            for(int j = i + 1; j <= n; j++) {
+                if(Miller_Rabin(A[i] + A[j])) {
+                    edge_add(i, j);
+                    edge_add(j, i);
+                }
+            }
+        }
+
+        printf("%d\n", BM(n));
+    }
+    return 0;
+}
+    return 0;
+}

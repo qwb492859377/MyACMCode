@@ -1,0 +1,53 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4712                   *
+*      VjudgeProblemID:46473               *
+*      SubmitTime:2015/8/19 16:38:53       *
+*      SubmitType:C++                      *
+*      Memory:2116KB                       *
+*      CodeLen:841B                        *
+*      RunTime:2137ms                      *
+********************************************
+*/
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <iostream>
+#include <cmath>
+#include <cstdio>
+#include <string>
+#include <ctime>
+using namespace std;
+typedef long long LL;
+const int MAXN = 1e5 + 5;
+const int INF = 0x3f3f3f3f;
+int T, n;
+int A[MAXN];
+int Get_Num(int m) {
+    int ret = 0;
+    while(m) {
+        ret += (m & 1);
+        m >>= 1;
+    }
+    return ret;
+}
+int main() {
+    scanf("%d", &T);
+    while(T --) {
+        scanf("%d", &n);
+        for(int i = 0; i < n; i ++) {
+            scanf("%X", &A[i]);
+        }
+        srand(time(NULL));
+        int  Min = INF;
+        for(int i = 0; i < 1e6; i ++) {
+            int a = rand() % n;
+            int b = rand() % n;
+            if(a == b) continue;
+            Min = min(Min, Get_Num(A[a] ^ A[b]));
+        }
+        printf("%d\n",Min);
+    }
+    return 0;
+}

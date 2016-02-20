@@ -1,0 +1,120 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:SPOJDQUERY                *
+*      VjudgeProblemID:32356               *
+*      SubmitTime:2015/8/21 22:08:31       *
+*      SubmitType:C++ (g++ 4.9.2)          *
+*      Memory:11264KB                      *
+*      CodeLen:2264B                       *
+*      RunTime:300ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<sstream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+const int MX = 3e4 + 5;
+const int MQ = 2e5 + 5;
+const int MP = 1e6 + 5;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,n,1
+
+struct Que {
+    int L, R, id;
+    bool operator<(const Que &b)const {
+        return R < b.R;
+    }
+} Q[MQ];
+
+int ans[MQ], pre[MP], A[MX];
+int S[MX << 2], col[MX << 2];
+
+void push_down(int rt, int len) {
+    if(col[rt]) {
+        int w = len >> 1;
+
+        col[rt << 1] += col[rt];
+        col[rt << 1 | 1] += col[rt];
+        S[rt << 1] += col[rt] * (len - w);
+        S[rt << 1 | 1] += col[rt] * w;
+        col[rt] = 0;
+    }
+}
+
+void push_up(int rt) {
+    S[rt] = S[rt << 1] + S[rt << 1 | 1];
+}
+
+void update(int L, int R, int d, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        col[rt] += d;
+        S[rt] += d;
+        return;
+    }
+
+    int m = (l + r) >> 1;
+    push_down(rt, r - l + 1);
+    if(L <= m) update(L, R, d, lson);
+    if(R > m) update(L, R, d, rson);
+    push_up(rt);
+}
+
+int query(int x, int l, int r, int rt) {
+    if(l == r) {
+        return S[rt];
+    }
+
+    int m = (l + r) >> 1;
+    push_down(rt, r - l + 1);
+    if(x <= m) return query(x, lson);
+    else return query(x, rson);
+}
+
+int main() {
+    int n, m; //FIN;
+    while(~scanf("%d", &n)) {
+        memset(pre, 0, sizeof(pre));
+        memset(col, 0, sizeof(col));
+        memset(S, 0, sizeof(S));
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+
+        scanf("%d", &m);
+        for(int i = 1; i <= m; i++) {
+            scanf("%d%d", &Q[i].L, &Q[i].R);
+            Q[i].id = i;
+        }
+        sort(Q + 1, Q + 1 + m);
+
+        int cur = 1;
+        for(int i = 1; i <= n; i++) {
+            update(pre[A[i]] + 1, i, 1, root);
+            pre[A[i]] = i;
+            while(cur <= m && Q[cur].R == i) {
+                ans[Q[cur].id] = query(Q[cur].L, root);
+                cur++;
+            }
+        }
+
+        for(int i = 1; i <= m; i++) {
+            printf("%d\n", ans[i]);
+        }
+    }
+    return 0;
+}

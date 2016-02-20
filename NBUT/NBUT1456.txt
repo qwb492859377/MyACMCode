@@ -1,0 +1,70 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1456                  *
+*      VjudgeProblemID:38738               *
+*      SubmitTime:2015/8/21 15:12:37       *
+*      SubmitType:G++                      *
+*      Memory:6484KB                       *
+*      CodeLen:1378B                       *
+*      RunTime:265ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<sstream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e5 + 5;
+
+int A[6][MX], dp[MX][5][2];
+
+int main() {
+    int n;//FIN;
+    while(~scanf("%d", &n)) {
+        memset(dp, 0, sizeof(dp));
+
+        for(int i = 1; i <= 5; i++) {
+            for(int j = 1; j <= n; j++) {
+                scanf("%d", &A[i][j]);
+            }
+        }
+
+        for(int i = 1; i <= 5; i++) {
+            dp[1][i][0] = dp[1][i][1] = A[i][1];
+        }
+        for(int i = 2; i <= n; i++) {
+            for(int j = 1; j <= 5; j++) {
+                for(int k = 1; k <= j - 1; k++) {
+                    dp[i][j][0] = max(dp[i][j][0], dp[i - 1][k][1] + A[j][i]);
+                }
+                for(int k = j + 1; k <= 5; k++) {
+                    dp[i][j][1] = max(dp[i][j][1], dp[i - 1][k][0] + A[j][i]);
+                }
+            }
+        }
+
+        int ans = 0;
+        for(int i = 1; i <= 5; i++) {
+            ans = max(ans, dp[n][i][0]);
+            ans = max(ans, dp[n][i][1]);
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

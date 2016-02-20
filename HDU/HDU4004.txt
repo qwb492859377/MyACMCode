@@ -1,0 +1,69 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4004                   *
+*      VjudgeProblemID:23009               *
+*      SubmitTime:2015/7/23 14:04:53       *
+*      SubmitType:C++                      *
+*      Memory:1732KB                       *
+*      CodeLen:1103B                       *
+*      RunTime:421ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 100000 + 10;
+const int INF = 0x3f3f3f3f;
+
+int A[MX], Len, n, k;
+int f(int x) {
+    int ret = 0, last = 0, cur = 0;
+    A[n + 1] = Len;
+    A[n + 2] = INF;
+
+    for(int i = 1; i <= n;) {
+        while(A[i] - last <= x && A[i + 1] - last <= x) i++;
+
+        if(cur == i) return INF;
+        ret++;
+        last = A[i];
+        cur = i;
+    }
+    return ret;
+}
+
+int main() {
+    //freopen("input.txt","r",stdin);
+    while(~scanf("%d%d%d", &Len, &n, &k)) {
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+        sort(A + 1, A + 1 + n);
+
+        int L = 0, R = 1000000000, m, ans, t;
+        while(L <= R) {
+            m = (L + R) >> 1;
+
+            t = f(m);
+            if(t > k) {
+                L = m + 1;
+            } else {
+                ans = m;
+                R = m - 1;
+            }
+
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

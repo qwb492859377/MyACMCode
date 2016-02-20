@@ -1,0 +1,50 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1087                   *
+*      VjudgeProblemID:17613               *
+*      SubmitTime:2015/3/16 0:56:08        *
+*      SubmitType:C++                      *
+*      Memory:1612KB                       *
+*      CodeLen:737B                        *
+*      RunTime:46ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int INF=1<<30;
+const int MX=1005;
+const int mod=1e9+7;
+
+int A[MX];
+LL dp[MX];
+
+int main(){
+    int n,t;
+    while(~scanf("%d",&n),n){
+        memset(dp,-0x3f,sizeof(dp));
+        for(int i=1;i<=n;i++){
+            scanf("%d",&A[i]);
+        }
+
+        dp[0]=0;
+        for(int i=0;i<=n;i++){
+            for(int j=i+1;j<=n;j++){
+                if(A[i]<A[j]){
+                    dp[j]=max(dp[j],dp[i]+A[j]);
+                }
+            }
+            dp[n+1]=max(dp[n+1],dp[i]);
+        }
+        printf("%I64d\n",dp[n+1]);
+    }
+    return 0;
+}

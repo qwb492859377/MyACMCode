@@ -1,0 +1,48 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:Gym100733D                *
+*      VjudgeProblemID:229606              *
+*      SubmitTime:2015/8/28 0:01:41        *
+*      SubmitType:GNU G++ 4.9.2            *
+*      Memory:7836KB                       *
+*      CodeLen:754B                        *
+*      RunTime:155ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 1e6 + 20;
+
+int A[MX], dp[MX];
+
+int main() {
+    int n;//FIN;
+    while(~scanf("%d", &n)) {
+        memset(dp, 0, sizeof(dp));
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+        }
+        for(int i = 3; i <= n + 2; i++) {
+            dp[i] = max(dp[i - 1], dp[i - 3] + A[i - 2]);
+        }
+        printf("%d\n", dp[n + 2]);
+    }
+    return 0;
+}

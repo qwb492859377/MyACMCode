@@ -1,0 +1,35 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1003                   *
+*      VjudgeProblemID:10018               *
+*      SubmitTime:2015/11/18 11:21:39      *
+*      SubmitType:G++                      *
+*      Memory:364KB                        *
+*      CodeLen:329B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+#include<math.h>
+#define FIN freopen("input.txt","r",stdin)
+
+int main() {
+    double s; //FIN;
+    while(~scanf("%lf", &s)) {
+        int n;
+        if(fabs(s) < 1e-6)break;
+
+        for(n = 1; s > 0; n++) {
+            s -= 1.0 / (n + 1);
+        }
+        printf("%d card(s)\n", n - 1);
+    }
+    return 0;
+}
+   }
+        }
+        printf("%d card(s)\n",ans-1);
+    }
+    return 0;
+}

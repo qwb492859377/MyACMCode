@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1449                  *
+*      VjudgeProblemID:46167               *
+*      SubmitTime:2015/8/21 12:48:08       *
+*      SubmitType:G++                      *
+*      Memory:220KB                        *
+*      CodeLen:738B                        *
+*      RunTime:78ms                        *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<sstream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+
+
+int main() {
+    int n;
+    double s;
+    while (~scanf("%d %lf", &n, &s)) {
+        int sum = 0;
+        for (int i = 0; i < n; i++) {
+            double w;
+            scanf("%lf", &w);
+            int k = ((int)w) % 10;
+            if (k == 5 && w > (int)w) continue;
+            if (k >= 0 && k <= 5) sum++;
+        }
+
+
+        printf("%.1lf\n", (60 + (0.2 * s)) * sum);
+    }
+    return 0;
+}

@@ -1,0 +1,151 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3667                   *
+*      VjudgeProblemID:18323               *
+*      SubmitTime:2015/8/18 21:57:02       *
+*      SubmitType:C++                      *
+*      Memory:2336KB                       *
+*      CodeLen:3185B                       *
+*      RunTime:967ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cctype>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e2 + 5;
+const int MM = 2e5 + 5;
+const int INF = 0x3f3f3f3f;
+
+struct Edge {
+    int to, next, cap, flow, cost;
+    Edge() {}
+    Edge(int _to, int _next, int _cap, int _flow, int _cost) {
+        to = _to; next = _next; cap = _cap; flow = _flow; cost = _cost;
+    }
+} E[MM];
+
+int Head[MX], tol;
+int pre[MX]; //储存前驱顶点
+int dis[MX]; //储存到源点s的距离
+bool vis[MX];
+int N;//节点总个数，节点编号从0~N-1
+
+void init(int n) {
+    tol = 0;
+    N = n + 2;
+    memset(Head, -1, sizeof(Head));
+}
+void edge_add(int u, int v, int cap, int cost) {
+    E[tol] = Edge(v, Head[u], cap, 0, cost);
+    Head[u] = tol++;
+
+    E[tol] = Edge(u, Head[v], 0, 0, -cost);
+    Head[v] = tol++;
+}
+bool spfa(int s, int t) {
+    queue<int>q;
+    for (int i = 0; i < N; i++) {
+        dis[i] = INF;
+        vis[i] = false;
+        pre[i] = -1;
+    }
+    dis[s] = 0;
+    vis[s] = true;
+    q.push(s);
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        vis[u] = false;
+        for (int i = Head[u]; i != -1; i = E[i].next) {
+            int v = E[i].to;
+            if (E[i].cap > E[i].flow && dis[v] > dis[u] + E[i].cost) {
+                dis[v] = dis[u] + E[i].cost;
+                pre[v] = i;
+                if (!vis[v]) {
+                    vis[v] = true;
+                    q.push(v);
+                }
+            }
+        }
+    }
+    if (pre[t] == -1) return false;
+    else return true;
+}
+
+//返回的是最大流， cost存的是最小费用
+int minCostMaxflow(int s, int t, int &cost) {
+    int flow = 0;
+    cost = 0;
+    while (spfa(s, t)) {
+        int Min = INF;
+        for (int i = pre[t]; i != -1; i = pre[E[i ^ 1].to]) {
+            if (Min > E[i].cap - E[i].flow)
+                Min = E[i].cap - E[i].flow;
+        }
+        for (int i = pre[t]; i != -1; i = pre[E[i ^ 1].to]) {
+            E[i].flow += Min;
+            E[i ^ 1].flow -= Min;
+            cost += E[i].cost * Min;
+        }
+        flow += Min;
+    }
+    return flow;
+}
+
+inline int read() {
+    char c = getchar();
+    while(!isdigit(c)) c = getchar();
+
+    int x = 0;
+    while(isdigit(c)) {
+        x = x * 10 + c - '0';
+        c = getchar();
+    }
+    return x;
+}
+
+int dist[] = {0, 1, 3, 5, 7, 9};
+
+int main() {
+    int n, m, k; //FIN;
+    while(~scanf("%d%d%d", &n, &m, &k)) {
+        int s = 0, t = n + 1;
+        init(t);
+
+        for(int i = 1; i <= m; i++) {
+            int u, v, a, c;
+            scanf("%d%d%d%d", &u, &v, &a, &c);
+            for(int j = 1; j <= c; j++) {
+                edge_add(u, v, 1, a * dist[j]);
+            }
+        }
+        edge_add(s, 1, k, 0);
+        edge_add(n, t, k, 0);
+
+        int ans = 0;
+        if(minCostMaxflow(s, t, ans) != k) {
+            printf("-1\n");
+        } else printf("%d\n", ans);
+    }
+    return 0;
+}
+eturn 0;
+}

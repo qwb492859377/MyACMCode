@@ -1,0 +1,125 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1457                  *
+*      VjudgeProblemID:38739               *
+*      SubmitTime:2015/8/21 13:47:16       *
+*      SubmitType:G++                      *
+*      Memory:8048KB                       *
+*      CodeLen:2345B                       *
+*      RunTime:2312ms                      *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1e5 + 5;
+const int MQ = 1e5 + 5;
+const int HS = 1000007;
+
+LL ans[MQ];
+int n, unit, Qt;
+int num[MX], A[MX];
+
+LL H_T[MX];
+int H_head[HS], H_next[MX], H_rear;
+
+int Hash(LL S) {
+    return S % HS;
+}
+
+void Hash_init() {
+    H_rear = 0;
+    memset(H_head, -1, sizeof(H_head));
+    memset(H_next, -1, sizeof(H_next));
+}
+
+int Hash_query(LL S) {
+    int h = Hash(S);
+
+    for(int i = H_head[h]; ~i; i = H_next[i]) {
+        if(H_T[i] == S) return i;
+    }
+
+    H_T[H_rear] = S;
+    H_next[H_rear] = H_head[h];
+    H_head[h] = H_rear;
+    return H_rear++;
+}
+
+struct Que {
+    int L, R, id;
+    bool operator<(const Que &b)const {
+        if(L / unit == b.L / unit) {
+            if(R == b.R) return L < b.L;
+            return R < b.R;
+        }
+        return L / unit < b.L / unit;
+    }
+} Q[MQ];
+
+void solve() {
+    LL sum = 0;
+    int L = 1, R = 0, c = 1;
+    while(c <= Qt) {
+        while(Q[c].L < L) {
+            LL s = num[A[--L]]++;
+            sum += -s * s * s + (s + 1) * (s + 1) * (s + 1);
+        }
+        while(Q[c].R > R) {
+            LL s = num[A[++R]]++;
+            sum += -s * s * s + (s + 1) * (s + 1) * (s + 1);
+        }
+        while(Q[c].L > L) {
+            LL s = num[A[L++]]--;
+            sum += -s * s * s + (s - 1) * (s - 1) * (s - 1);
+        }
+        while(Q[c].R < R) {
+            LL s = num[A[R--]]--;
+            sum += -s * s * s + (s - 1) * (s - 1) * (s - 1);
+        }
+        ans[Q[c++].id] = sum;
+    }
+}
+
+int main() {
+    //FIN;
+    while(~scanf("%d", &n)) {
+        Hash_init();
+        memset(num, 0, sizeof(num));
+        unit = sqrt(n + 0.5);
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+            A[i] = Hash_query(A[i]);
+        }
+
+        scanf("%d", &Qt);
+        for(int i = 1; i <= Qt; i++) {
+            scanf("%d%d", &Q[i].L, &Q[i].R);
+            Q[i].id = i;
+        }
+        sort(Q + 1, Q + 1 + Qt);
+
+        solve();
+        for(int i = 1; i <= Qt; i++) {
+            printf("%I64d\n", ans[i]);
+        }
+    }
+    return 0;
+}

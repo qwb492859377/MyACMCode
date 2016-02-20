@@ -1,0 +1,58 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:NBUT1219                  *
+*      VjudgeProblemID:32789               *
+*      SubmitTime:2015/8/17 12:44:52       *
+*      SubmitType:G++                      *
+*      Memory:260KB                        *
+*      CodeLen:1066B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define FIN freopen("input.txt","r",stdin)
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 2e2 + 5;
+const int INF = 0x3f3f3f3f;
+
+char S[MX][MX];
+int data[] = {119,36,93,109,46,107,123,37,127,111};
+
+void solve(int p, int x) {
+    x=data[x];
+    if(x >> 0 & 1) S[0][p + 1] = '_';
+    if(x >> 1 & 1) S[1][p + 0] = '|';
+    if(x >> 2 & 1) S[1][p + 2] = '|';
+    if(x >> 3 & 1) S[1][p + 1] = '_';
+    if(x >> 4 & 1) S[2][p + 0] = '|';
+    if(x >> 5 & 1) S[2][p + 2] = '|';
+    if(x >> 6 & 1) S[2][p + 1] = '_';
+}
+
+int main() {
+    int d[5];//FIN;
+    while(~scanf("%d%d%d%d", &d[0], &d[1], &d[2], &d[3])) {
+        memset(S, ' ', sizeof(S));
+        for(int i = 0; i < 3; i++) S[i][12] = 0;
+        for(int i = 0; i < 4; i++) solve(i * 3, d[i]);
+
+        for(int i = 0; i < 3; i++) printf("%s\n", S[i]);
+    }
+    return 0;
+}

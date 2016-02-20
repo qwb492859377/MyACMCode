@@ -1,0 +1,73 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU5119                   *
+*      VjudgeProblemID:87362               *
+*      SubmitTime:2015/11/7 23:23:53       *
+*      SubmitType:C++                      *
+*      Memory:9912KB                       *
+*      CodeLen:1330B                       *
+*      RunTime:436ms                       *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+
+const int MX = 1048575 + 10;
+
+int A[100];
+LL dp[2][MX];
+
+int main() {
+    int T, ansk = 0; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        int n, m, Max = 0;
+        scanf("%d%d", &n, &m);
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]);
+            Max = max(Max, A[i]);
+        }
+
+        for(int i = 31; i >= 0; i--) {
+            if(Max >> i & 1) {
+                Max = (1 << (i + 1)) - 1;
+                break;
+            }
+        }
+
+        int cur = 0, nxt = 1;
+        dp[cur][0] = 1;
+        for(int j = 1; j <= Max; j++) dp[cur][j] = 0;
+
+        for(int i = 1; i <= n; i++) {
+            for(int j = 0; j <= Max; j++) {
+                dp[nxt][j] = dp[cur][j] + dp[cur][j ^ A[i]];
+            }
+            swap(cur, nxt);
+        }
+
+        LL ans = 0;
+        for(int j = m; j <= Max; j++) ans += dp[cur][j];
+        printf("Case #%d: %I64d\n", ++ansk, ans);
+    }
+    return 0;
+}

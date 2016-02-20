@@ -1,0 +1,90 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ2828                   *
+*      VjudgeProblemID:10345               *
+*      SubmitTime:2015/4/10 20:21:57       *
+*      SubmitType:C++                      *
+*      Memory:4568KB                       *
+*      CodeLen:1137B                       *
+*      RunTime:1516ms                      *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=200000+5;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define root 1,n,1
+
+int S[MX<<2],ANS[MX],T1[MX],T2[MX];
+
+void push_up(int rt){
+    S[rt]=S[rt<<1]+S[rt<<1|1];
+}
+
+void build(int l,int r,int rt){
+    if(l==r){
+        S[rt]=1;
+        return;
+    }
+
+    int m=(l+r)>>1;
+    build(lson);
+    build(rson);
+    push_up(rt);
+}
+
+void tree(int pos,int W,int l,int r,int rt){
+    if(l==r){
+        S[rt]--;
+        ANS[l]=W;
+        return;
+    }
+
+    int m=(l+r)>>1;
+    if(pos<=S[rt<<1]) tree(pos,W,lson);
+    else tree(pos-S[rt<<1],W,rson);
+    push_up(rt);
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int n;
+    while(~scanf("%d",&n)){
+        for(int i=1;i<=n;i++){
+            scanf("%d%d",&T1[i],&T2[i]);T1[i]++;
+        }
+        build(root);
+
+        for(int i=n;i>=1;i--){
+            tree(T1[i],T2[i],root);
+        }
+
+        for(int i=1;i<=n;i++){
+            printf("%d%c",ANS[i],i==n?'\n':' ');
+        }
+    }
+    return 0;
+}
+
+t pos=query(T1[i],root);
+            update(pos,root);
+            ANS[pos]=T2[i];
+        }
+
+        for(int i=1;i<=n;i++){
+            printf("%d%c",ANS[i],i==n?'\n':' ');
+        }
+    }
+    return 0;
+}
+

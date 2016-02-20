@@ -1,0 +1,52 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2571                   *
+*      VjudgeProblemID:28937               *
+*      SubmitTime:2015/2/26 17:34:16       *
+*      SubmitType:C++                      *
+*      Memory:1288KB                       *
+*      CodeLen:868B                        *
+*      RunTime:31ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<queue>
+#include<algorithm>
+using namespace std;
+typedef __int64 LL;
+
+int K[25][1005];
+int dp[25][1005];
+
+int main(){
+    int T,n,m,t;
+    scanf("%d",&T);
+    while(T--){
+        memset(dp,-0x3f,sizeof(dp));
+
+        scanf("%d%d",&n,&m);
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+                scanf("%d",&K[i][j]);
+            }
+        }
+
+        dp[1][1]=K[1][1];
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+                dp[i+1][j]=max(dp[i+1][j],dp[i][j]+K[i+1][j]);
+                dp[i][j+1]=max(dp[i][j+1],dp[i][j]+K[i][j+1]);
+                for(int k=j;k+j<=m;k+=j){
+                    dp[i][j+k]=max(dp[i][j+k],dp[i][j]+K[i][j+k]);
+                }
+            }
+        }
+        printf("%d\n",dp[n][m]);
+    }
+    return 0;
+}
+

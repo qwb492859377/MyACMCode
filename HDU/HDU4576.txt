@@ -1,0 +1,69 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4576                   *
+*      VjudgeProblemID:46094               *
+*      SubmitTime:2015/6/4 17:45:18        *
+*      SubmitType:G++                      *
+*      Memory:1428KB                       *
+*      CodeLen:1070B                       *
+*      RunTime:2698ms                      *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cctype>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=200+5;
+
+double dp[2][MX];
+
+inline int read(){
+    char c=getchar();
+    while(!isdigit(c)) c=getchar();
+
+    int x=0;
+    while(isdigit(c)){
+        x=x*10+c-'0';
+        c=getchar();
+    }
+    return x;
+}
+
+int main(){
+    int n,m,l,r;
+    while(~scanf("%d%d%d%d",&n,&m,&l,&r),n+m+l+r){
+        memset(dp,0,sizeof(dp));
+        int cur=0,nxt,t;
+
+        dp[cur][0]=1;
+
+        for(int i=1;i<=m;i++){
+            nxt=cur^1;
+            memset(dp[nxt],0,sizeof(dp[nxt]));
+
+            t=read();t%=n;
+
+            for(int j=0;j<n;j++){
+                if(dp[cur][j]==0) continue;
+
+                dp[nxt][(j+t)%n]+=0.5*dp[cur][j];
+                dp[nxt][(j-t+n)%n]+=0.5*dp[cur][j];
+            }
+            cur=nxt;
+        }
+
+        double ans=0;
+        for(int i=l-1;i<=r-1;i++){
+            ans+=dp[cur][i];
+        }
+        printf("%.4lf\n",ans);
+    }
+    return 0;
+}

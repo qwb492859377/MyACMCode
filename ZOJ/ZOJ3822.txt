@@ -1,0 +1,65 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ZOJ3822                   *
+*      VjudgeProblemID:53727               *
+*      SubmitTime:2015/10/4 20:50:30       *
+*      SubmitType:C++ (g++ 4.7.2)          *
+*      Memory:71760KB                      *
+*      CodeLen:1444B                       *
+*      RunTime:4070ms                      *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck printf("fuck")
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 50 + 5;
+
+double dp[MX][MX][MX*MX];
+
+int main() {
+    int n, m, T; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d%d", &n, &m);
+        memset(dp, 0, sizeof(dp));
+
+        int sum = n * m;
+        dp[0][0][0] = 1;
+        for(int k = 1; k <= sum; k++) {
+            for(int i = 1; i <= n; i++) {
+                for(int j = 1; j <= m; j++) {
+                    if(i > k || j > k) continue;
+                    dp[i][j][k] += dp[i][j][k - 1] * (i * j - k + 1) / (sum - k + 1);
+                    dp[i][j][k] += dp[i - 1][j][k - 1] * ((n - i + 1) * j) / (sum - k + 1);
+                    dp[i][j][k] += dp[i][j - 1][k - 1] * (i * (m - j + 1)) / (sum - k + 1);
+                    dp[i][j][k] += dp[i - 1][j - 1][k - 1] * ((n - i + 1) * (m - j + 1)) / (sum - k + 1);
+                }
+            }
+        }
+
+        double ans = 0;
+        for(int i = max(n, m); i <= sum; i++) {
+            ans += (dp[n][m][i] - dp[n][m][i - 1]) * i;
+        }
+        printf("%.12lf\n", ans);
+    }
+    return 0;
+}

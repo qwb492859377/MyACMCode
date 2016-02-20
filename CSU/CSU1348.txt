@@ -1,0 +1,85 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:CSU1348                   *
+*      VjudgeProblemID:51717               *
+*      SubmitTime:2015/11/19 14:41:14      *
+*      SubmitType:C++                      *
+*      Memory:1492KB                       *
+*      CodeLen:1899B                       *
+*      RunTime:4ms                         *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+typedef pair<int, int>PII;
+
+const int MX = 30 + 5;
+
+int S[MX][MX];
+vector<PII>vec[10];
+
+int main() {
+    int T; //FIN;
+    scanf("%d", &T);
+    while(T--) {
+        int n, m;
+        scanf("%d%d", &n, &m);
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= m; j++) {
+                scanf("%d", &S[i][j]);
+            }
+        }
+
+        int d, ox, oy, ans = 0, x, y;
+        scanf("%d", &d);
+        for(int i = 1; i <= d; i++) {
+            for(int j = 0; j <= 9; j++) vec[j].clear();
+            scanf("%d%d", &ox, &oy);
+            if(S[ox][oy]) continue;
+
+            for(x = ox, y = oy; x >= 1 && !S[x][y]; x--);
+            if(x >= 1) vec[S[x][y]].push_back(PII(x, y));
+
+            for(x = ox, y = oy; x <= n && !S[x][y]; x++);
+            if(x <= n) vec[S[x][y]].push_back(PII(x, y));
+
+            for(x = ox, y = oy; y >= 1 && !S[x][y]; y--);
+            if(y >= 1) vec[S[x][y]].push_back(PII(x, y));
+
+            for(x = ox, y = oy; y <= m && !S[x][y]; y++);
+            if(y <= m) vec[S[x][y]].push_back(PII(x, y));
+
+            for(int k = 1; k <= 9; k++) {
+                int sz = (int)vec[k].size();
+                if(sz >= 2) {
+                    ans += sz;
+                    for(int j = 0; j < sz ; j++) {
+                        PII f = vec[k][j];
+                        x = f.first, y = f.second;
+                        S[x][y] = 0;
+                    }
+                }
+            }
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

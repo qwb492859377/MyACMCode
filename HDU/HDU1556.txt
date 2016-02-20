@@ -1,0 +1,65 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1556                   *
+*      VjudgeProblemID:27239               *
+*      SubmitTime:2015/7/6 15:36:41        *
+*      SubmitType:C++                      *
+*      Memory:2400KB                       *
+*      CodeLen:529B                        *
+*      RunTime:811ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+const int MX=100000+5;
+int L[MX],R[MX];
+
+int main(){
+    int n;
+    while(~scanf("%d",&n),n){
+        for(int i=1;i<=n;i++){
+            scanf("%d%d",&L[i],&R[i]);
+        }
+        sort(L+1,L+1+n);
+        sort(R+1,R+1+n);
+
+        int pos=1,l=1,r=1,ans=0;
+        while(pos<=n){
+            while(l<=n&&pos==L[l]) ans++,l++;
+            printf("%d%c",ans,pos==n?'\n':' ');
+            while(r<=n&&pos==R[r]) ans--,r++;
+            pos++;
+        }
+    }
+    return 0;
+}
+            printf("%d%c",ans,pos==n?'\n':' ');
+            while(r<=n&&pos==R[r]) ans--,r++;
+            pos++;
+        }
+    }
+    return 0;
+}
+t+=query(x,rson);
+    return ret;
+}
+
+int main(){
+    int n;
+    while(~scanf("%d",&n),n){
+        build();
+
+        for(int i=1;i<=n;i++){
+            int L,R;
+            scanf("%d%d",&L,&R);
+            update(L,R,root);
+        }
+
+        for(int i=1;i<=n;i++){
+            printf("%d%c",query(i,root),i==n?'\n':' ');
+        }
+    }
+    return 0;
+}

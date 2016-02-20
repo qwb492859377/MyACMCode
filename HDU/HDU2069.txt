@@ -1,0 +1,58 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2069                   *
+*      VjudgeProblemID:18456               *
+*      SubmitTime:2015/7/22 21:48:57       *
+*      SubmitType:C++                      *
+*      Memory:1604KB                       *
+*      CodeLen:911B                        *
+*      RunTime:46ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<map>
+#include<set>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<stack>
+#include<cctype>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1000 + 5;
+const int INF = 0x3f3f3f3f;
+
+int dp[MX];
+int d[]={50,25,10,5,1};//5
+
+int main(){
+    memset(dp,0,sizeof(dp));
+
+    int V=250;
+    for(int a=0;50*a<=V;a++){
+        for(int b=0;25*b<=V;b++){
+            for(int c=0;10*c<=V;c++){
+                for(int d=0;5*d<=V;d++){
+                    for(int e=0;e<=V;e++){
+                        int cnt=a+b+c+d+e;
+                        int sum=50*a+25*b+10*c+5*d+e;
+                        if(cnt<=100&&sum<=V) dp[sum]++;
+                    }
+                }
+            }
+        }
+    }
+
+    int n;
+    while(~scanf("%d",&n)){
+        printf("%d\n",dp[n]);
+    }
+    return 0;
+}

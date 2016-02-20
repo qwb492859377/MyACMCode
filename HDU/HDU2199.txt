@@ -1,0 +1,64 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU2199                   *
+*      VjudgeProblemID:20576               *
+*      SubmitTime:2015/12/4 20:12:37       *
+*      SubmitType:G++                      *
+*      Memory:1432KB                       *
+*      CodeLen:788B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<stdio.h>
+#include<algorithm>
+using namespace std;
+
+const int MX = 1e4 + 5 ;
+
+double y;
+
+double f(double x) {
+    return 8 * x * x * x * x + 7 * x * x * x + 2 * x * x + 3 * x + 6;
+}
+
+bool check(double x) {//f(x)<=y
+    return f(x) <= y;
+}
+
+double solve() {
+    double l = 0, r = 1e2, m;
+    for(int i = 1; i <= 100; i++) {
+        m = (l + r) / 2;
+        if(check(m)) l = m;
+        else r = m;
+    }
+    return l;
+}
+/*
+定义f(x)表示，当长度为x时，
+能截断出多少条绳子
+*/
+int main() {
+    //freopen("input.txt","r",stdin);
+    int T;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%lf", &y);
+        if(f(0) > y || f(100) < y) {
+            printf("No solution!\n");
+        } else {
+            printf("%.4f\n", solve());
+        }
+    }
+    return 0;
+}
+nf("%lf", &y);
+        if(f(100) < y || f(0) > y) {
+            printf("No solution!\n");
+            continue;
+        }
+        printf("%.4f\n", solve());
+    }
+    return 0;
+}

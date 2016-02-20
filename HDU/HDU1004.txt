@@ -1,0 +1,75 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1004                   *
+*      VjudgeProblemID:15515               *
+*      SubmitTime:2015/11/8 11:13:00       *
+*      SubmitType:G++                      *
+*      Memory:1432KB                       *
+*      CodeLen:636B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<stdio.h>
+#include<string.h>
+#define MX 1005
+
+char S[MX][20];
+int cnt[MX];
+
+int main() {
+    int n, i, j;
+    while(~scanf("%d", &n), n) {
+        memset(cnt, 0, sizeof(cnt));
+        for(i = 1; i <= n; i++) {
+            scanf("%s", S[i]);
+        }
+
+        for(i = 1; i <= n; i++) {
+            for(j = 1; j <= i; j++) {
+                if(strcmp(S[i], S[j]) == 0) {
+                    cnt[j]++;
+                    break;
+                }
+            }
+        }
+
+        int id = 1;
+        for(i = 2; i <= n; i++) {
+            if(cnt[i] > cnt[id]) id = i;
+        }
+        printf("%s\n", S[id]);
+    }
+    return 0;
+}
+    strcpy(col[rear],s);
+    return rear;
+}
+
+
+int main(){
+    int n;
+    while(~scanf("%d",&n)&&n){
+        memset(head,0,sizeof(head));
+        memset(next,0,sizeof(next));
+        memset(ans,0,sizeof(ans));
+
+        for(int i=1;i<=n;i++){
+            color temp;
+            scanf("%s",temp);
+            int id=hash_query(temp);
+            ans[id]++;
+        }
+
+        int w=0;
+        color temp;
+        for(int i=1;i<=rear;i++){
+            if(ans[i]>w){
+                w=ans[i];
+                strcpy(temp,col[i]);
+            }
+        }
+        printf("%s\n",temp);
+    }
+    return 0;
+}

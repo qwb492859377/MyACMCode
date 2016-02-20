@@ -1,0 +1,99 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3172                   *
+*      VjudgeProblemID:19386               *
+*      SubmitTime:2014/12/13 17:07:37      *
+*      SubmitType:C++                      *
+*      Memory:4836KB                       *
+*      CodeLen:1799B                       *
+*      RunTime:187ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+typedef char Name[21];
+typedef __int64 LL;
+const int maxn=100005;
+const int hashsize=500007;
+Name name[maxn];
+int p[maxn],head[hashsize]={0},next[maxn]={0};
+int rear=0;
+LL ans[maxn];
+
+int find(int x){
+    return p[x]==x?x:(p[x]=find(p[x]));
+}
+
+unsigned int BKDRHash(char*str){
+    unsigned int seed=131;
+    unsigned int hash=0;
+    while(*str)
+    {
+        hash=hash*seed+*str++;
+    }
+    return (hash&0x7FFFFFFF);
+}
+
+int hash_find(Name &m){
+    int h=BKDRHash(m)%hashsize;
+    for(int j=head[h];j!=0;j=next[j]){
+        if(strcmp(name[j],m)==0){
+            return j;
+        }
+    }
+    rear++;
+    next[rear]=head[h];
+    memcpy(&name[rear],&m,sizeof(m));
+    head[h]=rear;
+    return rear;
+}
+
+int main(){
+    int T;
+    while(~scanf("%d",&T)){
+    while(T--){
+        memset(head,0,sizeof(head));
+        memset(next,0,sizeof(next));
+        memset(ans,0,sizeof(ans));
+        memset(p,0,sizeof(p));
+
+        int n;
+        rear=0;
+        scanf("%d",&n);
+
+        for(int i=1;i<=n;i++){
+            Name a,b;
+            scanf("%s%s",a,b);
+            int id1=hash_find(a);
+            int id2=hash_find(b);
+
+            if(!p[id1]){
+                p[id1]=id1;
+                ans[id1]=1;
+                //printf("[%d,%d]",id1,p[id1]);
+            }
+            if(!p[id2]){
+                p[id2]=id2;
+                ans[id2]=1;
+                //printf("[%d,%d]",id2,p[id2]);
+            }
+            int k1=find(id1);
+            int k2=find(id2);
+
+            LL aw=ans[k1];
+            if(k1!=k2){
+                ans[k1]+=ans[k2];
+                aw=ans[k1];
+                p[k2]=k1;
+            }
+            printf("%I64d\n",aw);
+        }
+    }
+    }
+    return 0;
+}

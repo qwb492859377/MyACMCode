@@ -1,0 +1,51 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1800                   *
+*      VjudgeProblemID:21605               *
+*      SubmitTime:2014/12/8 17:39:46       *
+*      SubmitType:C++                      *
+*      Memory:1124KB                       *
+*      CodeLen:810B                        *
+*      RunTime:249ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cmath>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+
+int s[3005],w[3005],ans;
+
+int main(){
+    int n;
+    while(~scanf("%d",&n)){
+        for(int i=0;i<n;i++){
+            scanf("%d",&s[i]);
+        }
+        sort(s,s+n);
+        memset(w,0,sizeof(w));
+
+        ans=0;
+
+        for(int i=n-1;i>=0;i--){
+            int minw=w[0],minj=-1;
+            for(int j=0;j<ans;j++){
+                if(s[i]<w[j]&&w[j]<=minw){
+                    minw=w[j];
+                    minj=j;
+                }
+            }
+            //printf("[%d,%d,%d]%d,%d\n",i,minw,minj,s[i],ans);
+            if(minj!=-1){
+                w[minj]=s[i];
+            }else{
+                w[ans++]=s[i];
+            }
+        }
+        printf("%d\n",ans);
+    }
+    return 0;
+}

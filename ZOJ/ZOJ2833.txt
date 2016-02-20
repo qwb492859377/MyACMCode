@@ -1,0 +1,61 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ZOJ2833                   *
+*      VjudgeProblemID:17721               *
+*      SubmitTime:2015/7/5 21:32:16        *
+*      SubmitType:C++ (g++ 4.7.2)          *
+*      Memory:952KB                        *
+*      CodeLen:955B                        *
+*      RunTime:160ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<queue>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+
+const int MX=100000+5;
+
+int P[MX],A[MX];
+
+int find(int x){
+    return P[x]==x?x:(P[x]=find(P[x]));
+}
+
+int main(){
+    int n,m,ansk=0,first=true;
+    while(~scanf("%d%d",&n,&m)){
+        for(int i=1;i<=n;i++){
+            P[i]=i;
+            A[i]=1;
+        }
+
+        if(first) first=false;
+        else printf("\n");
+
+        printf("Case %d:\n",++ansk);
+        while(m--){
+            char op[10];int a,b;
+            scanf("%s%d",op,&a);
+            if(op[0]=='M'){
+                scanf("%d",&b);
+                int p1=find(a),p2=find(b);
+                if(p1!=p2){
+                    P[p1]=p2;
+                    A[p2]+=A[p1];
+                }
+            }else{
+                int p=find(a);
+                printf("%d\n",A[p]);
+            }
+        }
+    }
+    return 0;
+}

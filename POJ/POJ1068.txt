@@ -1,0 +1,70 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ1068                   *
+*      VjudgeProblemID:14578               *
+*      SubmitTime:2015/7/21 14:48:12       *
+*      SubmitType:C++                      *
+*      Memory:144KB                        *
+*      CodeLen:1186B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<cctype>
+#include<stack>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 100 + 5;
+const int INF = 0x3f3f3f3f;
+
+char S[MX];
+int tot;
+
+int main() {
+    int T, n, t;
+    scanf("%d", &T);
+    while(T--) {
+        tot = 0;
+
+        scanf("%d", &n);
+        int sum = 0;
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &t);
+            for(int i = sum; i < t; i++) {
+                S[tot++] = '(';
+            }
+            sum = t;
+            S[tot++] = ')';
+        }
+        S[tot] = 0;
+
+        stack<char>work;
+        for(int i = 0, j = 0; i < tot; i++) {
+            if(S[i] == '(') {
+                work.push(0);
+            } else {
+                j++;
+                int t = work.top();
+                work.pop();
+                printf("%d%c", t + 1, j == n ? '\n' : ' ');
+
+                if(!work.empty()) {
+                    int f = work.top();
+                    work.pop();
+                    work.push(f + t + 1);
+                }
+            }
+        }
+    }
+    return 0;
+}

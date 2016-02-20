@@ -1,0 +1,173 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3966                   *
+*      VjudgeProblemID:22734               *
+*      SubmitTime:2015/12/2 21:18:01       *
+*      SubmitType:G++                      *
+*      Memory:11412KB                      *
+*      CodeLen:3784B                       *
+*      RunTime:1638ms                      *
+********************************************
+*/
+#include<map>
+#include<set>
+#include<cmath>
+#include<ctime>
+#include<stack>
+#include<queue>
+#include<cstdio>
+#include<cctype>
+#include<string>
+#include<vector>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<functional>
+#define fuck(x) cout<<"["<<x<<"]"
+#define FIN freopen("input.txt","r",stdin)
+#define FOUT freopen("output.txt","w+",stdout)
+using namespace std;
+typedef long long LL;
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+
+const int MX = 5e4 + 5;
+const int INF = 0x3f3f3f3f;
+
+struct Edge {
+    int v, nxt;
+} E[MX << 2];
+int Head[MX], h_r;
+void edge_init() {
+    h_r = 0;
+    memset(Head, -1, sizeof(Head));
+}
+void edge_add(int u, int v) {
+    E[h_r].v = v;
+    E[h_r].nxt = Head[u];
+    Head[u] = h_r++;
+}
+
+LL SUM[MX << 2];
+int A[MX], B[MX];
+
+void build(int l, int r, int rt) {
+    SUM[rt] = 0;
+    if(l == r) {
+        SUM[rt] = A[l];
+        return;
+    }
+    int m = (l + r) >> 1;
+    build(lson);
+    build(rson);
+}
+void update(int L, int R, int d, int l, int r, int rt) {
+    if(L <= l && r <= R) {
+        SUM[rt] += d;
+        return;
+    }
+    int m = (l + r) >> 1;
+    if(L <= m) update(L, R, d, lson);
+    if(R > m) update(L, R, d, rson);
+}
+LL query(int x, int l, int r, int rt) {
+    if(l == r) {
+        return SUM[rt];
+    }
+    int m = (l + r) >> 1; LL ret = SUM[rt];
+    if(x <= m) ret += query(x, lson);
+    else ret += query(x, rson);
+    return ret;
+}
+
+int fa[MX], top[MX], siz[MX], son[MX], dep[MX], id[MX], rear;
+/*fa父节点，top重链开头起点，siz子树大小，son重儿子，dep深度，id新编号*/
+
+/*第一次DFS找到重边，并维护好siz,son,fa,dep*/
+void DFS1(int u, int f, int d) {
+    fa[u] = f; dep[u] = d;
+    son[u] = 0; siz[u] = 1;
+    for(int i = Head[u]; ~i; i = E[i].nxt) {
+        int v = E[i].v;
+        if(v == f) continue;
+        DFS1(v, u, d + 1);
+        siz[u] += siz[v];
+        if(siz[son[u]] < siz[v]) {
+            son[u] = v;
+        }
+    }
+}
+/*将重边编号好，维护id*/
+void DFS2(int u, int tp) {
+    top[u] = tp;
+    id[u] = ++rear;
+    if(son[u]) DFS2(son[u], tp);
+    for(int i = Head[u]; ~i; i = E[i].nxt) {
+        int v = E[i].v;
+        if(v == fa[u] || v == son[u]) continue;
+        DFS2(v, v);
+    }
+}
+/*用来给点编号，以及建立线段树，要用id编号建树*/
+void HLD_presolve() {
+    rear = 0;
+    DFS1(1, 0, 1);
+    DFS2(1, 1);
+    for(int i = 1; i <= rear; i++) {
+        A[id[i]] = B[i];
+    }
+    build(1, rear, 1);
+}
+/*修改，要注意使用id编号修改*/
+void HLD_update(int u, int v, int d) {
+    int tp1 = top[u], tp2 = top[v];
+    while(tp1 != tp2) {
+        if(dep[tp1] < dep[tp2]) {
+            swap(u, v);
+            swap(tp1, tp2);
+        }
+        update(id[tp1], id[u], d, 1, rear, 1);
+        u = fa[tp1]; tp1 = top[u];
+    }
+    if(dep[u] > dep[v]) swap(u, v);
+    update(id[u], id[v], d, 1, rear, 1);
+}
+
+LL HLD_query(int u) {
+    return query(id[u], 1, rear, 1);
+}
+
+int main() {
+    int n, m, p; //FIN;
+    while(~scanf("%d%d%d", &n, &m, &p)) {
+        edge_init();
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &B[i]);
+        }
+        for(int i = 1; i <= m; i++) {
+            int u, v;
+            scanf("%d%d", &u, &v);
+            edge_add(u, v);
+            edge_add(v, u);
+        }
+        HLD_presolve();
+
+        for(int i = 1; i <= p; i++) {
+            char op[10];
+            int a, b, c;
+            scanf("%s", op);
+            if(op[0] == 'I') {
+                scanf("%d%d%d", &a, &b, &c);
+                HLD_update(a, b, c);
+            } else if(op[0] == 'D') {
+                scanf("%d%d%d", &a, &b, &c);
+                HLD_update(a, b, -c);
+            } else {
+                scanf("%d", &a);
+                printf("%I64d\n", HLD_query(a));
+            }
+        }
+    }
+    return 0;
+}

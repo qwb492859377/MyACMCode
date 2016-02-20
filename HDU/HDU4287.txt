@@ -1,0 +1,107 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4287                   *
+*      VjudgeProblemID:31869               *
+*      SubmitTime:2015/8/8 13:41:34        *
+*      SubmitType:C++                      *
+*      Memory:3576KB                       *
+*      CodeLen:2023B                       *
+*      RunTime:171ms                       *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<map>
+#include<set>
+#include<string>
+#include<iostream>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<LL, int> PLI;
+
+const int MX = 1e3 + 5;
+const int INF = 0x3f3f3f3f;
+
+char S[10];
+vector<string>G;
+char table[][10] = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+
+struct Node {
+    int num;
+    Node *Next[26];
+    Node() {
+        num = 0;
+        memset(Next, NULL, sizeof(Next));
+    }
+};
+
+void trie_add(Node*root, char*S) {
+    int L = strlen(S);
+    Node *p = root;
+    for(int i = 0; i < L; i++) {
+        int id = S[i] - 'a';
+        if(p->Next[id] == NULL) {
+            p->Next[id] = new Node();
+        }
+        p = p->Next[id];
+    }
+    p->num++;
+}
+
+int trie_query(Node*root, int pos, int L) {
+    int ans = 0;
+    int id = S[pos] - '0';
+    for(int i = 0; i < strlen(table[id]); i++) {
+        int w = table[id][i] - 'a';
+        if(root->Next[w] != NULL) {
+            if(pos + 1 == L) {
+                ans += root->Next[w]->num;
+            } else {
+                ans += trie_query(root->Next[w], pos + 1, L);
+            }
+        }
+    }
+    return ans;
+}
+
+void trie_clear(Node *root) {
+    for(int i = 0; i < 26; i++) {
+        if(root->Next[i] != NULL) {
+            trie_clear(root->Next[i]);
+        }
+    }
+    delete root;
+}
+
+int main() {
+    //freopen("input.txt", "r", stdin);
+    int T, n, m;
+    scanf("%d", &T);
+    while(T--) {
+        G.clear();
+        Node *root = new Node();
+        scanf("%d%d", &n, &m);
+
+        for(int i = 1; i <= n; i++) {
+            scanf("%s", S);
+            G.push_back(string(S));
+        }
+        for(int i = 1; i <= m; i++) {
+            scanf("%s", S);
+            trie_add(root, S);
+        }
+        for(int i = 0; i < n; i++) {
+            strcpy(S, G[i].c_str());
+            printf("%d\n", trie_query(root, 0, strlen(S)));
+        }
+        trie_clear(root);
+    }
+    return 0;
+}

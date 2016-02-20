@@ -1,0 +1,85 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:POJ3616                   *
+*      VjudgeProblemID:16276               *
+*      SubmitTime:2015/3/20 18:57:21       *
+*      SubmitType:C++                      *
+*      Memory:152KB                        *
+*      CodeLen:843B                        *
+*      RunTime:16ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<cstdlib>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=1000+5;
+
+LL dp[MX];
+struct Inter{
+    int L,R,x;
+    bool operator<(const Inter&b)const{
+        return L<b.L;
+    }
+}A[MX];
+
+int main(){
+    int n,m,r;
+    while(~scanf("%d%d%d",&n,&m,&r)){
+        memset(dp,0,sizeof(dp));
+        for(int i=0;i<m;i++){
+            scanf("%d%d%d",&A[i].L,&A[i].R,&A[i].x);
+            A[i].R+=r;
+        }
+        sort(A,A+m);
+
+        LL ans=0;
+        for(int i=0;i<m;i++){
+            LL last=0;
+            for(int j=0;j<=i;j++){
+                if(A[j].R<=A[i].L) last=max(last,dp[j]);
+            }
+            dp[i]=last+A[i].x;
+            ans=max(ans,dp[i]);
+        }
+        printf("%I64d\n",ans);
+    }
+    return 0;
+}
+   push_up(rt);
+}
+
+struct Inter{
+    int L,R,x;
+    bool operator<(const Inter&b) const{
+        return L<b.L;
+    }
+}A[MN];
+
+int main(){
+    //freopen("input.txt","r",stdin);
+    int n,m,r;
+    while(~scanf("%d%d%d",&n,&m,&r)){
+        build(root);
+
+        for(int i=1;i<=m;i++){
+            scanf("%d%d%d",&A[i].L,&A[i].R,&A[i].x);
+        }
+        sort(A+1,A+m+1);
+
+        for(int i=1;i<=m;i++){
+            int e=min(n,A[i].R+r);
+            LL may=query(0,A[i].L,root)+A[i].x;
+            update(e,may,root);
+            int a=1;
+        }
+        printf("%I64d\n",query(0,n,root));
+    }
+    return 0;
+}

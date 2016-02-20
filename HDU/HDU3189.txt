@@ -1,0 +1,58 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU3189                   *
+*      VjudgeProblemID:25752               *
+*      SubmitTime:2015/7/22 21:35:22       *
+*      SubmitType:C++                      *
+*      Memory:1608KB                       *
+*      CodeLen:737B                        *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<map>
+#include<set>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<stack>
+#include<cctype>
+#include<vector>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 1000 + 5;
+const int INF = 0x3f3f3f3f;
+
+int F[MX];
+int ans[MX];
+
+int main(){
+    memset(F,0,sizeof(F));
+    memset(ans,-1,sizeof(ans));
+
+    for(int i=1;i<=1000;i++){
+        for(int j=i;j<=1000;j+=i){
+            F[j]++;
+        }
+    }
+
+    for(int i=1;i<=1000;i++){
+        if(ans[F[i]]==-1){
+            ans[F[i]]=i;
+        }
+    }
+
+    int T,t;
+    scanf("%d",&T);
+    while(T--){
+        scanf("%d",&t);
+        printf("%d\n",ans[t]);
+    }
+    return 0;
+}

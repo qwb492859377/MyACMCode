@@ -1,0 +1,67 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1394                   *
+*      VjudgeProblemID:15764               *
+*      SubmitTime:2015/8/8 14:33:40        *
+*      SubmitType:C++                      *
+*      Memory:1612KB                       *
+*      CodeLen:468B                        *
+*      RunTime:46ms                        *
+********************************************
+*/
+#include<stdio.h>
+#include<string.h>
+const int MX=5e3+5;int S[MX],A[MX],n;int query(int x){int ret=0;for(;x;x -= x & -x){ret+=S[x];}return ret;}void update(int x,int d){ for(;x <= n;x+=x & -x){S[x]+=d;}}int main(){while(~scanf("%d",&n)){memset(S,0,sizeof(S));int sum=0,ans;for(int i=1;i <= n;i++){scanf("%d",&A[i]);A[i]++;sum+=query(n)-query(A[i]-1);update(A[i],1);}ans=sum;for(int i=1;i <= n-1;i++){sum+=n-2*A[i]+1;ans=ans<sum?ans:sum;}printf("%d\n",ans);}return 0;}
+= n - 1; i++) {sum += n - 2 * A[i] + 1;ans = min(ans, sum);}printf("%d\n", ans);}return 0;}
+       for(int i = 1; i <= n - 1; i++) {
+            sum += n - 2 * A[i] + 1;
+            ans = min(ans, sum);
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}
+   }
+        printf("%d\n", ans);
+    }
+    return 0;
+}
+  printf("%d\n", ans);
+    }
+    return 0;
+}
+         update(A[i], 1);
+        }
+
+        int ans = sum;
+        for(int i = 1; i <= n - 1; i++) {
+            sum += n - 2 * A[i] + 1;
+            ans = min(ans, sum);
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}
+r",stdin);
+    while(~scanf("%d", &n)) {
+        int ans = 0, w = 0;
+        build(root);
+        for(int i = 1; i <= n; i++) {
+            scanf("%d", &A[i]); A[i]++;
+        }
+
+        for(int i = 1; i <= n; i++) {
+            w += query(A[i], n, root);
+            update(A[i], root);
+        }
+
+        ans = w;
+        for(int i = 1; i <= n - 1; i++) {
+            w =  w + n - 2 * A[i] + 1;
+            ans = min(ans, w);
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}

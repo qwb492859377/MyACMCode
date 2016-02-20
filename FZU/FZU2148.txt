@@ -1,0 +1,62 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:FZU2148                   *
+*      VjudgeProblemID:48690               *
+*      SubmitTime:2015/3/17 20:38:41       *
+*      SubmitType:GNU C++                  *
+*      Memory:208KB                        *
+*      CodeLen:1131B                       *
+*      RunTime:46ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+typedef long long LL;
+const int MX=35;
+const int INF=1<<30;
+
+struct Point{
+    int x,y;
+}P[MX];
+
+int mj(int p0,int p1,int p2){
+    int x1=P[p1].x-P[p0].x,x2=P[p2].x-P[p0].x;
+    int y1=P[p1].y-P[p0].y,y2=P[p2].y-P[p0].y;
+    return abs(x1*y2-y1*x2);
+}
+
+int main(){
+    int T,ansk=0,n;
+    scanf("%d",&T);
+    while(T--){
+        scanf("%d",&n);
+        for(int i=1;i<=n;i++){
+            scanf("%d%d",&P[i].x,&P[i].y);
+        }
+
+        int ans=0;
+        for(int i=1;i<=n-3;i++){
+            for(int j=i+1;j<=n-2;j++){
+                for(int k=j+1;k<=n-1;k++){
+                    int s1=mj(i,j,k);
+                    for(int l=k+1;l<=n;l++){
+                        int s2=mj(i,j,l),s3=mj(i,k,l),s4=mj(j,k,l);
+                        if(s1+s2+s3==s4||s1+s3+s4==s2||s1+s2+s4==s3||s2+s3+s4==s1) continue;
+                        ans++;
+                    }
+                }
+            }
+        }
+
+        printf("Case %d: %d\n",++ansk,ans);
+    }
+    return 0;
+}

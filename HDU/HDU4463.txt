@@ -1,0 +1,87 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU4463                   *
+*      VjudgeProblemID:34041               *
+*      SubmitTime:2015/5/13 18:33:36       *
+*      SubmitType:C++                      *
+*      Memory:1636KB                       *
+*      CodeLen:1428B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<queue>
+#include<vector>
+#include<algorithm>
+using namespace std;
+const int MX=5005;
+
+int P[MX],X[MX],Y[MX],rear;
+
+struct Edge{
+    int u,v;
+    double x;
+    Edge(){}
+    Edge(int a,int b,double c){
+        u=a;v=b;x=c;
+    }
+    bool operator<(const Edge&b)const{
+        return x<b.x;
+    }
+}E[MX];
+
+int find(int x){
+    return P[x]==x?x:(P[x]=find(P[x]));
+}
+
+double dist(int x1,int y1,int x2,int y2){
+    return sqrt(1.0*(x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
+}
+
+int main(){
+    int n,p,q;
+    while(~scanf("%d",&n),n){
+        rear=0;
+        for(int i=1;i<=n;i++){
+            P[i]=i;
+        }
+
+        scanf("%d%d",&p,&q);
+        if(p>q) swap(p,q);
+
+        for(int i=1;i<=n;i++){
+            scanf("%d%d",&X[i],&Y[i]);
+        }
+
+        for(int i=1;i<=n;i++){
+            for(int j=i+1;j<=n;j++){
+                E[++rear]=Edge(i,j,dist(X[i],Y[i],X[j],Y[j]));
+            }
+        }
+        sort(E+1,E+1+rear);
+
+        double ans;
+        for(int i=1;i<=rear;i++){
+            if(E[i].u==p&&E[i].v==q){
+                ans=E[i].x;
+                P[p]=q;
+                break;
+            }
+        }
+
+        for(int i=1;i<=rear;i++){
+            int p1=find(E[i].u),p2=find(E[i].v);
+            if(p1!=p2){
+                ans+=E[i].x;
+                P[p1]=p2;
+            }
+        }
+
+        printf("%.2lf\n",ans);
+    }
+    return 0;
+}

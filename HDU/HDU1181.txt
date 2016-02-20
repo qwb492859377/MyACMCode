@@ -1,0 +1,64 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:HDU1181                   *
+*      VjudgeProblemID:26199               *
+*      SubmitTime:2015/7/27 21:38:22       *
+*      SubmitType:C++                      *
+*      Memory:1624KB                       *
+*      CodeLen:945B                        *
+*      RunTime:15ms                        *
+********************************************
+*/
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<queue>
+#include<vector>
+#include<ctime>
+#include<functional>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int MX = 300 + 5;
+const int INF = 0x3f3f3f3f;
+
+vector<int>G[MX];
+char S[MX];
+int vis[MX];
+
+bool DFS(int u) {
+    vis[u] = 1;
+    if(u == 'm' - 'a') return true;
+
+    for(int i = 0; i < G[u].size(); i++) {
+        int v = G[u][i];
+        if(!vis[v] && DFS(v)) return true;
+    }
+    return false;
+}
+
+int main() {
+    while(~scanf("%s", S)) {
+        for(int i = 0; i < 30; i++) {
+            G[i].clear();
+        }
+
+        do {
+            if(S[0] == '0') {
+                break;
+            }
+
+            int l = strlen(S);
+            G[S[0] - 'a'].push_back(S[l - 1] - 'a');
+        } while(scanf("%s", S));
+
+        memset(vis, 0, sizeof(vis));
+
+        printf("%s\n", DFS(1) ? "Yes." : "No.");
+    }
+    return 0;
+}

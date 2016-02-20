@@ -1,0 +1,133 @@
+/*
+********************************************
+*      Author:492859377                    *
+*      ProblemID:ZOJ3490                   *
+*      VjudgeProblemID:18495               *
+*      SubmitTime:2015/1/22 17:06:54       *
+*      SubmitType:C++ (g++ 4.7.2)          *
+*      Memory:168KB                        *
+*      CodeLen:2670B                       *
+*      RunTime:0ms                         *
+********************************************
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn=200+5;
+
+bool isalb(char a){
+    if(('a'<=a&&a<='z')||('A'<=a&&a<='Z')||('0'<=a&&a<='9')){
+        return true;
+    }
+    return false;
+}
+
+bool havealb(char*s){
+    int len=strlen(s);
+    for(int i=0;i<len;i++){
+        if(isalb(s[i])){
+            return true;
+        }
+    }
+    return false;
+}
+
+void upside(char*s){
+    char temp;
+    int cup=strlen(s)-1;
+    for(int i=0;i<=cup/2;i++){
+        temp=s[cup-i];
+        s[cup-i]=s[i];
+        s[i]=temp;
+    }
+}
+
+void upside_print(char*w){
+    char temp;
+    char s[maxn];
+    strcpy(s,w);
+    int cup=strlen(s)-1;
+    for(int i=0;i<=cup/2;i++){
+        temp=s[cup-i];
+        s[cup-i]=s[i];
+        s[i]=temp;
+    }
+    printf("%s\n",s);
+}
+
+int main(){
+    //freopen("input.txt","r",stdin);
+
+    int T,n,jw,alb;
+    char s[maxn],temp[maxn],last;
+    scanf("%d",&T);
+    while(T--){
+        memset(s,0,sizeof(s));
+
+        scanf("%s%d",s,&n);
+        upside(s);
+
+        for(int i=1;i<=n;i++){
+            int cur=0,len=strlen(s);
+
+            alb=havealb(s);
+            while(cur<len){
+                if(alb&&!isalb(s[cur])){
+                    cur++;
+                    continue;
+                }
+                jw=false;
+                if('a'<=s[cur]&&s[cur]<='z'){
+                    s[cur]++;
+                    if(s[cur]>'z'){
+                        s[cur]='a';
+                        last='a';
+                        jw=true;
+                    }
+                }else if('A'<=s[cur]&&s[cur]<='Z'){
+                    s[cur]++;
+                    if(s[cur]>'Z'){
+                        s[cur]='A';
+                        last='A';
+                        jw=true;
+                    }
+                }else if('0'<=s[cur]&&s[cur]<='9'){
+                    s[cur]++;
+                    if(s[cur]>'9'){
+                        s[cur]='0';
+                        last='1';
+                        jw=true;
+                    }
+                }else{
+                    s[cur]++;
+                }
+
+                if(!jw){
+                    break;
+                }
+                cur++;
+            }
+
+            if(cur==len){
+                for(cur=len-1;cur>=0;cur--){
+                    if(isalb(s[cur])){
+                        break;
+                    }
+                }
+                strcpy(temp,s);
+                temp[cur+1]=last;
+
+                //printf("[%s]",temp);
+
+                strcpy(temp+cur+2,s+cur+1);
+                strcpy(s,temp);
+            }
+            upside_print(s);
+        }
+        printf("\n");
+    }
+    return 0;
+}
